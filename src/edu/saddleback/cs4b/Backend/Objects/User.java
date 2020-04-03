@@ -1,22 +1,17 @@
-package edu.saddleback.cs4b.Backend.Database;
+package edu.saddleback.cs4b.Backend.Objects;
 
 public class User
 {
-    private String uniqueID;
     private String username;
     private String password;
     private String firstName;
     private String lastName;
 
-
-    public String getUniqueID()
-    {
-        return uniqueID;
-    }
-
-    public void setUniqueID(String uniqueID)
-    {
-        this.uniqueID = uniqueID;
+    public User(String username, String password, String firstName, String lastName) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getUsername()

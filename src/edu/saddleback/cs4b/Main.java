@@ -1,11 +1,14 @@
 package edu.saddleback.cs4b;
 
-import edu.saddleback.cs4b.Backend.Database.DatabaseConnection;
+import edu.saddleback.cs4b.Backend.Database.DBManager;
+import edu.saddleback.cs4b.Backend.Objects.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
 
 public class Main extends Application
 {
@@ -18,10 +21,11 @@ public class Main extends Application
         primaryStage.show();
     }
 
-
-    public static void main(String[] args)
-    {
-        DatabaseConnection.connect();
+    public static void main(String[] args) throws SQLException {
+        //User myUser = new User("zerohezitation", "yourMom", "Jeffrey", "Adams");
+        //DBManager.getInstance().addUser(myUser);
+        DBManager.getInstance().getUsername(1);
         launch(args);
+
     }
 }
