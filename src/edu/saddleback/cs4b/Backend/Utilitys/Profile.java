@@ -34,4 +34,22 @@ public class Profile implements Serializable {
     }
 
     public User getUser() { return (User)user.clone(); }
+
+    @Override
+    protected Object clone()  {
+        try {
+            Profile copy = (Profile) super.clone();
+            copy.user = (User)user.clone();
+            return copy;
+        } catch (CloneNotSupportedException ce) {
+            return null;
+        }
+    }
+
+    @Override
+    public String toString() {
+        //todo add details about other fields later as we add more data
+        StringBuilder sb = new StringBuilder(user.toString());
+        return sb.toString();
+    }
 }
