@@ -32,4 +32,6 @@ public class Profile implements Serializable {
         }
         this.user = user;
     }
+
+    public User getUser() { return (User)user.clone(); }
 }
