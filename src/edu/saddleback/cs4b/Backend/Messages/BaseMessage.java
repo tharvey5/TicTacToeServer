@@ -11,7 +11,7 @@ public abstract class BaseMessage implements Serializable {
     Date timeStamp;
 
     public BaseMessage(MessageType newMessageType)
-    {git messageType
+    {
         messageType = newMessageType;
         timeStamp = new Date();
     }
