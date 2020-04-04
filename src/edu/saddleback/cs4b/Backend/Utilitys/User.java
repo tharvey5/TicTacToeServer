@@ -74,6 +74,13 @@ public class User implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("[Username= ");
+        sb.append(username);
+        sb.append(", FirstName= ");
+        sb.append(fn);
+        sb.append(", LastName= ");
+        sb.append(ln);
+        sb.append("]");
         return sb.toString();
     }
 }
