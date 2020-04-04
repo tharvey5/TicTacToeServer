@@ -106,7 +106,66 @@ class DBManagerTest
         assertEquals(2, id);
     }
 
+    @Test
+    @DisplayName("Test Get the Status")
+    void testGetStatus() throws SQLException
+    {
+        String error;
 
+        User user = new User("Boxhead", "1234", "Isaac", "Estrada");
+        int id;
 
+        String status;
 
+        try
+        {
+            status = DBManager.getInstance().getUsersStatus( DBManager.getInstance().getUniqueID(user));
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "failed";
+            id = 0;
+            status = "could not find status";
+        }
+
+        assertEquals("didnt fail", error);
+        assertEquals("Inactive", status);
+    }
+
+    @Test
+    @DisplayName("Test setting the user inactive")
+    void testInactivateUser() throws SQLException
+    {
+        String error;
+
+        User user = new User("Boxhead", "1234", "Isaac", "Estrada");
+        int id;
+
+        String status;
+
+        try
+        {
+            DBManager.getInstance().inactivateUser(DBManager.getInstance().getUniqueID(user));
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "failed";
+            id = 0;
+            status = "could not find status";
+        }
+
+        assertEquals("didnt fail", error);
+        try
+        {
+        assertEquals("Inactive", DBManager.getInstance().getUsersStatus(DBManager.getInstance().getUniqueID(user)));
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+        }
+    }
 }
