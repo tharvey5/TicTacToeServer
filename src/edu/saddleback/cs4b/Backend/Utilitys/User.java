@@ -2,6 +2,9 @@ package edu.saddleback.cs4b.Backend.Utilitys;
 
 import java.io.Serializable;
 
+// todo should this and the server lie in the Backend package to allow for
+//package access to methods only database would need but not any other client
+// such as getting and setting the id etc
 public class User implements Serializable {
     private String username;
     private String fn;
@@ -17,6 +20,22 @@ public class User implements Serializable {
         setId(id);
     }
 
+    /**
+     * This ctor can be used for creating a new user, or updating ALL
+     * of the fields of an existing user
+     */
+    public User(String username, String fn, String ln, String password) {
+        this(username, fn, ln, password, -1);
+    }
+
+    /**
+     * This ctor could/should only be used when the only information
+     * required for a user is their username and password
+     */
+    public User(String username, String password) {
+        this(username, "", "", password, -1);
+    }
+
     public String getUsername() { return username; }
     public String getFirstName() { return fn; }
     public String getLn() { return ln; }
@@ -26,10 +45,10 @@ public class User implements Serializable {
     // todo this probably would only be used by server??? ** should it be public **
     private int getId() { return id; }
 
-    private void setUsername(String username) { this.username = username; }
-    private void setFirstName(String fn) { this.fn = fn; }
-    private void setLastName(String ln) { this.ln = ln; }
-    private void setPassword(String password) { this.password = password; }
+    public void setUsername(String username) { this.username = username; }
+    public void setFirstName(String fn) { this.fn = fn; }
+    public void setLastName(String ln) { this.ln = ln; }
+    public void setPassword(String password) { this.password = password; }
     private void setId(int id) { this.id = id; }
 
     @Override
@@ -38,6 +57,10 @@ public class User implements Serializable {
     }
 
     @Override
+    /**
+     * can be used to check that the username for another user
+     * is not the same as the one trying to be set by this user
+     */
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
