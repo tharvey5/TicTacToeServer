@@ -45,10 +45,10 @@ public class User implements Serializable {
     // todo this probably would only be used by server??? ** should it be public **
     private int getId() { return id; }
 
-    public void setUsername(String username) { this.username = username; }
-    public void setFirstName(String fn) { this.fn = fn; }
-    public void setLastName(String ln) { this.ln = ln; }
-    public void setPassword(String password) { this.password = password; }
+    void setUsername(String username) { this.username = username; }
+    void setFirstName(String fn) { this.fn = fn; }
+    void setLastName(String ln) { this.ln = ln; }
+    void setPassword(String password) { this.password = password; }
     private void setId(int id) { this.id = id; }
 
     @Override
