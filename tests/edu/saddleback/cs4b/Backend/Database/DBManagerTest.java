@@ -23,10 +23,11 @@ class DBManagerTest
     {
         User user = new User("Boxhead", "1234", "Isaac", "Estrada");
         String error;
+        int id;
 
         try
         {
-            DBManager.getInstance().addUser(user);
+            id = DBManager.getInstance().addUser(user);
             error = "add user didnt fail";
         }
         catch(Exception e)
@@ -79,6 +80,33 @@ class DBManagerTest
 
         assertEquals("Username or Password incorrect", error);
     }
+
+    @Test
+    @DisplayName("Test Get Unique ID")
+    void testGetUniqueID() throws SQLException
+    {
+        String error;
+
+        User user = new User("Boxhead", "1234", "Isaac", "Estrada");
+        int id;
+
+        try
+        {
+             id = DBManager.getInstance().getUniqueID(user);
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "failed";
+            id = 0;
+        }
+
+        assertEquals("didnt fail", error);
+        assertEquals(2, id);
+    }
+
+
 
 
 }
