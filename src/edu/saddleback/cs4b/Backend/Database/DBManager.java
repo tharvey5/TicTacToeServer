@@ -9,6 +9,14 @@ public class DBManager
     private static DBManager instance;
     private Connection connection = null;
 
+    private int uniqueID  = 1;
+    private int username  = 2;
+    private int password  = 3;
+    private int firstName = 4;
+    private int lastName  = 5;
+    private int status    = 6;
+
+
     private DBManager()
     {
         this.getConnection();
@@ -53,6 +61,7 @@ public class DBManager
 
             rs = ps.executeQuery();
 
+
         }
         catch(Exception e)
         {
@@ -70,7 +79,7 @@ public class DBManager
 //            }
 //        }
 
-        return rs.getString(2);
+        return rs.getString(this.username);
     }
 
     //Will return a User if user is found, will throw an exception if no person is found
@@ -88,7 +97,7 @@ public class DBManager
 
             rs = ps.executeQuery();
 
-            User user = new User(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+            User user = new User(rs.getString(this.username), rs.getString(this.password), rs.getString(firstName), rs.getString(lastName));
 
             return user;
         }
@@ -127,7 +136,7 @@ public class DBManager
 
             rs = ps.executeQuery();
 
-            return rs.getInt(1);
+            return rs.getInt(this.uniqueID);
         }
         catch(Exception e)
         {
@@ -164,9 +173,41 @@ public class DBManager
 
     }
 
-    public void InactivateUser(int id)
-    {
+    public void inactivateUser(int id) throws Exception {
+        PreparedStatement ps = null;
 
+        try
+        {
+            ps = connection.prepareStatement("UPDATE USER SET Status = ? WHERE UniqueID = ?");
+            ps.setString(1, "Inactive");
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No User found with id: " + String.valueOf(id));
+        }
+    }
+
+    public String getUsersStatus(int id) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM USER WHERE UniqueID = ?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No User found with id: " + String.valueOf(id));
+        }
+
+        return rs.getString(this.status);
     }
 
     public boolean updateUser(int id, User user)
