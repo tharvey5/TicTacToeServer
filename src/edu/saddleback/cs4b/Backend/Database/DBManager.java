@@ -58,21 +58,57 @@ public class DBManager
         {
             System.out.println(e.toString());
         }
-        finally
-        {
-            if (ps!=null)
-            {
-                ps.close();
-            }
-            if(connection!=null)
-            {
-                connection.close();
-            }
-        }
-        return null;
+//        finally
+//        {
+//            if (ps!=null)
+//            {
+//                ps.close();
+//            }
+//            if(connection!=null)
+//            {
+//                connection.close();
+//            }
+//        }
+        return rs.getString(2);
     }
 
+    //Will return a User if user is found, will throw an exception if no person is found
 
+    public User Login(String username, String password ) throws SQLException
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM USER WHERE Username = ? AND Password = ?");
+            ps.setString(1, username);
+            ps.setString(2, password);
+
+            rs = ps.executeQuery();
+
+            User user = new User(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+
+            return user;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+        }
+//        finally
+//        {
+//            if (ps!=null)
+//            {
+//                ps.close();
+//            }
+//            if(connection!=null)
+//            {
+//                connection.close();
+//            }
+//        }
+
+        return null;
+    }
 
     public int addUser(User user) throws SQLException
     {
@@ -83,28 +119,29 @@ public class DBManager
 
         try
         {
-            ps = connection.prepareStatement("INSERT INTO USER(Username, Password, FirstName, LastName) VALUES(?,?,?,?)");
+            ps = connection.prepareStatement("INSERT INTO USER(Username, Password, FirstName, LastName, Status) VALUES(?,?,?,?,?)");
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getFirstName());
             ps.setString(4, user.getLastName());
+            ps.setString(5, "Active");
             recordCounter = ps.executeUpdate();
         }
         catch(Exception e)
         {
             System.out.println(e.toString());
         }
-        finally
-        {
-            if (ps!=null)
-            {
-                ps.close();
-            }
-            if(connection!=null)
-            {
-            connection.close();
-            }
-        }
+//        finally
+//        {
+//            if (ps!=null)
+//            {
+//                ps.close();
+//            }
+//            if(connection!=null)
+//            {
+//            connection.close();
+//            }
+//        }
 
         return recordCounter;
     }

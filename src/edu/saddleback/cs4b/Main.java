@@ -24,7 +24,7 @@ public class Main extends Application
     public static void main(String[] args) throws SQLException {
         //User myUser = new User("zerohezitation", "yourMom", "Jeffrey", "Adams");
         //DBManager.getInstance().addUser(myUser);
-        DBManager.getInstance().getUsername(1);
+        //DBManager.getInstance().getUsername(1);
         launch(args);
 
     }
