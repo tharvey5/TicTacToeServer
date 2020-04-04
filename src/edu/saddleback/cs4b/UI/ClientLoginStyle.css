@@ -1,0 +1,23 @@
+.background-Color
+{
+    -fx-background-color: #2A363B;
+}
+
+.border-Color
+{
+    -fx-border-color: #FBFCFC;
+}
+
+.text-field
+{
+    -fx-prompt-text-fill: #FBFCFC;
+    -fx-text-fill: #FBFCFC;
+    -fx-text-inner-color:#FBFCFC;
+    -fx-font-size:15px;
+    -fx-border-radius: 4px;
+}
+
+.button
+{
+    -fx-border-radius: 4px;
+}
