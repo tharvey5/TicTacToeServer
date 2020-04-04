@@ -52,7 +52,7 @@ public class DBManager
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
-            return rs.getString(2);
+
         }
         catch(Exception e)
         {
@@ -69,12 +69,13 @@ public class DBManager
 //                connection.close();
 //            }
 //        }
+
         return rs.getString(2);
     }
 
     //Will return a User if user is found, will throw an exception if no person is found
 
-    public User Login(String username, String password ) throws SQLException
+    public User Login(String username, String password ) throws Exception
     {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -94,6 +95,7 @@ public class DBManager
         catch(Exception e)
         {
             System.out.println(e.toString());
+            throw new Exception("incorrect Username or Password");
         }
 //        finally
 //        {
@@ -106,11 +108,9 @@ public class DBManager
 //                connection.close();
 //            }
 //        }
-
-        return null;
     }
 
-    public int addUser(User user) throws SQLException
+    public int addUser(User user) throws Exception
     {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -130,6 +130,7 @@ public class DBManager
         catch(Exception e)
         {
             System.out.println(e.toString());
+            throw new Exception("User name was not unique");
         }
 //        finally
 //        {
