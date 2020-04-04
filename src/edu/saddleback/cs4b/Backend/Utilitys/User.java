@@ -5,7 +5,7 @@ import java.io.Serializable;
 // todo should this and the server lie in the Backend package to allow for
 //package access to methods only database would need but not any other client
 // such as getting and setting the id etc
-public class User implements Serializable {
+public class User implements Serializable, Cloneable {
     private String username;
     private String fn;
     private String ln;
@@ -69,6 +69,17 @@ public class User implements Serializable {
         } else {
             return username.equals((((User) obj).username));
         }
+    }
+
+    @Override
+    protected Object clone(){
+        Object clone = null;
+        try {
+            clone = super.clone();
+        } catch (CloneNotSupportedException ce) {
+            ce.printStackTrace();
+        }
+        return clone;
     }
 
     @Override
