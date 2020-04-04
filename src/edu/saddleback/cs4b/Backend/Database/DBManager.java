@@ -110,12 +110,38 @@ public class DBManager
 //        }
     }
 
-    public int addUser(User user) throws Exception
+    public int getUniqueID(User user) throws Exception
     {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        int recordCounter = 0;
+        int uniqueID;
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM USER WHERE Username = ? AND Password = ? AND FirstName = ? AND LastName = ?");
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getFirstName());
+            ps.setString(4, user.getLastName());
+
+            rs = ps.executeQuery();
+
+            return rs.getInt(1);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("User Does not exist");
+        }
+
+    }
+
+
+    public int addUser(User user) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try
         {
@@ -125,45 +151,28 @@ public class DBManager
             ps.setString(3, user.getFirstName());
             ps.setString(4, user.getLastName());
             ps.setString(5, "Active");
-            recordCounter = ps.executeUpdate();
+
+            rs = ps.executeQuery();
+
+            return this.getUniqueID(user);
         }
         catch(Exception e)
         {
             System.out.println(e.toString());
             throw new Exception("User name was not unique");
         }
-//        finally
-//        {
-//            if (ps!=null)
-//            {
-//                ps.close();
-//            }
-//            if(connection!=null)
-//            {
-//            connection.close();
-//            }
-//        }
-
-        return recordCounter;
-    }
-
-    public void deleteUser(String username)
-    {
-        //jdbc code
-
 
     }
 
-    public void deleteUser(int userID)
+    public void InactivateUser(int id)
     {
-        //jdbc code
-
 
     }
 
-    public boolean updateUser(User user)
+    public boolean updateUser(int id, User user)
     {
-        //jdbc code
+
+
 
         return true;
     }
