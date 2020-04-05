@@ -1,29 +1,38 @@
 package edu.saddleback.cs4b.Backend.Messages;
 
-import edu.saddleback.cs4b.Backend.MessageType;
 import edu.saddleback.cs4b.Backend.Utilitys.MsgTypes;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 public abstract class BaseMessage implements Serializable {
     MsgTypes messageType;
-    Date timeStamp;
+    LocalDateTime timeStamp;
 
     public BaseMessage(MsgTypes newMessageType)
     {
         messageType = newMessageType;
-        timeStamp = new Date();
+        timeStamp   = LocalDateTime.now();
     }
 
-    public String getMessageType()//RETURN AS STRING
+    public String getMessageType()
     {
         return messageType.getType();
     }
 
-    public Date getTimeStamp()  //JUST RETURN TIME AS STRING
+    /*
+     *Returns time of message sent
+     * -Could be changed to include the date as well
+     */
+    public String getTimeStamp()
     {
-        return timeStamp;
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(Integer.toString(timeStamp.getHour()));
+        sb.append(":");
+        sb.append(Integer.toString(timeStamp.getMinute()));
+
+        return sb.toString();
     }
 }
