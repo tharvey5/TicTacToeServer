@@ -5,11 +5,17 @@ import java.util.ArrayList;
 public class ActiveUserMessage {
     ArrayList<String> activeUsers;
 
+    /*
+     * Request Message Constructor
+     */
     public ActiveUserMessage()
     {
         activeUsers = null;
     }
 
+    /*
+     * Server Response Message Constructor
+     */
     public ActiveUserMessage(ArrayList<String> newActiveUsers)
     {
         setActiveUsers(newActiveUsers);
