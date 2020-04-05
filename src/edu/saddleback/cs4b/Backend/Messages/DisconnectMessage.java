@@ -7,6 +7,13 @@ public class DisconnectMessage extends BaseMessage{
     String userName;
 
 
+    /**
+     * used for the message factory
+     */
+    DisconnectMessage()
+    {
+        this(null, "");
+    }
 
     public DisconnectMessage(ArrayList<String> newChannels, String newUserName)
     {
