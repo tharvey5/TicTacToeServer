@@ -1,13 +1,18 @@
 package edu.saddleback.cs4b.Backend.Messages;
 
+import edu.saddleback.cs4b.Backend.Utilitys.MsgTypes;
+
 import java.util.ArrayList;
 
-public class DisconnectMessage {
+public class DisconnectMessage extends BaseMessage{
     ArrayList<String> channels;
     String userName;
 
+
+
     public DisconnectMessage(ArrayList<String> newChannels, String newUserName)
     {
+        super(MsgTypes.DISCONNECTION);
         setChannels(newChannels);
         setUserName(newUserName);
     }

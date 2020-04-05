@@ -1,8 +1,10 @@
 package edu.saddleback.cs4b.Backend.Messages;
 
+import edu.saddleback.cs4b.Backend.Utilitys.MsgTypes;
+
 import java.util.ArrayList;
 
-public class ActiveUserMessage {
+public class ActiveUserMessage extends BaseMessage {
     ArrayList<String> activeUsers;
 
     /*
@@ -10,6 +12,7 @@ public class ActiveUserMessage {
      */
     public ActiveUserMessage()
     {
+        super(MsgTypes.ACTIVE_USER_REQ);
         activeUsers = null;
     }
 
@@ -18,6 +21,7 @@ public class ActiveUserMessage {
      */
     public ActiveUserMessage(ArrayList<String> newActiveUsers)
     {
+        super(MsgTypes.ACTIVE_USER_REQ);
         setActiveUsers(newActiveUsers);
     }
 
