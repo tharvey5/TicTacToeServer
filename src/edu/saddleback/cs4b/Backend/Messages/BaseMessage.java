@@ -22,7 +22,7 @@ public abstract class BaseMessage implements Serializable {
     }
 
     /*
-     *Returns time of message sent
+     *Returns time of message sent as a string
      * -Could be changed to include the date as well
      */
     public String getTimeStamp()
