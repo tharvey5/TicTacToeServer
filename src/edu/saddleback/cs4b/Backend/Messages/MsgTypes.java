@@ -1,4 +1,4 @@
-package edu.saddleback.cs4b.Backend.Utilitys;
+package edu.saddleback.cs4b.Backend.Messages;
 
 public enum MsgTypes {
     INVALID_REG("Invalid Registration"),

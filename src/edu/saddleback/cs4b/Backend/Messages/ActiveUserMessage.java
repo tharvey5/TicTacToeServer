@@ -1,7 +1,5 @@
 package edu.saddleback.cs4b.Backend.Messages;
 
-import edu.saddleback.cs4b.Backend.Utilitys.MsgTypes;
-
 import java.util.ArrayList;
 
 public class ActiveUserMessage extends BaseMessage {
