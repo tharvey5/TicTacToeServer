@@ -35,13 +35,5 @@ public class ActiveUserMessage extends BaseMessage {
         return activeUsers;
     }
 
-    public void addActiveUser(String newUser)
-    {
-        activeUsers.add(newUser);
-    }
 
-    public void removeActiveUser(String oldUser)
-    {
-        activeUsers.remove(oldUser);
-    }
 }
