@@ -10,11 +10,10 @@ public class MessageEvent implements SystemEvent {
     }
 
     private void setMessage(BaseMessage message) { this.message = message; }
+    public BaseMessage getMessage() { return message; }
 
     @Override
-    public SystemEvent getEvent() {
-        return null;
-    }
+    public SystemEvent getEvent() { return this; }
 
     @Override
     public String getType() { return EventType.MESSAGE_EVENT.getType(); }
