@@ -4,7 +4,7 @@ import edu.saddleback.cs4b.Backend.Utilitys.MsgTypes;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 public class SignInMessage extends BaseMessage {
-    User userInfo;
+    private User userInfo;
 
     public SignInMessage(User newUserInfo)
     {

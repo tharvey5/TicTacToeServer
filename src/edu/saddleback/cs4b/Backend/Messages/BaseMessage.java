@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 
 public abstract class BaseMessage implements Serializable {
-    MsgTypes messageType;
-    LocalDateTime timeStamp;
+    private MsgTypes messageType;
+    private LocalDateTime timeStamp;
 
     public BaseMessage(MsgTypes newMessageType)
     {

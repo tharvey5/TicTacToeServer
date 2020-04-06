@@ -5,8 +5,8 @@ import edu.saddleback.cs4b.Backend.Utilitys.MsgTypes;
 import java.util.ArrayList;
 
 public class DisconnectMessage extends BaseMessage{
-    ArrayList<String> channels;
-    String userName;
+    private ArrayList<String> channels;
+    private String userName;
 
 
 

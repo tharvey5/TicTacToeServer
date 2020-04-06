@@ -5,7 +5,7 @@ import edu.saddleback.cs4b.Backend.Utilitys.MsgTypes;
 import java.util.ArrayList;
 
 public class ActiveUserMessage extends BaseMessage {
-    ArrayList<String> activeUsers;
+    private ArrayList<String> activeUsers;
 
     /*
      * Request Message Constructor
