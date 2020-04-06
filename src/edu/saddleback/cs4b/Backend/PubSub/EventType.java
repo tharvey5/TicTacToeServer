@@ -5,7 +5,7 @@ package edu.saddleback.cs4b.Backend.PubSub;
  * events to force certain names
  */
 public enum EventType {
-    CONNECTION("Connection");
+    MESSAGE_EVENT("Message Event");
 
     private EventType(String type) { this.type = type; }
     private String type;
