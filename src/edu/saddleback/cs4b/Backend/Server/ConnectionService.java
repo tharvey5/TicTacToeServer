@@ -41,11 +41,16 @@ public class ConnectionService {
      */
     public void start() {
         boolean isRunning = true;
-        Socket client = null;
-
+        Socket connection = null;
+        Thread worker = null;
+        ClientCommunication client = null;
         while (isRunning) {
             try {
-                client = serverSocket.accept();
+                connection = serverSocket.accept();
+                client = new ClientCommunication(connection);
+                connections.add(client);
+                worker = new Thread(client);
+                worker.start();
             } catch (SocketException se) {
                 isRunning = false;
             } catch (IOException io) {
