@@ -2,6 +2,8 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 
 /**
@@ -31,5 +33,24 @@ public class ConnectionService {
             }
         }
         return connectionService;
+    }
+
+    /**
+     * this method will start the connectionService
+     * // TODO prevent from being started once its already started
+     */
+    public void start() {
+        boolean isRunning = true;
+        Socket client = null;
+
+        while (isRunning) {
+            try {
+                client = serverSocket.accept();
+            } catch (SocketException se) {
+                isRunning = false;
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+        }
     }
 }
