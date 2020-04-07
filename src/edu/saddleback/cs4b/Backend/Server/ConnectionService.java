@@ -21,4 +21,15 @@ public class ConnectionService {
             e.printStackTrace();
         }
     }
+
+    public static ConnectionService getInstance() {
+        if (connectionService == null) {
+            synchronized (ConnectionService.class) {
+                if (connectionService == null) {
+                    connectionService = new ConnectionService();
+                }
+            }
+        }
+        return connectionService;
+    }
 }
