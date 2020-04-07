@@ -3,7 +3,11 @@ package edu.saddleback.cs4b.Backend.Messages;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 public class SignInMessage extends BaseMessage {
-    User userInfo;
+    private User userInfo;
+
+    SignInMessage() {
+        this(null);
+    }
 
     public SignInMessage(User newUserInfo)
     {
