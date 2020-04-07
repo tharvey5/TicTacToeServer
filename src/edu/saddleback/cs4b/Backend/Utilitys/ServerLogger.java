@@ -17,17 +17,19 @@ public class ServerLogger implements Logger, Subject {
 
     @Override
     public void addObserver(Observer o) {
-
+        observers.add(o);
     }
 
     @Override
     public void removeObserver(Observer o) {
-
+        observers.remove(o);
     }
 
     @Override
     public void notifyObserver(SystemEvent e) {
-
+        for (Observer ob : observers) {
+            ob.update(e);
+        }
     }
 
     @Override
