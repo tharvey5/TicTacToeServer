@@ -8,11 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerLogger implements Logger, Subject {
-    private static ServerLogger logger = null;
+    // volatile tells jvm && threads to not do any cache optimization, make sure that
+    // any private copy it keeps is most up to date with whats in memory
+    private volatile static ServerLogger logger = null;
     private List<Observer> observers;
 
     private ServerLogger() {
         observers = new ArrayList<>();
+    }
+
+    public static ServerLogger getInstance() {
+        if (logger == null) {
+            synchronized (ServerLogger.class) {
+                // check again in case multiple treads got to this point
+                if (logger == null) {
+                    logger = new ServerLogger();
+                }
+            }
+        }
+        return logger;
     }
 
     @Override
@@ -34,6 +48,6 @@ public class ServerLogger implements Logger, Subject {
 
     @Override
     public void log(SystemEvent se) {
-
+        notifyObserver(se);
     }
 }
