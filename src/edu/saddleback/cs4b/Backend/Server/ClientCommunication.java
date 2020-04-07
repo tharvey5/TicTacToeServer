@@ -1,7 +1,6 @@
 package edu.saddleback.cs4b.Backend.Server;
 
-import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
-import edu.saddleback.cs4b.Backend.Messages.Packet;
+import edu.saddleback.cs4b.Backend.Messages.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -39,7 +38,7 @@ public class ClientCommunication implements Runnable {
             while (isRunning) {
                 Packet packet = (Packet)is.readObject();
                 BaseMessage message = packet.getData();
-                // handleMessage()
+                handleMessages(message);
             }
         } catch (EOFException eof) {
             isRunning = false;
@@ -47,6 +46,16 @@ public class ClientCommunication implements Runnable {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void handleMessages(BaseMessage message) {
+        if (message instanceof SignInMessage) {
+            // call the authentication service
+            // send the appropriate message based on the result
+        } else if (message instanceof ActiveUserMessage) {
+            // ask for the system info to get you that
+            // output the appropriate result
         }
     }
 }
