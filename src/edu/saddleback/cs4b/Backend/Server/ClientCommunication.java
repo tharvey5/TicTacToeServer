@@ -4,6 +4,9 @@ import edu.saddleback.cs4b.Backend.Messages.*;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Handles communication with a particular client
@@ -55,7 +58,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
         }
     }
 
-    private void handleMessages(BaseMessage message) {
+    private void handleMessages(BaseMessage message) throws IOException {
         if (message instanceof SignInMessage) {
             SignInMessage signIn = (SignInMessage)message;
 
@@ -66,12 +69,24 @@ public class ClientCommunication implements Runnable, ClientConnection {
             }
 
         } else if (message instanceof ActiveUserMessage) {
-            // ask for the system info to get you that
-            // output the appropriate result
+            // todo change this out
+            ActiveUserMessage usrMsg = new ActiveUserMessage(getActiveUsers());
+            Packet packet = new Packet(usrMsg);
+            os.writeObject(packet);
+            os.flush();
         } else if (/** sign-out message comes in **/) {
             SystemInfoService.getInstance().removeOnlineUser(this);
             // propagate to the users
         }
+    }
+
+    private List<String> getActiveUsers() {
+        List<ClientConnection> connections = SystemInfoService.getInstance().getOnlineUsers();
+        List<String> users = new ArrayList<>();
+        for (ClientConnection c : connections) {
+            users.add(c.identifyClient());
+        }
+        return users;
     }
 
     @Override

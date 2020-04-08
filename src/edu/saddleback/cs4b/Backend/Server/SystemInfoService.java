@@ -1,6 +1,9 @@
 package edu.saddleback.cs4b.Backend.Server;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Keeps track stats about the system such as who is logged in/active
@@ -23,11 +26,15 @@ public class SystemInfoService {
         return si;
     }
 
-    public void markUserAsOnline(ClientConnection user) {
+    public synchronized void markUserAsOnline(ClientConnection user) {
         onlineUsers.add(user);
     }
 
-    public void removeOnlineUser(ClientConnection user) {
+    public synchronized void removeOnlineUser(ClientConnection user) {
         onlineUsers.remove(user);
+    }
+
+    public List<ClientConnection> getOnlineUsers() {
+        return Collections.unmodifiableList(onlineUsers);
     }
 }
