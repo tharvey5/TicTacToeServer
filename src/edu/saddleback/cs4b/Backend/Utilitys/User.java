@@ -1,11 +1,13 @@
 package edu.saddleback.cs4b.Backend.Utilitys;
 
+import edu.saddleback.cs4b.Backend.Server.Authenticatable;
+
 import java.io.Serializable;
 
 // todo should this and the server lie in the Backend package to allow for
 //package access to methods only database would need but not any other client
 // such as getting and setting the id etc
-public class User implements Serializable, Cloneable {
+public class User implements Serializable, Cloneable, Authenticatable {
     private String username;
     private String fn;
     private String ln;
@@ -93,5 +95,15 @@ public class User implements Serializable, Cloneable {
         sb.append(ln);
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public String getKey() {
+        return password;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return username;
     }
 }
