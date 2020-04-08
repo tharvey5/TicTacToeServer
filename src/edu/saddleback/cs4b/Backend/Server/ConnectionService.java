@@ -12,7 +12,6 @@ import java.util.List;
 public class ConnectionService {
     private volatile static ConnectionService connectionService = null;
 
-    private List<ClientCommunication> connections;
     private ServerSocket serverSocket;
     private final static int port = 8080;
 
@@ -48,7 +47,6 @@ public class ConnectionService {
             try {
                 connection = serverSocket.accept();
                 client = new ClientCommunication(connection);
-                connections.add(client);
                 worker = new Thread(client);
                 worker.start();
             } catch (SocketException se) {

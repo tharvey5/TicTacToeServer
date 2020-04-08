@@ -17,6 +17,7 @@ public class ClientCommunication implements Runnable {
     public ClientCommunication(Socket socket) {
         this.socket = socket;
         initiateStreams();
+        SystemInfoService.getInstance().markUserAsOnline(this);
     }
 
     private void initiateStreams() {
@@ -62,6 +63,9 @@ public class ClientCommunication implements Runnable {
         } else if (message instanceof ActiveUserMessage) {
             // ask for the system info to get you that
             // output the appropriate result
+        } else if (/** signout message comes in **/) {
+            SystemInfoService.getInstance().removeOnlineUser(this);
+            // propogate to the users
         }
     }
 }
