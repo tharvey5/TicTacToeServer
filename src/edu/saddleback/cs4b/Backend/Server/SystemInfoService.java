@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class SystemInfoService {
     private static volatile SystemInfoService si = null;
-    private List<ClientCommunication> onlineUsers;
+    private List<ClientConnection> onlineUsers;
 
     private SystemInfoService() {}
 
@@ -23,11 +23,11 @@ public class SystemInfoService {
         return si;
     }
 
-    public void markUserAsOnline(ClientCommunication user) {
+    public void markUserAsOnline(ClientConnection user) {
         onlineUsers.add(user);
     }
 
-    public void removeOnlineUser(ClientCommunication user) {
+    public void removeOnlineUser(ClientConnection user) {
         onlineUsers.remove(user);
     }
 }

@@ -8,10 +8,11 @@ import java.net.Socket;
 /**
  * Handles communication with a particular client
  */
-public class ClientCommunication implements Runnable {
+public class ClientCommunication implements Runnable, ClientConnection {
     private Socket socket;
     private ObjectOutputStream os;
     private ObjectInputStream is;
+    private String username; // set when registered
     // probably hold the profile information?
 
     public ClientCommunication(Socket socket) {
@@ -39,6 +40,10 @@ public class ClientCommunication implements Runnable {
             while (isRunning) {
                 Packet packet = (Packet)is.readObject();
                 BaseMessage message = packet.getData();
+
+                // todo user must be registered before they can proceed
+                //should be a way to only sign-in and register before
+                //other stuff can be done
                 handleMessages(message);
             }
         } catch (EOFException eof) {
@@ -63,9 +68,12 @@ public class ClientCommunication implements Runnable {
         } else if (message instanceof ActiveUserMessage) {
             // ask for the system info to get you that
             // output the appropriate result
-        } else if (/** signout message comes in **/) {
+        } else if (/** sign-out message comes in **/) {
             SystemInfoService.getInstance().removeOnlineUser(this);
-            // propogate to the users
+            // propagate to the users
         }
     }
+
+    @Override
+    public String identifyClient() { return username; }
 }
