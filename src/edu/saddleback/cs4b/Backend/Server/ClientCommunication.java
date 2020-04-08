@@ -51,8 +51,14 @@ public class ClientCommunication implements Runnable {
 
     private void handleMessages(BaseMessage message) {
         if (message instanceof SignInMessage) {
-            // call the authentication service
-            // send the appropriate message based on the result
+            SignInMessage signIn = (SignInMessage)message;
+
+            if (AuthenticationService.getInstance().authenticate(signIn.getUserInfo())) {
+                // respond with an authenticated message as output
+            } else {
+                // output a message that denied the access to the system
+            }
+
         } else if (message instanceof ActiveUserMessage) {
             // ask for the system info to get you that
             // output the appropriate result

@@ -5,7 +5,7 @@ public class AuthenticationService implements Authenticator {
 
     private AuthenticationService() {}
 
-    private static AuthenticationService getInstance() {
+    public static AuthenticationService getInstance() {
         if (authSvc == null) {
             synchronized (AuthenticationService.class) {
                 if (authSvc == null ) {
