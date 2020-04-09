@@ -4,9 +4,8 @@ import edu.saddleback.cs4b.Backend.Objects.User;
 
 import java.sql.*;
 
-public class DBManager
-{
-    private static DBManager instance;
+public class SQLDatabase implements DatabaseManager {
+    private static SQLDatabase instance;
     private Connection connection = null;
 
     private int uniqueID  = 1;
@@ -16,14 +15,14 @@ public class DBManager
     private int lastName  = 5;
     private int status    = 6;
 
-    static DBManager getInstance()
+    static SQLDatabase getInstance()
     {
-        if (DBManager.instance == null)
+        if (SQLDatabase.instance == null)
         {
-            DBManager.instance = new DBManager();
+            SQLDatabase.instance = new SQLDatabase();
         }
 
-        return DBManager.instance;
+        return SQLDatabase.instance;
     }
 
 
@@ -44,11 +43,12 @@ public class DBManager
         return connection;
     }
 
-    private DBManager()
+    private SQLDatabase()
     {
         this.getConnection();
     }
 
+    @Override
     public String getUsername(int id) throws SQLException
     {
         PreparedStatement ps = null;
@@ -84,6 +84,7 @@ public class DBManager
 
     //Will return a User if user is found, will throw an exception if no person is found
 
+    @Override
     public User Login(String username, String password) throws Exception
     {
         PreparedStatement ps = null;
@@ -119,6 +120,7 @@ public class DBManager
 //        }
     }
 
+    @Override
     public int getUniqueID(User user) throws Exception
     {
         PreparedStatement ps = null;
@@ -146,6 +148,7 @@ public class DBManager
 
     }
 
+    @Override
     public int addUser(User user) throws Exception
     {
         PreparedStatement ps = null;
@@ -174,6 +177,7 @@ public class DBManager
 
     }
 
+    @Override
     public void inactivateUser(int id) throws Exception {
         PreparedStatement ps = null;
 
@@ -191,6 +195,7 @@ public class DBManager
         }
     }
 
+    @Override
     public void activateUser(int id) throws Exception {
         PreparedStatement ps = null;
 
@@ -208,6 +213,7 @@ public class DBManager
         }
     }
 
+    @Override
     public String getUsersStatus(int id) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -228,6 +234,7 @@ public class DBManager
         return rs.getString(this.status);
     }
 
+    @Override
     public void updateUser(int id, User user) throws Exception {
 
         PreparedStatement ps = null;
@@ -260,5 +267,4 @@ public class DBManager
 //    {
 //        List<User> users = new ArrayList<>();
 //    }
-
 }
