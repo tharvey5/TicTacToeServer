@@ -1,5 +1,7 @@
 package edu.saddleback.cs4b.Backend.Server;
 
+import edu.saddleback.cs4b.Backend.Utilitys.Authenticatable;
+
 public class AuthenticationService implements Authenticator {
     private volatile static AuthenticationService authSvc = null;
 

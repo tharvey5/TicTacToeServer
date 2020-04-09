@@ -1,7 +1,5 @@
 package edu.saddleback.cs4b.Backend.Utilitys;
 
-import edu.saddleback.cs4b.Backend.Server.Authenticatable;
-
 public interface User extends Authenticatable {
     String getUsername();
     String getFirstName();

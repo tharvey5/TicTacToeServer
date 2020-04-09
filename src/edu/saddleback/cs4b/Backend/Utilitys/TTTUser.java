@@ -1,7 +1,5 @@
 package edu.saddleback.cs4b.Backend.Utilitys;
 
-import edu.saddleback.cs4b.Backend.Server.Authenticatable;
-
 import java.io.Serializable;
 
 // todo should this and the server lie in the Backend package to allow for
