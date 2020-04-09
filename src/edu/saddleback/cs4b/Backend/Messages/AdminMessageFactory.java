@@ -10,6 +10,10 @@ public class AdminMessageFactory implements AbstractMessageFactory {
             message = new DisconnectMessage();
         } else if (type.equals(MsgTypes.SIGN_IN.getType())) {
             message = new SignInMessage();
+        } else if (type.equals(MsgTypes.SIGN_OUT.getType())) {
+            message = new SignOutMessage();
+        } else if (type.equals(MsgTypes.REG_ERROR.getType())) {
+            message = new RegistrationErrorMessage();
         }
         return message;
     }
