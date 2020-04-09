@@ -17,11 +17,13 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private ObjectInputStream is;
     private String username; // set when registered
     // probably hold the profile information?
+    private AbstractMessageFactory msgFactory;
 
     public ClientCommunication(Socket socket) {
         this.socket = socket;
         initiateStreams();
         SystemInfoService.getInstance().markUserAsOnline(this);
+        this.msgFactory = new AdminMessageFactory();
     }
 
     private void initiateStreams() {
@@ -73,8 +75,9 @@ public class ClientCommunication implements Runnable, ClientConnection {
             }
 
         } else if (message instanceof ActiveUserMessage) {
-            // todo change this out
-            ActiveUserMessage usrMsg = new ActiveUserMessage(getActiveUsers());
+            // todo change this out with more efficient way of getting the message
+            ActiveUserMessage usrMsg = (ActiveUserMessage) msgFactory.createMessage(MsgTypes.ACTIVE_USER_REQ.getType());
+            usrMsg.setActiveUsers(getActiveUsers());
             Packet packet = new Packet(usrMsg);
             os.writeObject(packet);
             os.flush();
