@@ -25,6 +25,9 @@ public class AdminMessageFactory implements AbstractMessageFactory {
         else if (type.equals(MsgTypes.AUTHENTICATION.getType())) {
             message = new AuthenticatedMessage();
         }
+        else if (type.equals(MsgTypes.DENIED.getType())) {
+            message = new DeniedEntryMessage();
+        }
         return message;
     }
 }
