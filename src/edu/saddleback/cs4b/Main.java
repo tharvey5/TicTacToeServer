@@ -1,7 +1,5 @@
 package edu.saddleback.cs4b;
 
-import edu.saddleback.cs4b.Backend.Database.DBManager;
-import edu.saddleback.cs4b.Backend.Objects.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

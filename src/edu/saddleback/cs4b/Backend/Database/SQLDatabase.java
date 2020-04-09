@@ -4,7 +4,7 @@ import edu.saddleback.cs4b.Backend.Objects.User;
 
 import java.sql.*;
 
-public class SQLDatabase implements DatabaseManager {
+public class SQLDatabase implements DBManager {
     private static SQLDatabase instance;
     private Connection connection = null;
 
@@ -24,6 +24,7 @@ public class SQLDatabase implements DatabaseManager {
 
         return SQLDatabase.instance;
     }
+
 
 
     private Connection getConnection()
