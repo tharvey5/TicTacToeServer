@@ -1,7 +1,6 @@
 package edu.saddleback.cs4b.Backend.Messages;
 
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
-import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 public class ProfileMessage extends BaseMessage {
     private Profile profile;
@@ -20,10 +19,6 @@ public class ProfileMessage extends BaseMessage {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
-    }
-
-    public void setProfile(User user) {
-        this.profile = new Profile(user);
     }
 
     // todo should this be immutable?
