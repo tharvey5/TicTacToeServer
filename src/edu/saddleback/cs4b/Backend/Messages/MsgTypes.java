@@ -1,6 +1,7 @@
 package edu.saddleback.cs4b.Backend.Messages;
 
 public enum MsgTypes {
+    PROFILE("Profile"),
     REG_ERROR("Registration Error"),
     SUCCESS_REG("Successful Registration"),
     SIGN_IN("Sign-in"),
