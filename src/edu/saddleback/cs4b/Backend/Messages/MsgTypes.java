@@ -1,7 +1,7 @@
 package edu.saddleback.cs4b.Backend.Messages;
 
 public enum MsgTypes {
-    INVALID_REG("Invalid Registration"),
+    REG_ERROR("Registration Error"),
     SUCCESS_REG("Successful Registration"),
     SIGN_IN("Sign-in"),
     AUTHENTICATION("Authentication"),
