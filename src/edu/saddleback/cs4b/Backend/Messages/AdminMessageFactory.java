@@ -1,5 +1,9 @@
 package edu.saddleback.cs4b.Backend.Messages;
 
+/**
+ * This factory should be used to create any administrative messages BUT
+ * not the game related messages
+ */
 public class AdminMessageFactory implements AbstractMessageFactory {
     @Override
     public  BaseMessage createMessage(String type) {
