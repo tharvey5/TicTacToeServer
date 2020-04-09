@@ -66,12 +66,12 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
             if (AuthenticationService.getInstance().authenticate(signIn.getUserInfo())) {
                 // respond with an authenticated message as output
-                // os.writeObject(new Packet(new AuthenticatedMessage))
-                // os.flush()
+                 os.writeObject(new Packet(msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType())));
+                 os.flush();
             } else {
                 // output a message that denied the access to the system
-                // os.writeObject(new Packet(new DenialMessage))
-                // os.flush()
+                 os.writeObject(new Packet(msgFactory.createMessage(MsgTypes.DENIED.getType())));
+                 os.flush();
             }
 
         } else if (message instanceof ActiveUserMessage) {
@@ -82,10 +82,11 @@ public class ClientCommunication implements Runnable, ClientConnection {
             os.writeObject(packet);
             os.flush();
         } 
-//        else if (/** sign-out message comes in **/) {
-//            SystemInfoService.getInstance().removeOnlineUser(this);
-//            // propagate to the users
-//        }
+        else if (message instanceof SignOutMessage) {
+            SystemInfoService.getInstance().removeOnlineUser(this);
+            // todo finish this up
+            // propagate to the users
+        }
     }
 
     private List<String> getActiveUsers() {
