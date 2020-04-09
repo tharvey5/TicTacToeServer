@@ -22,6 +22,9 @@ public class AdminMessageFactory implements AbstractMessageFactory {
         else if (type.equals(MsgTypes.SUCCESS_REG.getType())) {
             message = new SuccessfulRegistration();
         }
+        else if (type.equals(MsgTypes.AUTHENTICATION.getType())) {
+            message = new AuthenticatedMessage();
+        }
         return message;
     }
 }
