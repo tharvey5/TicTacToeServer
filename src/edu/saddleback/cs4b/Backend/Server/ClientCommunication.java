@@ -66,12 +66,10 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
             if (AuthenticationService.getInstance().authenticate(signIn.getUserInfo())) {
                 // respond with an authenticated message as output
-                 os.writeObject(new Packet(msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType())));
-                 os.flush();
+                 notifyClient(new Packet(msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType())));
             } else {
                 // output a message that denied the access to the system
-                 os.writeObject(new Packet(msgFactory.createMessage(MsgTypes.DENIED.getType())));
-                 os.flush();
+                 notifyClient(new Packet(msgFactory.createMessage(MsgTypes.DENIED.getType())));
             }
 
         } else if (message instanceof ActiveUserMessage) {
@@ -79,14 +77,24 @@ public class ClientCommunication implements Runnable, ClientConnection {
             ActiveUserMessage usrMsg = (ActiveUserMessage) msgFactory.createMessage(MsgTypes.ACTIVE_USER_REQ.getType());
             usrMsg.setActiveUsers(getActiveUsers());
             Packet packet = new Packet(usrMsg);
-            os.writeObject(packet);
-            os.flush();
-        } 
-        else if (message instanceof SignOutMessage) {
+            notifyClient(packet);
+        } else if (message instanceof SignOutMessage) {
             SystemInfoService.getInstance().removeOnlineUser(this);
             // todo finish this up
             // propagate to the users
+        } else if (message instanceof ProfileMessage) {
+            // determine if its an update or registration for a new user
+            // via the registration service
+        } else if (message instanceof AcctDeactivationMessage) {
+            // call on the Registration service to deactivate the account
+            Packet packet = new Packet(msgFactory.createMessage(MsgTypes.DEACTIVATION.getType()));
+            notifyClient(packet);
         }
+    }
+
+    private void notifyClient(Packet packet) throws IOException {
+        os.writeObject(packet);
+        os.flush();
     }
 
     private List<String> getActiveUsers() {
