@@ -1,6 +1,7 @@
 package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
+import edu.saddleback.cs4b.Backend.Utilitys.Profile;
 
 import java.io.*;
 import java.net.Socket;
@@ -15,7 +16,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private Socket socket;
     private ObjectOutputStream os;
     private ObjectInputStream is;
-    private String username; // set when registered
+    private Profile user; // set when registered
     // probably hold the profile information?
     private AbstractMessageFactory msgFactory;
 
@@ -87,6 +88,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
             // via the registration service
         } else if (message instanceof AcctDeactivationMessage) {
             // call on the Registration service to deactivate the account
+
             Packet packet = new Packet(msgFactory.createMessage(MsgTypes.DEACTIVATION.getType()));
             notifyClient(packet);
         }
@@ -107,5 +109,5 @@ public class ClientCommunication implements Runnable, ClientConnection {
     }
 
     @Override
-    public String identifyClient() { return username; }
+    public String identifyClient() { return user.getUser().getUsername(); }
 }
