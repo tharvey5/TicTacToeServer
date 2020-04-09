@@ -10,7 +10,7 @@ public class ProfileMessage extends BaseMessage {
      * only to be used by the message factory
      */
     ProfileMessage() {
-       this(null);
+        this(null);
     }
 
     public ProfileMessage(Profile profile) {
