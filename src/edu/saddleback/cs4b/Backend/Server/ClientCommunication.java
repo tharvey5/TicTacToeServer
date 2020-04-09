@@ -73,21 +73,31 @@ public class ClientCommunication implements Runnable, ClientConnection {
             }
 
         } else if (message instanceof ActiveUserMessage) {
+
             // todo change this out with more efficient way of getting the message
             ActiveUserMessage usrMsg = (ActiveUserMessage) msgFactory.createMessage(MsgTypes.ACTIVE_USER_REQ.getType());
             usrMsg.setActiveUsers(getActiveUsers());
             Packet packet = new Packet(usrMsg);
             notifyClient(packet);
         } else if (message instanceof SignOutMessage) {
+
             SystemInfoService.getInstance().removeOnlineUser(this);
             // todo finish this up
             // propagate to the users
+
         } else if (message instanceof ProfileMessage) {
             // determine if its an update or registration for a new user
-            // via the registration service
+            Profile profileToProcess = ((ProfileMessage) message).getProfile();
+            if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
+                user = profileToProcess;
+                notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType())));
+            } else {
+                notifyClient(new Packet(msgFactory.createMessage(MsgTypes.REG_ERROR.getType())));
+            }
         } else if (message instanceof AcctDeactivationMessage) {
-            // call on the Registration service to deactivate the account
 
+            // call on the Registration service to deactivate the account
+            RegistrationService.getInstance().deactivateAccount(user);
             Packet packet = new Packet(msgFactory.createMessage(MsgTypes.DEACTIVATION.getType()));
             notifyClient(packet);
         }
