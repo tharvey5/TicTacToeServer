@@ -1,10 +1,15 @@
 package edu.saddleback.cs4b.Backend.Messages;
 
-import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * This message is received by clients to indicate that the user
+ * has been disconnected from the channel. This is NOT used for acct
+ * suspensions
+ */
 public class DisconnectMessage extends BaseMessage{
-    ArrayList<String> channels;
-    String userName;
+    private List<String> channels;
+    private String userName;
 
 
     /**
@@ -15,7 +20,7 @@ public class DisconnectMessage extends BaseMessage{
         this(null, "");
     }
 
-    public DisconnectMessage(ArrayList<String> newChannels, String newUserName)
+    public DisconnectMessage(List<String> newChannels, String newUserName)
     {
         super(MsgTypes.DISCONNECTION);
         setChannels(newChannels);
@@ -24,12 +29,12 @@ public class DisconnectMessage extends BaseMessage{
 
 
 
-    public ArrayList<String> getChannels()
+    public List<String> getChannels()
     {
         return channels;
     }
 
-    private void setChannels(ArrayList<String> channels)
+    private void setChannels(List<String> channels)
     {
         channels = channels;
     }
