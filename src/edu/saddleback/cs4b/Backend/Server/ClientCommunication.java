@@ -88,7 +88,6 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
         } else if (message instanceof ProfileMessage) {
 
-            // todo if its an already registered userProfile,
             Profile profileToProcess = ((ProfileMessage) message).getProfile();
             handleProfile(profileToProcess);
         } else if (message instanceof AcctDeactivationMessage) {
