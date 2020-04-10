@@ -2,7 +2,9 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
+import edu.saddleback.cs4b.Backend.Utilitys.TTTProfile;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
+import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 import java.io.*;
 import java.net.Socket;
@@ -19,12 +21,14 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private Profile userProfile; // set when registered
     // probably hold the profile information?
     private AbstractMessageFactory msgFactory;
+    private Authenticator authenticator;
 
     public ClientCommunication(Socket socket) {
         this.socket = socket;
         initiateStreams();
         SystemInfoService.getInstance().markUserAsOnline(this);
         this.msgFactory = new AdminMessageFactory();
+        this.authenticator = AuthenticationService.getInstance();
     }
 
     private void initiateStreams() {
@@ -64,10 +68,11 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private void handleMessages(BaseMessage message) throws IOException {
         if (message instanceof SignInMessage) {
             SignInMessage signIn = (SignInMessage)message;
-
-            if (AuthenticationService.getInstance().authenticate(signIn.getUserInfo())) {
+            User userProcessed = (User)authenticator.authenticate(signIn.getUserInfo());
+            if (userProcessed != null) {
                 // respond with an authenticated message as output
                  notifyClient(new Packet(msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType())));
+                // userProfile = new TTTProfile(userProcessed);
             } else {
                 // output a message that denied the access to the system
                  notifyClient(new Packet(msgFactory.createMessage(MsgTypes.DENIED.getType())));

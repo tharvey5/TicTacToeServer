@@ -3,6 +3,7 @@ package edu.saddleback.cs4b.Backend.Server;
 import edu.saddleback.cs4b.Backend.Database.DBManager;
 import edu.saddleback.cs4b.Backend.Database.SQLDatabase;
 import edu.saddleback.cs4b.Backend.Utilitys.Authenticatable;
+import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 public class AuthenticationService implements Authenticator {
     private volatile static AuthenticationService authSvc = null;
@@ -23,17 +24,17 @@ public class AuthenticationService implements Authenticator {
         return authSvc;
     }
 
-    //TODO will we need to synchronize this when we have it running
-    // with the data base?
+
     @Override
-    public boolean authenticate(Authenticatable auth) {
+    public synchronized Authenticatable authenticate(Authenticatable auth) {
+        Authenticatable authObj = null;
         try {
-            database.Login(auth.getIdentifier(), auth.getKey());
+            authObj = database.Login(auth.getIdentifier(), auth.getKey());
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return authObj;
         }
         // the authentication
-        return true;
+        return null;
     }
 }
