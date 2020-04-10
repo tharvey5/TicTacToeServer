@@ -31,6 +31,7 @@ public class RegistrationService {
         try {
             database.addUser(profile.getUser());
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -40,9 +41,11 @@ public class RegistrationService {
      * @return true if successful & false if it failed
      */
     public boolean deactivateAccount(Profile profile) {
+        int id = Integer.parseInt(profile.getId());
         try {
-            //database.inactivateUser();
+            database.inactivateUser(id);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;

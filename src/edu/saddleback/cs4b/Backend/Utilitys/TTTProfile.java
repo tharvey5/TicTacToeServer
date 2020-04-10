@@ -37,6 +37,11 @@ public class TTTProfile implements Serializable, Profile {
     public User getUser() { return (TTTUser)user.clone(); }
 
     @Override
+    public String getId() {
+        return Integer.toString(user.getId());
+    }
+
+    @Override
     protected Object clone()  {
         try {
             TTTProfile copy = (TTTProfile) super.clone();
