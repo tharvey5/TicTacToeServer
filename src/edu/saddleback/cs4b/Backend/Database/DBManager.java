@@ -1,6 +1,6 @@
 package edu.saddleback.cs4b.Backend.Database;
 
-import edu.saddleback.cs4b.Backend.Objects.User;
+import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 import java.sql.SQLException;
 

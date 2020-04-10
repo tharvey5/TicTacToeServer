@@ -1,6 +1,7 @@
 package edu.saddleback.cs4b.Backend.Database;
 
-import edu.saddleback.cs4b.Backend.Objects.User;
+import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
+import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 import java.sql.*;
 
@@ -99,7 +100,7 @@ public class SQLDatabase implements DBManager {
 
             rs = ps.executeQuery();
 
-            User user = new User(rs.getString(this.username), rs.getString(this.password), rs.getString(this.firstName), rs.getString(this.lastName));
+            User user = new TTTUser(rs.getString(this.username), rs.getString(this.password), rs.getString(this.firstName), rs.getString(this.lastName));
 
             return user;
         }

@@ -1,6 +1,7 @@
 package edu.saddleback.cs4b.Backend.Database;
 
-import edu.saddleback.cs4b.Backend.Objects.User;
+import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
+import edu.saddleback.cs4b.Backend.Utilitys.User;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -60,7 +61,7 @@ class SQLDatabaseTest {
 
         DBManager db = SQLDatabase.getInstance();
 
-        User user = new User(username, password, firstName, lastName);
+        User user = new TTTUser(username, password, firstName, lastName);
         String error;
         int id;
 
@@ -184,7 +185,7 @@ class SQLDatabaseTest {
 
         String error;
 
-        User user = new User("JEFF", "1235", "Isaac", "Estrada");
+        User user = new TTTUser("JEFF", "1235", "Isaac", "Estrada");
         int idOfUpdatedUser = 1;
 
         String status;
