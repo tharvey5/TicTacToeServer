@@ -2,6 +2,7 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
+import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
 
 import java.io.*;
 import java.net.Socket;
@@ -15,7 +16,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private Socket socket;
     private ObjectOutputStream os;
     private ObjectInputStream is;
-    private Profile user; // set when registered
+    private Profile userProfile; // set when registered
     // probably hold the profile information?
     private AbstractMessageFactory msgFactory;
 
@@ -46,7 +47,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 Packet packet = (Packet)is.readObject();
                 BaseMessage message = packet.getData();
 
-                // todo user must be registered before they can proceed
+                // todo userProfile must be registered before they can proceed
                 //should be a way to only sign-in and register before
                 //other stuff can be done
                 handleMessages(message);
@@ -87,22 +88,27 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
         } else if (message instanceof ProfileMessage) {
 
-            // todo if its an already registered user,
+            // todo if its an already registered userProfile,
             Profile profileToProcess = ((ProfileMessage) message).getProfile();
-
-            // if user exists, pass that set that id in the profile to process
-            if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
-                user = profileToProcess;
-                notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType())));
-            } else {
-                notifyClient(new Packet(msgFactory.createMessage(MsgTypes.REG_ERROR.getType())));
-            }
+            handleProfile(profileToProcess);
         } else if (message instanceof AcctDeactivationMessage) {
 
             // call on the Registration service to deactivate the account
-            RegistrationService.getInstance().deactivateAccount(user);
+            RegistrationService.getInstance().deactivateAccount(userProfile);
             Packet packet = new Packet(msgFactory.createMessage(MsgTypes.DEACTIVATION.getType()));
             notifyClient(packet);
+        }
+    }
+
+    private void handleProfile(Profile profileToProcess) throws IOException {
+        if (userProfile != null && !userProfile.getId().equals("-1")) {
+            ((TTTUser)profileToProcess.getUser()).setId(Integer.parseInt(userProfile.getId()));
+        }
+        if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
+            userProfile = profileToProcess;
+            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType())));
+        } else {
+            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.REG_ERROR.getType())));
         }
     }
 
@@ -121,5 +127,5 @@ public class ClientCommunication implements Runnable, ClientConnection {
     }
 
     @Override
-    public String identifyClient() { return user.getUser().getUsername(); }
+    public String identifyClient() { return userProfile.getUser().getUsername(); }
 }

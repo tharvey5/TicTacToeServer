@@ -28,8 +28,13 @@ public class RegistrationService {
      * a repeated username
      */
     public boolean setAccountDetails(Profile profile) {
+        int id = Integer.parseInt(profile.getId());
         try {
-            database.addUser(profile.getUser());
+            if (id == -1) {
+                database.addUser(profile.getUser());
+            } else {
+                database.updateUser(id, profile.getUser());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
