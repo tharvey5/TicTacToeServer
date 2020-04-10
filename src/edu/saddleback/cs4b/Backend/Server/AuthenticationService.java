@@ -34,7 +34,7 @@ public class AuthenticationService implements Authenticator {
             e.printStackTrace();
             return authObj;
         }
-        // the authentication
-        return null;
+        // the authentication is successful if this isn't null
+        return authObj;
     }
 }
