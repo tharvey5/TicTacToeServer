@@ -1,11 +1,16 @@
 package edu.saddleback.cs4b.Backend.Server;
 
+import edu.saddleback.cs4b.Backend.Database.DBManager;
+import edu.saddleback.cs4b.Backend.Database.SQLDatabase;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
 
 public class RegistrationService {
     private static volatile RegistrationService rs = null;
+    private DBManager database;
 
-    private RegistrationService() {}
+    private RegistrationService() {
+        this.database = SQLDatabase.getInstance();
+    }
 
     public static RegistrationService getInstance() {
         if (rs == null) {
@@ -23,6 +28,11 @@ public class RegistrationService {
      * a repeated username
      */
     public boolean setAccountDetails(Profile profile) {
+        try {
+            database.addUser(profile.getUser());
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
@@ -30,7 +40,11 @@ public class RegistrationService {
      * @return true if successful & false if it failed
      */
     public boolean deactivateAccount(Profile profile) {
-        // call on the DB to deactivate the account
+        try {
+            //database.inactivateUser();
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 }

@@ -86,8 +86,11 @@ public class ClientCommunication implements Runnable, ClientConnection {
             // propagate to the users
 
         } else if (message instanceof ProfileMessage) {
-            // determine if its an update or registration for a new user
+
+            // todo if its an already registered user,
             Profile profileToProcess = ((ProfileMessage) message).getProfile();
+
+            // if user exists, pass that set that id in the profile to process
             if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
                 user = profileToProcess;
                 notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType())));

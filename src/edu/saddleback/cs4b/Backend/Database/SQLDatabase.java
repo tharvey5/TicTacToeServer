@@ -16,7 +16,7 @@ public class SQLDatabase implements DBManager {
     private int lastName  = 5;
     private int status    = 6;
 
-    static SQLDatabase getInstance()
+    public static SQLDatabase getInstance()
     {
         if (SQLDatabase.instance == null)
         {
