@@ -4,6 +4,7 @@ import edu.saddleback.cs4b.Backend.Database.DBManager;
 import edu.saddleback.cs4b.Backend.Database.SQLDatabase;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
 
+// todo make thread-safe for adding user and deactivate
 public class RegistrationService {
     private static volatile RegistrationService rs = null;
     private DBManager database;
@@ -54,5 +55,16 @@ public class RegistrationService {
             return false;
         }
         return true;
+    }
+
+    public int getUsersId(Profile profile) {
+        int id = -1;
+        try {
+            id = database.getUniqueID(profile.getUser());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+        return id;
     }
 }

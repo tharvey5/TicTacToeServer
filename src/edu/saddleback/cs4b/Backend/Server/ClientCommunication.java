@@ -70,9 +70,12 @@ public class ClientCommunication implements Runnable, ClientConnection {
             SignInMessage signIn = (SignInMessage)message;
             User userProcessed = (User)authenticator.authenticate(signIn.getUserInfo());
             if (userProcessed != null) {
-                // respond with an authenticated message as output
+
+                 // if the user was authenticated, then set the user profile
                  notifyClient(new Packet(msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType())));
-                // userProfile = new TTTProfile(userProcessed);
+                 userProfile.setUser(userProcessed);
+                  int id = RegistrationService.getInstance().getUsersId(userProfile);
+                 userProfile.setId(Integer.toString(id));
             } else {
                 // output a message that denied the access to the system
                  notifyClient(new Packet(msgFactory.createMessage(MsgTypes.DENIED.getType())));
