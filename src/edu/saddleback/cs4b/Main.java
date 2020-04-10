@@ -6,18 +6,24 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+import java.sql.SQLException;
 
+public class Main extends Application
+{
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception
+    {
         Parent root = FXMLLoader.load(getClass().getResource("UI/ServerScreen.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
     }
 
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        //User myUser = new User("zerohezitation", "yourMom", "Jeffrey", "Adams");
+        //DBManager.getInstance().addUser(myUser);
+        //DBManager.getInstance().getUsername(1);
         launch(args);
+
     }
 }
