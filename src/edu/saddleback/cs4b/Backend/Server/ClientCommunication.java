@@ -2,6 +2,7 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
+import edu.saddleback.cs4b.Backend.Utilitys.TTTProfile;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
 
@@ -72,8 +73,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
                  // if the user was authenticated, then set the user profile
                  notifyClient(new Packet(msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType())));
-                 userProfile.setUser(userProcessed);
-                  int id = RegistrationService.getInstance().getUsersId(userProfile);
+                 userProfile = new TTTProfile((TTTUser)userProcessed);
+                 int id = RegistrationService.getInstance().getUsersId(userProfile);
                  userProfile.setId(Integer.toString(id));
             } else {
                 // output a message that denied the access to the system
