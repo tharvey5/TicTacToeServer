@@ -100,7 +100,7 @@ public class SQLDatabase implements DBManager {
 
             rs = ps.executeQuery();
 
-            User user = new TTTUser(rs.getString(this.username), rs.getString(this.password), rs.getString(this.firstName), rs.getString(this.lastName));
+            User user = new TTTUser(rs.getString(this.username), rs.getString(this.firstName), rs.getString(this.lastName), rs.getString(this.password));
 
             return user;
         }

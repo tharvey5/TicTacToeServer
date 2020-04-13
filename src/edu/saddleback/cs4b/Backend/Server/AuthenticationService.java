@@ -3,7 +3,6 @@ package edu.saddleback.cs4b.Backend.Server;
 import edu.saddleback.cs4b.Backend.Database.DBManager;
 import edu.saddleback.cs4b.Backend.Database.SQLDatabase;
 import edu.saddleback.cs4b.Backend.Utilitys.Authenticatable;
-import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 public class AuthenticationService implements Authenticator {
     private volatile static AuthenticationService authSvc = null;
