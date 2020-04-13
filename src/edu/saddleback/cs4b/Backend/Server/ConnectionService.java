@@ -46,6 +46,7 @@ public class ConnectionService {
         while (isRunning) {
             try {
                 connection = serverSocket.accept();
+                System.out.println("Connection Accepted");
                 client = new ClientCommunication(connection);
                 worker = new Thread(client);
                 worker.start();
@@ -55,5 +56,10 @@ public class ConnectionService {
                 io.printStackTrace();
             }
         }
+    }
+
+    public static void main(String[] args) {
+        ConnectionService svc = ConnectionService.getInstance();
+        svc.start();
     }
 }
