@@ -19,7 +19,7 @@
          <children>
             <VBox layoutX="14.0" layoutY="171.0" prefHeight="259.0" prefWidth="190.0" spacing="10.0">
                <children>
-                  <Button fx:id="eventLogButton" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#handleEventLogAction" onMouseEntered="#highlightEventLog" onMouseExited="#resetEventLog" prefHeight="27.0" prefWidth="171.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Event Log" textFill="WHITE">
+                  <Button fx:id="eventLogButton" alignment="TOP_LEFT" mnemonicParsing="false" onMouseClicked="#handleEventLogAction" onMouseEntered="#highlightEventLog" onMouseExited="#resetEventLog" prefHeight="27.0" prefWidth="171.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Event Log" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -27,7 +27,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="activeGamesButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleActiveGamesAction" onMouseEntered="#highlightActiveGames" onMouseExited="#resetActiveGames" prefHeight="27.0" prefWidth="171.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Active Games" textFill="WHITE">
+                  <Button fx:id="activeGamesButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleActiveGamesAction" onMouseEntered="#highlightActiveGames" onMouseExited="#resetActiveGames" prefHeight="27.0" prefWidth="171.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Active Games" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -35,7 +35,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="completedGamesButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleCompletedGamesAction" onMouseEntered="#highlightCompletedGames" onMouseExited="#resetCompletedGames" prefHeight="27.0" prefWidth="171.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Completed Games" textFill="WHITE">
+                  <Button fx:id="completedGamesButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="55.0" mnemonicParsing="false" onMouseClicked="#handleCompletedGamesAction" onMouseEntered="#highlightCompletedGames" onMouseExited="#resetCompletedGames" prefHeight="27.0" prefWidth="171.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Completed Games" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -43,13 +43,10 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="playersButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="100.0" mnemonicParsing="false" onAction="#handlePlayersAction" onMouseEntered="#highlightPlayers" onMouseExited="#resetPlayers" prefHeight="27.0" prefWidth="171.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Players" textFill="WHITE">
+                  <Button fx:id="playersButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="100.0" mnemonicParsing="false" onMouseClicked="#handlePlayersAction" onMouseEntered="#highlightPlayers" onMouseExited="#resetPlayers" prefHeight="27.0" prefWidth="171.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Players" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
                   </Button>
                </children>
             </VBox>
