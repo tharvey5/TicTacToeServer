@@ -13,7 +13,9 @@ public class SystemInfoService {
     private static volatile SystemInfoService si = null;
     private List<ClientConnection> onlineUsers;
 
-    private SystemInfoService() {}
+    private SystemInfoService() {
+        onlineUsers = new ArrayList<>();
+    }
 
     public static SystemInfoService getInstance() {
         if (si == null) {
