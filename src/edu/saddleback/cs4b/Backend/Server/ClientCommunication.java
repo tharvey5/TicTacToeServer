@@ -2,7 +2,6 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
-import edu.saddleback.cs4b.Backend.Utilitys.TTTProfile;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
 
@@ -44,7 +43,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
     @Override
     // the connection will listen for incoming messages
     public void run() {
-        boolean isRunning = false;
+        boolean isRunning = true;
         try {
             //ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
             while (isRunning) {
@@ -111,6 +110,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
         if (userProfile != null && !userProfile.getId().equals("-1")) {
             ((TTTUser)profileToProcess.getUser()).setId(Integer.parseInt(userProfile.getId()));
         }
+
         if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
             userProfile = profileToProcess;
             notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType())));
