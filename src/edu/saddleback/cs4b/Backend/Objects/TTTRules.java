@@ -17,8 +17,12 @@ public class TTTRules implements GameRules {
     }
 
     private String checkForWinner(Board board) {
-        String winningToken = "";
-        if (!(winningToken = horizontalWinner(board)).equals("")) {
+        String winningToken = null;
+        if ((winningToken = horizontalWinner(board)) != null) {
+            return winningToken;
+        } else if ((winningToken = verticalWinner(board)) != null) {
+            return winningToken;
+        } else if ((winningToken = checkDiagonalWinner(board)) != null) {
             return winningToken;
         }
         return winningToken;
