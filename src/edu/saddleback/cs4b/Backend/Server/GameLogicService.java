@@ -1,6 +1,7 @@
 package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Objects.Board;
+import edu.saddleback.cs4b.Backend.Objects.GameRules;
 import edu.saddleback.cs4b.Backend.Objects.Move;
 
 /**
@@ -24,14 +25,14 @@ public class GameLogicService {
         return logicService;
     }
 
-    public boolean validMove(Move move, GameRule rules) {
-        return rules.acceptablePlacement(move);
+    public boolean validMove(Board board, Move move, GameRules rules) {
+        return rules.inBounds(move) && rules.acceptablePlacement(board, move);
     }
 
     /**
      * returns the user name of the winner or "" if no winner
      */
-    public String findWinner(Board board, GameRule rules) {
+    public String findWinner(Board board, GameRules rules) {
         return rules.gameWinner(board);
     }
 }
