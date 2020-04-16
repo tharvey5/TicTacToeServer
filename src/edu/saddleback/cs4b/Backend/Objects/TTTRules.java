@@ -3,7 +3,8 @@ package edu.saddleback.cs4b.Backend.Objects;
 public class TTTRules implements GameRules {
     @Override
     public boolean acceptablePlacement(Board board, Move move) {
-        return false;
+        Coordinate coord = move.getCoordinate();
+        return board.getToken(coord.getXCoord(), coord.getYCoord()) == null;
     }
 
     @Override
