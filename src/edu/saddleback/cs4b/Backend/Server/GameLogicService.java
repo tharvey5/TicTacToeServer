@@ -7,7 +7,7 @@ public class GameLogicService {
     private volatile static GameLogicService logicService = null;
 
     private GameLogicService() {}
-    
+
     public static GameLogicService getInstance() {
         if (logicService == null) {
             synchronized (GameLogicService.class) {
