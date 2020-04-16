@@ -34,4 +34,15 @@ public class TTTRules implements GameRules {
         }
         return null;
     }
+
+    private String verticalWinner(Board board) {
+        for (int c = 0; c < board.cols(); ++c) {
+            if (board.getToken(0, c).equals(board.getToken(1, c)) &&
+                board.getToken(1, c).equals(board.getToken(2, c)) &&
+                board.getToken(0, c) != null) {
+                return board.getToken(0, c).getTokenID();
+            }
+        }
+        return null;
+    }
 }
