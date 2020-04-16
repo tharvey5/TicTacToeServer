@@ -13,6 +13,14 @@ public class TTTRules implements GameRules {
 
     @Override
     public String gameWinner(Board board) {
-        return null;
+        return checkForWinner(board);
+    }
+
+    private String checkForWinner(Board board) {
+        String winningToken = "";
+        if (!(winningToken = horizontalWinner(board)).equals("")) {
+            return winningToken;
+        }
+        return winningToken;
     }
 }
