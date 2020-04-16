@@ -8,7 +8,9 @@ public class TTTRules implements GameRules {
 
     @Override
     public boolean inBounds(Move move) {
-        return false;
+        Coordinate coordinate = move.getCoordinate();
+        return (coordinate.getXCoord() >= 0 && coordinate.getXCoord() < 3) &&
+                coordinate.getYCoord() >= 0 && coordinate.getYCoord() < 3;
     }
 
     @Override
