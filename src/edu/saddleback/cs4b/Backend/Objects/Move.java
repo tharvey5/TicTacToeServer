@@ -8,7 +8,7 @@ public interface Move
     public void setGameID(String newGameID);
 
     public LocalDateTime getStartTime();
-    public void setStartTime(LocalDateTime);
+    public void setStartTime(LocalDateTime time);
 
     public String getPlayerID();
     public void setPlayerID(String newPlayerID);
