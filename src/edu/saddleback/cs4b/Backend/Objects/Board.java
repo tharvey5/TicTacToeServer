@@ -6,4 +6,6 @@ public interface Board
    void setToken(Coordinate coordinate, Token token);
    Board getBoard();
    Token getToken(int r, int c);
+   int rows();
+   int cols();
 }
