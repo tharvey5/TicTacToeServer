@@ -14,15 +14,15 @@ public interface Game
     public String getOtherPlayer();
     public void setOtherPlayer (String newOtherPlayer);
 
-    public List getViewers();
-    public void setViewers
+    public List<String> getViewers();
+    public void setViewers(List<String> newViewers);
 
-    public void addViewer();
-    public void removeViewer();
+    public void addViewer(String newViewer);
+    public void removeViewer(String newViewer);
 
 
-    public List getMoves();
-    public void setMoves(List newMoves);
+    public List<Move> getMoves();
+    public void setMoves(List<Move> newMoves);
     public void addMove(Move newMove);
 
     public String getWinner();
