@@ -45,4 +45,19 @@ public class TTTRules implements GameRules {
         }
         return null;
     }
+
+    private String checkDiagonalWinner(Board board) {
+        if (board.getToken(0, 0).equals(board.getToken(1, 1)) &&
+            board.getToken(1, 1).equals(board.getToken(2, 2)) &&
+            board.getToken(0, 0) != null) {
+            return board.getToken(1, 1).getTokenID();
+        }
+
+        if (board.getToken(0,2).equals(board.getToken(1,1)) &&
+            board.getToken(1, 1).equals(board.getToken(2,0)) &&
+            board.getToken(0,2) != null) {
+            return board.getToken(1,1).getTokenID();
+        }
+        return null;
+    }
 }
