@@ -5,17 +5,20 @@ import java.util.List;
 
 public interface Game
 {
-    public LocalDateTime getStartTime();
+    public String getStartTime();
     public void setStartTime(LocalDateTime newTime);
 
     public String getStartPlayer();
-    public void setStartPlayer(String newStartPlayer);
+    public void setStartPlayer(String username);
+
+    void setCreator(String username);
+    String getCreator();
 
     public String getOtherPlayer();
-    public void setOtherPlayer (String newOtherPlayer);
+    public void setOtherPlayer (String username);
 
-    public List<Move> getMoves();
-    public void setMoves(List<Move> newMoves);
+    public Moves getMoves();
+    public void setMoves(Moves newMoves);
     public void addMove(Move newMove);
 
     public String getWinner();
