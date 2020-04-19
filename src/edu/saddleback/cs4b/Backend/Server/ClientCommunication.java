@@ -93,6 +93,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
         } else if (message instanceof SignOutMessage) {
 
             SystemInfoService.getInstance().removeOnlineUser(this);
+            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SIGN_OUT.getType())));
             // todo finish this up
             // propagate to the users
 
@@ -111,12 +112,14 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
     private void handleProfile(Profile profileToProcess) throws IOException {
         if (userProfile != null && !userProfile.getId().equals("-1")) {
-            ((TTTUser)profileToProcess.getUser()).setId(Integer.parseInt(userProfile.getId()));
+            profileToProcess.setId(userProfile.getId());
         }
 
         if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
             userProfile = profileToProcess;
-            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType())));
+            SuccessfulRegistration msg = (SuccessfulRegistration)msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType());
+            msg.setUser(userProfile.getUser());
+            notifyClient(new Packet(msg));
         } else {
             notifyClient(new Packet(msgFactory.createMessage(MsgTypes.REG_ERROR.getType())));
         }
