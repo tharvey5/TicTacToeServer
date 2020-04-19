@@ -40,6 +40,11 @@ public class TTTUser implements Serializable, Cloneable, User {
     public String getUsername() { return username; }
 
     @Override
+    public void setId(String id) {
+        this.id = Integer.parseInt(id);
+    }
+
+    @Override
     public String getFirstName() { return fn; }
 
     @Override
