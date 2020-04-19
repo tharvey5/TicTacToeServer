@@ -72,7 +72,9 @@ public class ClientCommunication implements Runnable, ClientConnection {
             if (userProcessed != null) {
 
                  // if the user was authenticated, then set the user profile
-                 notifyClient(new Packet(msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType())));
+                AuthenticatedMessage authMsg = (AuthenticatedMessage) msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType());
+                authMsg.setAuthUser(userProcessed);
+                 notifyClient(new Packet(authMsg));
                  userProfile = new TTTProfile((TTTUser)userProcessed);
                  int id = RegistrationService.getInstance().getUsersId(userProfile);
                  userProfile.setId(Integer.toString(id));
