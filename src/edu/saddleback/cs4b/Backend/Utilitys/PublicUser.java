@@ -3,55 +3,47 @@ package edu.saddleback.cs4b.Backend.Utilitys;
 /**
  * This user will only contain information about a user
  * that is safe for public visibility
+ *
+ * NOTE: Our user structure could of been designed in a better way
+ * possibly using an abstract class for the specific use cases
  */
 public class PublicUser implements User {
-    @Override
-    public String getUsername() {
-        return null;
-    }
+    private String firstName;  // included bc our contract expects it
+    private String lastName;   // included bc our contract expects it
+    private String username;
+    private String id;
 
     @Override
-    public String getFirstName() {
-        return null;
-    }
+    public String getUsername() { return username; }
 
     @Override
-    public String getLastName() {
-        return null;
-    }
+    public String getFirstName() { return firstName; }
 
     @Override
-    public String getPassword() {
-        return null;
-    }
+    public String getLastName() { return lastName; }
 
     @Override
-    public void setUsername(String username) {
-
-    }
+    public String getPassword() { return null; }
 
     @Override
-    public void setFirstName(String firstName) {
-
-    }
+    public void setUsername(String username) { this.username = username; }
 
     @Override
-    public void setLastName(String lastName) {
-
-    }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
     @Override
-    public void setPassword(String password) {
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-    }
+    @Override
+    public void setPassword(String password) { }
 
     @Override
     public String getKey() {
-        return null;
+        return username;
     }
 
     @Override
     public String getIdentifier() {
-        return null;
+        return id;
     }
 }
