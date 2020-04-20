@@ -15,7 +15,7 @@ public class UserRemovedMessage extends BaseMessage {
     }
 
     public UserRemovedMessage(PublicUser user) {
-        super(MsgTypes.ADDED_USER);
+        super(MsgTypes.REMOVED_USER);
         this.user = user;
     }
 

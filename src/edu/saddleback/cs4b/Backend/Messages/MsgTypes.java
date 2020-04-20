@@ -26,7 +26,8 @@ public enum MsgTypes {
 
 
      // messages that are only used on the server
-     ADDED_USER("Added User");
+     ADDED_USER("Added User"),
+     REMOVED_USER("Removed User");
 
 
 
