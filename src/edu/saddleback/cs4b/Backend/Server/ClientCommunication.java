@@ -133,8 +133,6 @@ public class ClientCommunication implements Runnable, ClientConnection {
             // display the updated user name
             if (userProfile != null && !userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
                 log.log(new MessageEvent(new UserAddedMessage(profileToProcess.getUser())));
-            } else if (userProfile == null) {
-                log.log(new MessageEvent(new UserAddedMessage(profileToProcess.getUser())));
             }
 
             userProfile = profileToProcess;
