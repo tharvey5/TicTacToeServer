@@ -1,6 +1,10 @@
 package edu.saddleback.cs4b.UI;
 
 
+import edu.saddleback.cs4b.Backend.PubSub.Observer;
+import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
+import edu.saddleback.cs4b.Backend.Server.Logger;
+import edu.saddleback.cs4b.Backend.Server.ServerLogger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -8,7 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class ServerScreenController
+public class ServerScreenController implements Observer
 {
     @FXML
     private Button eventLogButton;
@@ -24,6 +28,18 @@ public class ServerScreenController
 
     @FXML
     private BorderPane viewScreen;
+
+
+    public ServerScreenController() {
+        ServerLogger.getInstance().addObserver(this);
+    }
+    
+
+    @Override
+    public void update(SystemEvent e)
+    {
+
+    }
 
 
     /**
