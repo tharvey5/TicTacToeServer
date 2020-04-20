@@ -33,7 +33,7 @@ public class ServerScreenController implements Observer
     public ServerScreenController() {
         ServerLogger.getInstance().addObserver(this);
     }
-    
+
 
     @Override
     public void update(SystemEvent e)
