@@ -1,6 +1,7 @@
 package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
+import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTProfile;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
@@ -22,6 +23,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
     // probably hold the profile information?
     private AbstractMessageFactory msgFactory;
     private Authenticator authenticator;
+    private Logger log = ServerLogger.getInstance();
 
     public ClientCommunication(Socket socket) {
         this.socket = socket;
@@ -74,10 +76,13 @@ public class ClientCommunication implements Runnable, ClientConnection {
                  // if the user was authenticated, then set the user profile
                 AuthenticatedMessage authMsg = (AuthenticatedMessage) msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType());
                 authMsg.setAuthUser(userProcessed);
-                 notifyClient(new Packet(authMsg));
-                 userProfile = new TTTProfile((TTTUser)userProcessed);
-                 int id = RegistrationService.getInstance().getUsersId(userProfile);
-                 userProfile.setId(Integer.toString(id));
+                notifyClient(new Packet(authMsg));
+                userProfile = new TTTProfile((TTTUser)userProcessed);
+                int id = RegistrationService.getInstance().getUsersId(userProfile);
+                userProfile.setId(Integer.toString(id));
+
+                // log the new user on the UI
+                log.log(new MessageEvent(new UserAddedMessage(userProfile.getUser())));
             } else {
                 // output a message that denied the access to the system
                  notifyClient(new Packet(msgFactory.createMessage(MsgTypes.DENIED.getType())));
@@ -97,6 +102,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
             // todo finish this up
             // propagate to the users
 
+            // log the new user on the UI
+            log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
         } else if (message instanceof ProfileMessage) {
 
             Profile profileToProcess = ((ProfileMessage) message).getProfile();
@@ -111,11 +118,23 @@ public class ClientCommunication implements Runnable, ClientConnection {
     }
 
     private void handleProfile(Profile profileToProcess) throws IOException {
+        // if a user already exists
         if (userProfile != null && !userProfile.getId().equals("-1")) {
             profileToProcess.setId(userProfile.getId());
+
+            if (!userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
+                System.out.println("occurs");
+                log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
+            }
         }
 
         if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
+
+            // display the updated user name
+            if (userProfile != null && !userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
+                log.log(new MessageEvent(new UserAddedMessage(profileToProcess.getUser())));
+            }
+
             userProfile = profileToProcess;
             SuccessfulRegistration msg = (SuccessfulRegistration)msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType());
             msg.setUser(userProfile.getUser());
