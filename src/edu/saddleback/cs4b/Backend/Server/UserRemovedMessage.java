@@ -5,16 +5,16 @@ import edu.saddleback.cs4b.Backend.Messages.MsgTypes;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
 /**
- * Sent to the user when user has been added
+ * Sent to the UI when user has been removed
  */
-public class UserAddedMessage extends BaseMessage {
+public class UserRemovedMessage extends BaseMessage {
     private PublicUser user;
 
-    public UserAddedMessage() {
+    public UserRemovedMessage() {
         this(null);
     }
 
-    public UserAddedMessage(PublicUser user) {
+    public UserRemovedMessage(PublicUser user) {
         super(MsgTypes.ADDED_USER);
         this.user = user;
     }
