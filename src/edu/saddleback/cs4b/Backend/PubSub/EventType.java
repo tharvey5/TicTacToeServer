@@ -6,8 +6,7 @@ package edu.saddleback.cs4b.Backend.PubSub;
  */
 public enum EventType {
     MESSAGE_EVENT("Message Event"),
-    UI_EVENT("UI-Event"),
-    INNER_EVENT("Inner Event");
+    UI_EVENT("UI-Event");
 
     private EventType(String type) { this.type = type; }
     private String type;
