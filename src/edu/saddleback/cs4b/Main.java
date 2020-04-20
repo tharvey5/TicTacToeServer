@@ -14,16 +14,12 @@ public class Main extends Application
     public void start(Stage primaryStage) throws Exception
     {
         Parent root = FXMLLoader.load(getClass().getResource("UI/ServerScreen.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public static void main(String[] args) throws SQLException {
-        //User myUser = new User("zerohezitation", "yourMom", "Jeffrey", "Adams");
-        //DBManager.getInstance().addUser(myUser);
-        //DBManager.getInstance().getUsername(1);
+    public static void main(String[] args) {
         launch(args);
-
     }
 }
