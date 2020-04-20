@@ -9,8 +9,11 @@ import edu.saddleback.cs4b.Backend.Server.Logger;
 import edu.saddleback.cs4b.Backend.Server.ServerLogger;
 import edu.saddleback.cs4b.Backend.Server.UserAddedMessage;
 import edu.saddleback.cs4b.Backend.Server.UserRemovedMessage;
+import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -33,6 +36,9 @@ public class ServerScreenController implements Observer
     @FXML
     private BorderPane viewScreen;
 
+    @FXML
+    private ListView<String> tempArea; // this is just temporary until we have a solution
+
 
     public ServerScreenController() {
         ServerLogger.getInstance().addObserver(this);
@@ -52,12 +58,22 @@ public class ServerScreenController implements Observer
     {
         if (message instanceof UserAddedMessage)
         {
-            // add
+            displayUser(((UserAddedMessage) message).getUser());
         }
         else if (message instanceof UserRemovedMessage)
         {
-            // remov
+            removeUser(((UserRemovedMessage) message).getUser());
         }
+    }
+
+    private void removeUser(PublicUser user)
+    {
+        Platform.runLater(()-> tempArea.getItems().remove(user.getUsername()));
+    }
+
+    private void displayUser(PublicUser user)
+    {
+        Platform.runLater(()-> tempArea.getItems().add(user.getUsername()));
     }
 
 
