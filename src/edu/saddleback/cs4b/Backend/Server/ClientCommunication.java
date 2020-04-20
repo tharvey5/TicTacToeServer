@@ -121,15 +121,14 @@ public class ClientCommunication implements Runnable, ClientConnection {
         // if a user already exists
         if (userProfile != null && !userProfile.getId().equals("-1")) {
             profileToProcess.setId(userProfile.getId());
-
-            if (!userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
-                System.out.println("occurs");
-                log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
-            }
         }
 
         if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
 
+            if (userProfile != null && !userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
+                System.out.println("occurs");
+                log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
+            }
             // display the updated user name
             if (userProfile != null && !userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
                 log.log(new MessageEvent(new UserAddedMessage(profileToProcess.getUser())));
