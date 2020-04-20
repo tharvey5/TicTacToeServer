@@ -68,12 +68,12 @@ public class ServerScreenController implements Observer
 
     private void removeUser(PublicUser user)
     {
-        Platform.runLater(()-> tempArea.getItems().remove(user.getUsername()));
+        Platform.runLater(()-> tempArea.getItems().remove("user: " + user.getUsername()));
     }
 
     private void displayUser(PublicUser user)
     {
-        Platform.runLater(()-> tempArea.getItems().add(user.getUsername()));
+        Platform.runLater(()-> tempArea.getItems().add("user: " + user.getUsername()));
     }
 
 

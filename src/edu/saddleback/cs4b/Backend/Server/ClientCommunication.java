@@ -118,18 +118,29 @@ public class ClientCommunication implements Runnable, ClientConnection {
     }
 
     private void handleProfile(Profile profileToProcess) throws IOException {
+        // if a user already exists
         if (userProfile != null && !userProfile.getId().equals("-1")) {
             profileToProcess.setId(userProfile.getId());
+
+            if (!userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
+                System.out.println("occurs");
+                log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
+            }
         }
 
         if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
+
+            // display the updated user name
+            if (userProfile != null && !userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
+                log.log(new MessageEvent(new UserAddedMessage(profileToProcess.getUser())));
+            } else if (userProfile == null) {
+                log.log(new MessageEvent(new UserAddedMessage(profileToProcess.getUser())));
+            }
+
             userProfile = profileToProcess;
             SuccessfulRegistration msg = (SuccessfulRegistration)msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType());
             msg.setUser(userProfile.getUser());
             notifyClient(new Packet(msg));
-
-            // log the new user on the UI
-            log.log(new MessageEvent(new UserAddedMessage(userProfile.getUser())));
         } else {
             notifyClient(new Packet(msgFactory.createMessage(MsgTypes.REG_ERROR.getType())));
         }
