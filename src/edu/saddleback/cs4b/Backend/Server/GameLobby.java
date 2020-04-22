@@ -5,6 +5,7 @@ import edu.saddleback.cs4b.Backend.Objects.Game;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,4 +68,16 @@ public class GameLobby {
         // call system service to get their connection and set as observer
         return game.getGameBoard();
     }
+
+    public Map<String, List<String>> getAllGames(){
+        Map<String, List<String>> games = new Hashtable<>();
+        for (String id : activeGames.keySet()) {
+            String p1 = activeGames.get(id).getStartPlayer().getUsername();
+            String p2 = activeGames.get(id).getOtherPlayer().getUsername();
+            games.put(id, List.of(p1, p2));
+        }
+        return games;
+    }
+
+    public void getAllPlayableGames(){}
 }
