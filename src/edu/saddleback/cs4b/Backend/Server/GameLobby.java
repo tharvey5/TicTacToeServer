@@ -79,5 +79,11 @@ public class GameLobby {
         return games;
     }
 
-    public void getAllPlayableGames(){}
+    public Map<String, String> getAllPlayableGames(){
+        Map<String, String> games = new Hashtable<>();
+        for (String id : playableGames.keySet()) {
+            games.put(id, playableGames.get(id).getCreator().getUsername());
+        }
+        return games;
+    }
 }
