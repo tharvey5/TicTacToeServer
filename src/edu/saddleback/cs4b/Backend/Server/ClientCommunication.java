@@ -2,6 +2,7 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
+import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTProfile;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
@@ -11,6 +12,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Handles communication with a particular client
@@ -148,15 +150,18 @@ public class ClientCommunication implements Runnable, ClientConnection {
         os.flush();
     }
 
+    // todo is to finish this
     private List<String> getActiveUsers() {
-        List<ClientConnection> connections = SystemInfoService.getInstance().getOnlineUsers();
-        List<String> users = new ArrayList<>();
-        for (ClientConnection c : connections) {
-            users.add(c.identifyClient());
-        }
-        return users;
+        Set<String> connections = SystemInfoService.getInstance().getOnlineUsers();
+        //
+        return null;
     }
 
     @Override
     public String identifyClient() { return userProfile.getUser().getUsername(); }
+
+    @Override
+    public void update(SystemEvent e) {
+        // do something
+    }
 }

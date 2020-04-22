@@ -57,7 +57,7 @@ public class GameLobby {
         if (game != null) {
             // call system service to get their connection and set as observer
 
-            //game.addObserver(sysInfo.getConnection(player.getUsername()));
+            game.addObserver(sysInfo.getConnection(player.getUsername()));
             game.setOtherPlayer(player);
             playableGames.remove(gameId);
             return game.getGameBoard();
@@ -69,7 +69,7 @@ public class GameLobby {
     public Board viewGame(PublicUser viewer, String gameId) {
         Game game = activeGames.get(gameId);
 
-        // game.addObserver(sysInfo.getConnection(viewer.getUsername()));
+        game.addObserver(sysInfo.getConnection(viewer.getUsername()));
         // call system service to get their connection and set as observer
         return game.getGameBoard();
     }
