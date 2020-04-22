@@ -20,8 +20,13 @@ public class GameLobby {
                                             // Convert to a list to demo
                                             // that we can show all active games
 
+    private Map<String, Game> playableGames; // lists all games that are able to
+                                             // be played and will be removed once
+                                             // there are two players assigned
+
     private GameLobby() {
         activeGames = new Hashtable<>();
+        playableGames = new Hashtable<>();
     }
 
     public static GameLobby getInstance() {
@@ -46,10 +51,15 @@ public class GameLobby {
     }
 
     public Board joinGame(PublicUser player, String gameId) {
-        Game game = activeGames.get(gameId);
-        // call system service to get their connection and set as observer
-        game.setOtherPlayer(player);
-        return game.getGameBoard();
+        Game game = playableGames.get(gameId);
+        if (game != null) {
+            // call system service to get their connection and set as observer
+            game.setOtherPlayer(player);
+            playableGames.remove(gameId);
+            return game.getGameBoard();
+        } else {
+            return null;
+        }
     }
 
     public Board viewGame(PublicUser viewer, String gameId) {
@@ -57,5 +67,4 @@ public class GameLobby {
         // call system service to get their connection and set as observer
         return game.getGameBoard();
     }
-
 }
