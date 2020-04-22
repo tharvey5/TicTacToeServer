@@ -38,7 +38,7 @@ public class SystemInfoService {
     public Set<String> getOnlineUsers() {
         return Collections.unmodifiableSet(onlineUsers.keySet());
     }
-    
+
     public ClientConnection getConnection(String onlineUser) {
         return onlineUsers.get(onlineUser);
     }

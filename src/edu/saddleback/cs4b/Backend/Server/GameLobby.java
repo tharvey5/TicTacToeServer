@@ -24,6 +24,7 @@ public class GameLobby {
     private Map<String, Game> playableGames; // lists all games that are able to
                                              // be played and will be removed once
                                              // there are two players assigned
+    private SystemInfoService sysInfo = SystemInfoService.getInstance();
 
     private GameLobby() {
         activeGames = new Hashtable<>();
@@ -55,6 +56,8 @@ public class GameLobby {
         Game game = playableGames.get(gameId);
         if (game != null) {
             // call system service to get their connection and set as observer
+
+            //game.addObserver(sysInfo.getConnection(player.getUsername()));
             game.setOtherPlayer(player);
             playableGames.remove(gameId);
             return game.getGameBoard();
@@ -65,6 +68,8 @@ public class GameLobby {
 
     public Board viewGame(PublicUser viewer, String gameId) {
         Game game = activeGames.get(gameId);
+
+        // game.addObserver(sysInfo.getConnection(viewer.getUsername()));
         // call system service to get their connection and set as observer
         return game.getGameBoard();
     }
