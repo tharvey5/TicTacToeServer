@@ -79,7 +79,7 @@ public interface DBManager
 
     void createNewGame(Game game) throws Exception;
 
-    void updateGameInfo(int id, Game game) throws Exception;
+    void updateGameInfo(Game game) throws Exception;
 
     void addViewerToGame(int id) throws Exception;
 

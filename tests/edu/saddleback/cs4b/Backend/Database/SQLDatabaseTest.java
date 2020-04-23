@@ -1,10 +1,17 @@
 package edu.saddleback.cs4b.Backend.Database;
 
+import edu.saddleback.cs4b.Backend.Objects.*;
+import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
+import edu.saddleback.cs4b.Backend.Utilitys.TTTPublicUser;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Array;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -203,4 +210,317 @@ class SQLDatabaseTest {
 
         assertEquals("didnt fail", error);
     }
+
+    @Test
+    void createGame()
+    {
+
+        TTTPublicUser John = new TTTPublicUser("1","John1");
+        TTTPublicUser Smith = new TTTPublicUser("2","Smith2");
+        TTTPublicUser Erica = new TTTPublicUser("3","Erica3");
+        TTTPublicUser Isaac = new TTTPublicUser("4","Isaac4");
+
+        List<PublicUser> viewers = new ArrayList<PublicUser>();
+
+        viewers.add(John);
+        viewers.add(Smith);
+
+
+        DBManager db = SQLDatabase.getInstance();
+
+        Game game = new Game() {
+
+            String id;
+
+            @Override
+            public void setToken(Token token, PublicUser user) {
+
+            }
+
+            @Override
+            public Token getToken(PublicUser user) {
+                return null;
+            }
+
+            @Override
+            public String getStartTime() {
+                return "1:20 AM";
+            }
+
+            @Override
+            public void setStartTime(LocalDateTime newTime) {
+
+            }
+
+            @Override
+            public void setEndTime(LocalDateTime endTime) {
+
+            }
+
+            @Override
+            public String getEndTime() {
+                return "2:20 PM";
+            }
+
+            @Override
+            public PublicUser getStartPlayer() {
+                return Isaac;
+            }
+
+            @Override
+            public void setStartPlayer(PublicUser user) {
+
+            }
+
+            @Override
+            public void setCreator(PublicUser user) {
+
+            }
+
+            @Override
+            public PublicUser getCreator() {
+                return Isaac;
+            }
+
+            @Override
+            public PublicUser getOtherPlayer() {
+                return Erica;
+            }
+
+            @Override
+            public void setOtherPlayer(PublicUser user) {
+
+            }
+
+            @Override
+            public Moves getMoves() {
+                return null;
+            }
+
+            @Override
+            public void setMoves(Moves newMoves) {
+
+            }
+
+            @Override
+            public void addMove(Move newMove) {
+
+            }
+
+            @Override
+            public PublicUser getWinner() {
+                return Isaac;
+            }
+
+            @Override
+            public void setWinner(PublicUser user) {
+
+            }
+
+            @Override
+            public String getGameID() {
+                return id;
+            }
+
+            @Override
+            public void setGameID(String newGameID) {
+                id = newGameID;
+            }
+
+            @Override
+            public Board getGameBoard() {
+                return null;
+            }
+
+            @Override
+            public void setGameBoard(Board newBoard) {
+
+            }
+
+            @Override
+            public List<PublicUser> viewers() {
+                return viewers;
+            }
+
+            @Override
+            public void addViewer(PublicUser user) {
+
+            }
+        };
+
+        game.setGameID("4321");
+
+        String error;
+
+        try
+        {
+            db.createNewGame(game);
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+
+    }
+
+    @Test
+    void updateGame()
+    {
+
+        TTTPublicUser John = new TTTPublicUser("1","John1");
+        TTTPublicUser Smith = new TTTPublicUser("25","Smith2");
+        TTTPublicUser Erica = new TTTPublicUser("3","Erica3");
+        TTTPublicUser Isaac = new TTTPublicUser("4","Isaac4");
+
+        List<PublicUser> viewers = new ArrayList<PublicUser>();
+
+        viewers.add(John);
+        viewers.add(Smith);
+
+
+        DBManager db = SQLDatabase.getInstance();
+
+        Game game = new Game() {
+
+            String id;
+
+            @Override
+            public void setToken(Token token, PublicUser user) {
+
+            }
+
+            @Override
+            public Token getToken(PublicUser user) {
+                return null;
+            }
+
+            @Override
+            public String getStartTime() {
+                return "3:20 AM";
+            }
+
+            @Override
+            public void setStartTime(LocalDateTime newTime) {
+
+            }
+
+            @Override
+            public void setEndTime(LocalDateTime endTime) {
+
+            }
+
+            @Override
+            public String getEndTime() {
+                return "2:20 PM";
+            }
+
+            @Override
+            public PublicUser getStartPlayer() {
+                return Isaac;
+            }
+
+            @Override
+            public void setStartPlayer(PublicUser user) {
+
+            }
+
+            @Override
+            public void setCreator(PublicUser user) {
+
+            }
+
+            @Override
+            public PublicUser getCreator() {
+                return Isaac;
+            }
+
+            @Override
+            public PublicUser getOtherPlayer() {
+                return Erica;
+            }
+
+            @Override
+            public void setOtherPlayer(PublicUser user) {
+
+            }
+
+            @Override
+            public Moves getMoves() {
+                return null;
+            }
+
+            @Override
+            public void setMoves(Moves newMoves) {
+
+            }
+
+            @Override
+            public void addMove(Move newMove) {
+
+            }
+
+            @Override
+            public PublicUser getWinner() {
+                return Isaac;
+            }
+
+            @Override
+            public void setWinner(PublicUser user) {
+
+            }
+
+            @Override
+            public String getGameID() {
+                return id;
+            }
+
+            @Override
+            public void setGameID(String newGameID) {
+                id = newGameID;
+            }
+
+            @Override
+            public Board getGameBoard() {
+                return null;
+            }
+
+            @Override
+            public void setGameBoard(Board newBoard) {
+
+            }
+
+            @Override
+            public List<PublicUser> viewers() {
+                return viewers;
+            }
+
+            @Override
+            public void addViewer(PublicUser user) {
+
+            }
+        };
+
+        game.setGameID("4321");
+
+        String error;
+
+        try
+        {
+            db.updateGameInfo(game);
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+
+    }
+
 }

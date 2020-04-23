@@ -280,10 +280,11 @@ public class SQLDatabase implements DBManager {
         {
             viewersString.append(game.viewers().get(j).getId());
 
-            if(j++ != game.viewers().size())
+            if((j + 1) != game.viewers().size())
             {
                 viewersString.append(",");
             }
+
         }
 
         try
@@ -309,8 +310,48 @@ public class SQLDatabase implements DBManager {
     }
 
     @Override
-    public void updateGameInfo(int id, Game game) throws Exception {
+    public void updateGameInfo(Game game) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
+        int counter = 0;
+
+        int j;
+
+        StringBuilder viewersString = new StringBuilder();
+
+        for(j = 0; j < game.viewers().size(); j++ )
+        {
+            viewersString.append(game.viewers().get(j).getId());
+
+            if((j + 1) != game.viewers().size())
+            {
+                viewersString.append(",");
+            }
+        }
+
+        try
+        {
+
+            ps = connection.prepareStatement("UPDATE GAMES SET Creator = ? , Winner = ?, Player1 = ?, Player2 = ? , Viewers = ?, StartTime = ?, EndTime = ? WHERE UniqueID = ?");
+
+            ps.setInt(1, Integer.parseInt(game.getCreator().getId()));
+            ps.setInt(2, Integer.parseInt(game.getWinner().getId()));
+            ps.setInt(3, Integer.parseInt(game.getStartPlayer().getId()));
+            ps.setInt(4, Integer.parseInt(game.getOtherPlayer().getId()));
+            ps.setString(5, viewersString.toString());
+            ps.setString(6, game.getStartTime());
+            ps.setString(7, game.getEndTime());
+            ps.setInt(8, Integer.parseInt(game.getGameID()));
+
+            counter = ps.executeUpdate();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception(e.toString());
+        }
     }
 
     @Override
