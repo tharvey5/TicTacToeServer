@@ -1,9 +1,12 @@
 package edu.saddleback.cs4b.Backend.Database;
 
+import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.Objects.Moves;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 import java.sql.*;
+import java.util.List;
 
 public class SQLDatabase implements DBManager {
     private static SQLDatabase instance;
@@ -258,6 +261,81 @@ public class SQLDatabase implements DBManager {
             System.out.println(e.toString());
             throw new Exception("Was not a unique username");
         }
+    }
+
+    @Override
+    public void createNewGame(Game game) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        int counter = 0;
+
+        int j;
+
+        StringBuilder viewersString = new StringBuilder();
+
+
+        for(j = 0; j < game.viewers().size(); j++ )
+        {
+            viewersString.append(game.viewers().get(j).getId());
+
+            if(j++ != game.viewers().size())
+            {
+                viewersString.append(",");
+            }
+        }
+
+        try
+        {
+            ps = connection.prepareStatement("INSERT INTO GAMES(UniqueID, Creator, Winner, Player1, Player2, Viewers, StartTime, EndTime) VALUES(?,?,?,?,?,?,?,?)");
+
+            ps.setInt(1, Integer.parseInt(game.getGameID()));
+            ps.setInt(2, Integer.parseInt(game.getCreator().getId()));
+            ps.setInt(3, Integer.parseInt(game.getWinner().getId()));
+            ps.setInt(4, Integer.parseInt(game.getStartPlayer().getId()));
+            ps.setInt(5, Integer.parseInt(game.getOtherPlayer().getId()));
+            ps.setString(6, viewersString.toString());
+            ps.setString(7, game.getStartTime());
+            ps.setString(8, game.getEndTime());
+
+            counter = ps.executeUpdate();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception(e.toString());
+        }
+    }
+
+    @Override
+    public void updateGameInfo(int id, Game game) throws Exception {
+
+    }
+
+    @Override
+    public void addViewerToGame(int id) throws Exception {
+
+    }
+
+    @Override
+    public void addMovesToGame(Moves moves) throws Exception {
+
+    }
+
+    @Override
+    public Game getGameInfo(int id) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<Game> getGamesOfPlayer(int id) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Moves getMovesOfGame(int id) throws Exception {
+        return null;
     }
 
 //    public List<User> getAllUsers()
