@@ -1,7 +1,10 @@
 package edu.saddleback.cs4b.Backend.Database;
 
 import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.Objects.Move;
 import edu.saddleback.cs4b.Backend.Objects.Moves;
+import edu.saddleback.cs4b.Backend.Objects.Token;
+import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 import java.sql.SQLException;
@@ -81,9 +84,11 @@ public interface DBManager
 
     void updateGameInfo(Game game) throws Exception;
 
-    void addViewerToGame(int id) throws Exception;
+    void addViewerToGame(int id, PublicUser viewer) throws Exception;
 
     void addMovesToGame(Moves moves) throws Exception;
+
+    void addMoveToGame(Move move, Token token) throws Exception;
 
     Game getGameInfo(int id) throws Exception;
 

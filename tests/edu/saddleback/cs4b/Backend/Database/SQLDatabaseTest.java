@@ -348,7 +348,7 @@ class SQLDatabaseTest {
             }
         };
 
-        game.setGameID("4321");
+        game.setGameID("1234");
 
         String error;
 
@@ -511,6 +511,136 @@ class SQLDatabaseTest {
         try
         {
             db.updateGameInfo(game);
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+
+    }
+
+    @Test
+    void addViewerToGame()
+    {
+
+        TTTPublicUser Jeff = new TTTPublicUser("50","Jeff50");
+
+        DBManager db = SQLDatabase.getInstance();
+
+        String error;
+
+        try
+        {
+            db.addViewerToGame(1234, Jeff);
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+
+    }
+
+    @Test
+    void addMoveToGame()
+    {
+
+        TTTPublicUser John = new TTTPublicUser("1","John1");
+
+        Move move = new Move() {
+
+            String id;
+            Coordinate cords = new Coordinate() {
+                int x;
+                int y;
+
+                @Override
+                public int getXCoord() {
+                    return x;
+                }
+
+                @Override
+                public void setXCoord(int newXCoord) {
+                    x = newXCoord;
+                }
+
+                @Override
+                public int getYCoord() {
+                    return y;
+                }
+
+                @Override
+                public void setYCoord(int newYCoord) {
+                    y = newYCoord;
+                }
+            };
+
+
+            @Override
+            public String getGameID() {
+                return "4321";
+            }
+
+            @Override
+            public void setGameID(String newGameID) {
+
+            }
+
+            @Override
+            public String getStartTime() {
+                return "4:00PM";
+            }
+
+            @Override
+            public void setStartTime(LocalDateTime time) {
+
+            }
+
+            @Override
+            public PublicUser getPlayerID() {
+                return John;
+            }
+
+            @Override
+            public void setPlayerID(PublicUser newPlayerID) {
+
+            }
+
+            @Override
+            public Coordinate getCoordinate() {
+                return cords;
+            }
+
+            @Override
+            public void setCoordinate(Coordinate newCoordinate) {
+
+            }
+        };
+
+        Token token = new Token() {
+            @Override
+            public String getTokenID() {
+                return "X";
+            }
+        };
+
+        move.getCoordinate().setXCoord(2);
+        move.getCoordinate().setYCoord(1);
+
+        DBManager db = SQLDatabase.getInstance();
+
+        String error;
+
+        try
+        {
+            db.addMoveToGame(move, token);
             error = "didnt fail";
         }
         catch(Exception e)

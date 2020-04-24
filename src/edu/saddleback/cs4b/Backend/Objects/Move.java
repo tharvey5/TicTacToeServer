@@ -1,5 +1,7 @@
 package edu.saddleback.cs4b.Backend.Objects;
 
+import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
+
 import java.time.LocalDateTime;
 
 public interface Move
@@ -10,8 +12,8 @@ public interface Move
     public String getStartTime();
     public void setStartTime(LocalDateTime time);
 
-    public String getPlayerID();
-    public void setPlayerID(String newPlayerID);
+    public PublicUser getPlayerID();
+    public void setPlayerID(PublicUser newPlayerID);
 
     public Coordinate getCoordinate();
     public void setCoordinate(Coordinate newCoordinate);

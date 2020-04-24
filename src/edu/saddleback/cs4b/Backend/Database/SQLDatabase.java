@@ -1,7 +1,10 @@
 package edu.saddleback.cs4b.Backend.Database;
 
 import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.Objects.Move;
 import edu.saddleback.cs4b.Backend.Objects.Moves;
+import edu.saddleback.cs4b.Backend.Objects.Token;
+import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
 
@@ -13,11 +16,23 @@ public class SQLDatabase implements DBManager {
     private Connection connection = null;
 
     private int uniqueID  = 1;
+
+
     private int username  = 2;
     private int password  = 3;
     private int firstName = 4;
     private int lastName  = 5;
     private int status    = 6;
+
+
+    private int creator  = 2;
+    private int winner   = 3;
+    private int player1  = 4;
+    private int player2  = 5;
+    private int viewers  = 6;
+    private int startTime  = 7;
+    private int endTime  = 8;
+
 
     public static SQLDatabase getInstance()
     {
@@ -282,7 +297,7 @@ public class SQLDatabase implements DBManager {
 
             if((j + 1) != game.viewers().size())
             {
-                viewersString.append(",");
+                viewersString.append(", ");
             }
 
         }
@@ -327,13 +342,12 @@ public class SQLDatabase implements DBManager {
 
             if((j + 1) != game.viewers().size())
             {
-                viewersString.append(",");
+                viewersString.append(", ");
             }
         }
 
         try
         {
-
             ps = connection.prepareStatement("UPDATE GAMES SET Creator = ? , Winner = ?, Player1 = ?, Player2 = ? , Viewers = ?, StartTime = ?, EndTime = ? WHERE UniqueID = ?");
 
             ps.setInt(1, Integer.parseInt(game.getCreator().getId()));
@@ -355,13 +369,88 @@ public class SQLDatabase implements DBManager {
     }
 
     @Override
-    public void addViewerToGame(int id) throws Exception {
+    public void addViewerToGame(int id, PublicUser viewer) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int val;
+
+        StringBuilder viewersString = new StringBuilder();
+
+        try
+        {
+            viewersString.append(getCurrentViewers(id));
+
+            viewersString.append(", ");
+
+            viewersString.append(viewer.getId());
+
+            ps = connection.prepareStatement("UPDATE GAMES SET Viewers = ? WHERE UniqueID = ?");
+            ps.setString(1, viewersString.toString());
+            ps.setInt(2, id);
+
+            val = ps.executeUpdate();
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("1No User found with id: " + String.valueOf(id));
+        }
+    }
+
+    private String getCurrentViewers(int id) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+
+        try
+        {
+            ps = connection.prepareStatement("Select Viewers FROM GAMES WHERE UniqueID = ?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            return rs.getString(1);
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("2No User found with id: " + String.valueOf(id));
+        }
+    }
+
+    @Override
+    public void addMovesToGame(Moves moves) throws Exception
+    {
 
     }
 
     @Override
-    public void addMovesToGame(Moves moves) throws Exception {
+    public void addMoveToGame(Move move, Token token) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
+        int counter = 0;
+
+        try {
+            ps = connection.prepareStatement("INSERT INTO MOVES(GameID, Player, XLocation, YLocation, Time, TokenType) VALUES(?,?,?,?,?,?)");
+
+            ps.setInt(1, Integer.parseInt(move.getGameID()));
+            ps.setInt(2, Integer.parseInt(move.getPlayerID().getId()));
+            ps.setInt(3, move.getCoordinate().getXCoord());
+            ps.setInt(4, move.getCoordinate().getYCoord());
+            ps.setString(5, move.getStartTime());
+            ps.setString(6, token.getTokenID());
+
+            counter = ps.executeUpdate();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception(e.toString());
+        }
     }
 
     @Override
