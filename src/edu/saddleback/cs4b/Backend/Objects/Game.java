@@ -1,12 +1,11 @@
 package edu.saddleback.cs4b.Backend.Objects;
 
-import edu.saddleback.cs4b.Backend.PubSub.Subject;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface Game extends Subject
+public interface Game
 {
     void setToken(Token token, PublicUser user);
     Token getToken(PublicUser user);
