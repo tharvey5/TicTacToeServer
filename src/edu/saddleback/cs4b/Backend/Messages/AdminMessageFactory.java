@@ -51,7 +51,7 @@ public class AdminMessageFactory implements AbstractMessageFactory {
         {
             message = new SignOutMessage();
         }
-        else if (type.equals(MsgTypes.SIGN_OUT_CONFIRM))
+        else if (type.equals(MsgTypes.SIGN_OUT_CONFIRM.getType()))
         {
             message = new SignOutConfirmationMessage();
         }

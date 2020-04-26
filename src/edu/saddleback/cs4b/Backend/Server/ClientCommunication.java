@@ -122,8 +122,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
             log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
 
             userProfile = existingProfile;
-            //BaseMessage retMsg = msgFactory.createMessage(MsgTypes.SUCCESS_UPDATE_PROFILE.getType());
-            BaseMessage retMsg = new SuccessfulUpdateProfileMessage();
+            BaseMessage retMsg = msgFactory.createMessage(MsgTypes.SUCCESS_UPDATE_PROFILE.getType());
+            //BaseMessage retMsg = new SuccessfulUpdateProfileMessage();
             ((SuccessfulUpdateProfileMessage)retMsg).setUser(userProfile.getUser());
             notifyClient(new Packet(retMsg));
             
