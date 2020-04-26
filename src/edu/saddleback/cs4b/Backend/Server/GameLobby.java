@@ -43,17 +43,20 @@ public class GameLobby {
     }
 
     // what if they want to play against the AI
-    public Board createGame(PublicUser player) {
-        // create the new game
+    public Game createGame(PublicUser player) {
+        TTTGame newGame = new TTTGame(player);
+        Thread gameThread = new Thread(newGame);
+        gameThread.start();
+
         // request the id from the DB
         // assign the id to the game
-        // assign the user as the observer by calling the
-        // system info svc to map the user, to their system representation
-        // return the board of the created game
-        return null;
+        activeGames.put(newGame.getGameID(), newGame);
+        playableGames.put(newGame.getGameID(), newGame);
+        newGame.addObserver(sysInfo.getConnection(player.getUsername()));
+        return newGame;
     }
 
-    public Board joinGame(PublicUser player, String gameId) {
+    public Game joinGame(PublicUser player, String gameId) {
         Game game = playableGames.get(gameId);
         if (game != null) {
             // call system service to get their connection and set as observer
@@ -61,7 +64,7 @@ public class GameLobby {
             game.addObserver(sysInfo.getConnection(player.getUsername()));
             game.setOtherPlayer(player);
             playableGames.remove(gameId);
-            return game.getGameBoard();
+            return game;
         } else {
             return null;
         }
