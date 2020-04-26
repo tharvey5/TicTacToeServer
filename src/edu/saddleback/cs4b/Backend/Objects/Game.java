@@ -41,4 +41,6 @@ public interface Game extends Subject
 
     List<PublicUser> viewers();
     void addViewer(PublicUser user);
+
+    void playMove(Move move);
 }
