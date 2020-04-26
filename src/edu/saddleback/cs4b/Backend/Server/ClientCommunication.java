@@ -31,7 +31,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private RegistrationService regSvc = RegistrationService.getInstance();
 
 
-    // maps a game to its game id
+    // maps a game id to the game itself
     private Map<String, Game> gameMap;
 
     public ClientCommunication(Socket socket) {
@@ -126,8 +126,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
             GameSuccessfullyCreatedMessage gameMsg =
                     (GameSuccessfullyCreatedMessage) msgFactory.createMessage(MsgTypes.GAME_CREATED.getType());
-
-            // todo return a board and maybe who you are playing -- set here
+            gameMsg.setGame(newGame);
             notifyClient(new Packet(gameMsg));
 
         } else if (message instanceof JoinGameRequestMessage) {
@@ -135,7 +134,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
         } else if (message instanceof ViewGameRequestMessage) {
             // user would like to view a game
         } else if (message instanceof MoveMessage) {
-            //Game game = gameMap.get()
+            Game game = gameMap.get(((MoveMessage)message).getGameId());
+
         }
     }
 
