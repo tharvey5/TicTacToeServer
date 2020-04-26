@@ -15,10 +15,18 @@ public class TTTGame implements Subject, Runnable, Game {
     private Map<String, Token> tokenMap; // maps players to tokens
     private LocalDateTime start;
     private LocalDateTime end;
+    private PublicUser startPlayer;
+    private PublicUser otherPlayer;
+    private PublicUser creator;
 
-    public TTTGame() {
+    /**
+     * note creator is by default the start player
+     */
+    public TTTGame(PublicUser creator) {
         tokenMap = new Hashtable<>();
         setStartTime(LocalDateTime.now());
+        setCreator(creator);
+        startPlayer = this.creator;
 
     }
 
@@ -67,32 +75,43 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public PublicUser getStartPlayer() {
-        return null;
+        return startPlayer;
     }
 
+    // only use if you want p2 to start, creator is start by default
     @Override
     public void setStartPlayer(PublicUser user) {
-
+        if (user.equals(otherPlayer)) {
+            PublicUser temp = startPlayer;
+            startPlayer = otherPlayer;
+            otherPlayer = temp;
+        }
     }
 
     @Override
     public void setCreator(PublicUser user) {
-
+        if (creator != null) {
+            this.creator = user;
+        }
     }
 
     @Override
     public PublicUser getCreator() {
-        return null;
+        return creator;
     }
 
     @Override
     public PublicUser getOtherPlayer() {
-        return null;
+        return otherPlayer;
     }
 
+    // will not swap the start players like setStartWill, only used to set
+    // the other player
     @Override
     public void setOtherPlayer(PublicUser user) {
-
+        if (otherPlayer == null) {
+            otherPlayer = user;
+        }
     }
 
     @Override
