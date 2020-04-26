@@ -13,12 +13,17 @@ public class TTTGame implements Subject, Runnable, Game {
     private Map<String, Token> tokenMap; // maps players to tokens
     private LocalDateTime start;
     private LocalDateTime end;
-    private PublicUser startPlayer;
-    private PublicUser otherPlayer;
-    private PublicUser creator;
+    private volatile PublicUser startPlayer;
+    private volatile PublicUser otherPlayer;
+    private volatile PublicUser creator;
+    private PublicUser winner;
     private List<Observer> observers;
     private List<PublicUser> viewers;  // todo this seems kind of redundant
                                        // couldn't we deduce if not player its a viewer
+    private Moves moves;
+    boolean isActive;
+    private Board board;
+    private String gameId;
 
     /**
      * note creator is by default the start player
@@ -29,6 +34,9 @@ public class TTTGame implements Subject, Runnable, Game {
         setCreator(creator);
         startPlayer = this.creator;
         this.observers = new ArrayList<>();
+        this.isActive = false;
+
+        // set the new TTTBoard
     }
 
     @Override
@@ -38,7 +46,7 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public Token getToken(PublicUser user) {
-        return null;
+        return tokenMap.get(user.getUsername());
     }
 
     @Override
@@ -82,16 +90,14 @@ public class TTTGame implements Subject, Runnable, Game {
     // only use if you want p2 to start, creator is start by default
     @Override
     public void setStartPlayer(PublicUser user) {
-        if (user.equals(otherPlayer)) {
-            PublicUser temp = startPlayer;
-            startPlayer = otherPlayer;
-            otherPlayer = temp;
+        if (user != null && startPlayer == null) {
+            startPlayer = user;
         }
     }
 
     @Override
     public void setCreator(PublicUser user) {
-        if (creator != null) {
+        if (user != null && creator != null) {
             this.creator = user;
         }
     }
@@ -117,48 +123,46 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public Moves getMoves() {
-        return null;
+        return moves;
     }
 
     @Override
-    public void setMoves(Moves newMoves) {
-
-    }
+    public void setMoves(Moves newMoves) { }
 
     @Override
     public void addMove(Move newMove) {
-
+        //
     }
 
     @Override
     public PublicUser getWinner() {
-        return null;
+        return winner;
     }
 
     @Override
     public void setWinner(PublicUser user) {
-
+        if (user != null && winner != null) {
+            winner = user;
+        }
     }
 
     @Override
     public String getGameID() {
-        return null;
+        return gameId;
     }
 
     @Override
     public void setGameID(String newGameID) {
-
+        this.gameId = newGameID;
     }
 
     @Override
     public Board getGameBoard() {
-        return null;
+        return board;
     }
 
     @Override
-    public void setGameBoard(Board newBoard) {
-
-    }
+    public void setGameBoard(Board newBoard) { }
 
     @Override
     public List<PublicUser> viewers() {
@@ -167,12 +171,16 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public void addViewer(PublicUser user) {
-
+        if (user != null) {
+            viewers.add(user);
+        }
     }
 
     @Override
     public void addObserver(Observer o) {
-        observers.add(o);
+        if (o != null) {
+            observers.add(o);
+        }
     }
 
     @Override
@@ -191,6 +199,6 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public void run() {
-
     }
+
 }
