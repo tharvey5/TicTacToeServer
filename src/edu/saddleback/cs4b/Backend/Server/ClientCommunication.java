@@ -2,6 +2,7 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.Objects.TTTMove;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
@@ -134,8 +135,9 @@ public class ClientCommunication implements Runnable, ClientConnection {
         } else if (message instanceof ViewGameRequestMessage) {
             // user would like to view a game
         } else if (message instanceof MoveMessage) {
-            Game game = gameMap.get(((MoveMessage)message).getGameId());
-
+            MoveMessage moveMsg = (MoveMessage)message;
+            Game game = gameMap.get(moveMsg.getGameId());
+            game.playMove(new TTTMove(moveMsg.getGameId(), userProfile.getId(), moveMsg.getCoordinate()));
         }
     }
 
