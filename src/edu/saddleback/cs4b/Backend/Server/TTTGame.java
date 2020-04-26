@@ -16,6 +16,7 @@ public class TTTGame implements Subject, Runnable, Game {
     private volatile PublicUser startPlayer;
     private volatile PublicUser otherPlayer;
     private volatile PublicUser creator;
+    private PublicUser currentTurn;
     private PublicUser winner;
     private List<Observer> observers;
     private List<PublicUser> viewers;  // todo this seems kind of redundant
@@ -24,6 +25,8 @@ public class TTTGame implements Subject, Runnable, Game {
     boolean isActive;
     private Board board;
     private String gameId;
+    private GameRules rules;
+    private GameLogicService checker = GameLogicService.getInstance();
 
     /**
      * note creator is by default the start player
@@ -36,7 +39,8 @@ public class TTTGame implements Subject, Runnable, Game {
         this.observers = new ArrayList<>();
         this.isActive = false;
         this.board = new TTTBoard();
-
+        this.currentTurn = creator;
+        this.rules = new TTTRules();
     }
 
     @Override
@@ -130,17 +134,7 @@ public class TTTGame implements Subject, Runnable, Game {
     public void setMoves(Moves newMoves) { }
 
     @Override
-    public void addMove(Move newMove) {
-        if (moves.getMoves().size() == 0) {
-            moves.addMove(newMove);
-        } else {
-            int lastMove = moves.getMoves().size() - 1;
-            String lastPlayMadeBy = moves.getMoves().get(lastMove).getPlayerID();
-            if (!newMove.getPlayerID().equals(lastPlayMadeBy)) {
-                moves.addMove(newMove);
-            }
-        }
-    }
+    public void addMove(Move newMove) { }
 
     @Override
     public PublicUser getWinner() {
@@ -181,6 +175,26 @@ public class TTTGame implements Subject, Runnable, Game {
     public void addViewer(PublicUser user) {
         if (user != null) {
             viewers.add(user);
+        }
+    }
+
+    /**
+     *
+     * @return false if the move is invalid or its not your turn
+     */
+    public boolean playMove(Move move) {
+        if (move.getPlayerID().equals(currentTurn.getId())) {
+            synchronized (this) {
+                if (checker.validMove(board, move)) {
+                    int r = move.getCoordinate().getXCoord();
+                    int c = move.getCoordinate().getYCoord();
+                    board.setToken(r, c, tokenMap.get(currentTurn.getUsername()));
+                    return true;
+                }
+                return false; 
+            }
+        } else {
+            return false;
         }
     }
 
