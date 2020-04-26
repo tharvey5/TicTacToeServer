@@ -7,9 +7,20 @@ import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
 import java.time.LocalDateTime;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 public class TTTGame implements Subject, Runnable, Game {
+    private Map<String, Token> tokenMap; // maps players to tokens
+    private LocalDateTime start;
+    private LocalDateTime end;
+
+    public TTTGame() {
+        tokenMap = new Hashtable<>();
+        setStartTime(LocalDateTime.now());
+
+    }
 
     @Override
     public void setToken(Token token, PublicUser user) {
@@ -23,22 +34,35 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public String getStartTime() {
-        return null;
+        return formatTime(start);
     }
+
+    private String formatTime(LocalDateTime time) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(time.getHour());
+        sb.append(":");
+        sb.append(time.getMinute());
+        return sb.toString();
+    }
+
 
     @Override
     public void setStartTime(LocalDateTime newTime) {
-
+        if (start != null) {
+            this.start = newTime;
+        }
     }
 
     @Override
     public void setEndTime(LocalDateTime endTime) {
-
+        if (end != null) {
+            this.end = endTime;
+        }
     }
 
     @Override
     public String getEndTime() {
-        return null;
+        return formatTime(end);
     }
 
     @Override
