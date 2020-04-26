@@ -24,6 +24,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private AbstractMessageFactory msgFactory;
     private Authenticator authenticator;
     private Logger log = ServerLogger.getInstance();
+    private RegistrationService regSvc = RegistrationService.getInstance();
 
     public ClientCommunication(Socket socket) {
         this.socket = socket;
@@ -96,15 +97,12 @@ public class ClientCommunication implements Runnable, ClientConnection {
             Packet packet = new Packet(usrMsg);
             notifyClient(packet);
         } else if (message instanceof SignOutMessage) {
-
             SystemInfoService.getInstance().removeOnlineUser(this);
-            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SIGN_OUT.getType())));
-            // todo finish this up
-            // propagate to the users
+            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SIGN_OUT_CONFIRM.getType())));
 
-            // log the new user on the UI
             log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
-        } else if (false) {
+        } else if (message instanceof RegistrationMessage) {
+            handleRegistration(message);
 
 
         } else if (message instanceof AcctDeactivationMessage) {
@@ -115,10 +113,23 @@ public class ClientCommunication implements Runnable, ClientConnection {
             notifyClient(packet);
         }
     }
-
-    private void handleProfile(Profile profileToProcess) throws IOException {
-       // get rid of this
+    
+    private void handleRegistration(BaseMessage message) throws IOException {
+        RegistrationMessage msg = (RegistrationMessage) message;
+        Profile newProfile = msg.getProfile();
+        newProfile.setId("-1");
+        if (regSvc.setAccountDetails(newProfile)) {
+            int id = regSvc.getUsersId(newProfile);
+            newProfile.setId(Integer.toString(id));
+            userProfile = newProfile;
+            BaseMessage retMsg = msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType());
+            ((SuccessfulRegistrationMessage)retMsg).setUser(userProfile.getUser());
+            notifyClient(new Packet(retMsg));
+        } else {
+            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.REG_ERROR.getType())));
+        }
     }
+
 
     private void notifyClient(Packet packet) throws IOException {
         os.writeObject(packet);
