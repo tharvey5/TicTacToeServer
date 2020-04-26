@@ -195,8 +195,11 @@ public class TTTGame implements Subject, Runnable, Game {
                     board.setToken(r, c, tokenMap.get(currentTurn.getUsername()));
                     moves.addMove(move);
 
-                    ValidMoveMessage validMoveMsg = (ValidMoveMessage) factory.createMessage(MsgTypes.VALID_MOVE.getType());
-                    // set the valid move here
+                    ValidMoveMessage validMoveMsg =
+                            new ValidMoveMessage(new TTTPosition(r, c),
+                            gameId,tokenMap.get(currentTurn.getUsername()),
+                            currentTurn.getUsername());
+
                     notifyObserver(new MessageEvent(validMoveMsg));
                     return true;
                 }
@@ -225,8 +228,7 @@ public class TTTGame implements Subject, Runnable, Game {
     public void notifyObserver(SystemEvent e) {
         for (Iterator<Observer> iterator = observers.iterator(); iterator.hasNext();) {
             Observer ob = iterator.next();
-            // ob.update(null);
-            // todo update with the move
+            ob.update(e);
         }
     }
 
