@@ -5,15 +5,14 @@ import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
-import edu.saddleback.cs4b.Backend.Server.Logger;
 import edu.saddleback.cs4b.Backend.Server.ServerLogger;
 import edu.saddleback.cs4b.Backend.Server.UserAddedMessage;
 import edu.saddleback.cs4b.Backend.Server.UserRemovedMessage;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -37,13 +36,13 @@ public class ServerScreenController implements Observer
     private BorderPane viewScreen;
 
     @FXML
-    private ListView<String> tempArea; // this is just temporary until we have a solution
+    private ListView<String> tempArea;
 
 
-    public ServerScreenController() {
+    public ServerScreenController()
+    {
         ServerLogger.getInstance().addObserver(this);
     }
-
 
     @Override
     public void update(SystemEvent e)
@@ -76,6 +75,41 @@ public class ServerScreenController implements Observer
         Platform.runLater(()-> tempArea.getItems().add("user: " + user.getUsername()));
     }
 
+    @FXML
+    public void handleEventLogAction(MouseEvent event)
+    {
+        System.out.println("You clicked me!");
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("EventLogScreen");
+        viewScreen.setCenter(view);
+    }
+
+    @FXML
+    public void handleActiveGamesAction(MouseEvent event)
+    {
+        System.out.println("You clicked me!");
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("ActiveGamesScreen");
+        viewScreen.setCenter(view);
+    }
+
+    @FXML
+    public void handleCompletedGamesAction(MouseEvent event)
+    {
+        System.out.println("You clicked me!");
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("CompletedGamesScreen");
+        viewScreen.setCenter(view);
+    }
+
+    @FXML
+    public void handlePlayersAction(MouseEvent event)
+    {
+        System.out.println("You clicked me!");
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("PlayersScreen");
+        viewScreen.setCenter(view);
+    }
 
     /**
      * WHEN THIS METHOD IS CALLED THE 'EVENT LOG' BUTTON WILL CHANGE COLOR WHEN THE MOUSE IS HOVERING OVER IT
@@ -153,39 +187,4 @@ public class ServerScreenController implements Observer
         playersButton.setOnMouseExited(mouseEvent -> playersButton.setTextFill(Color.WHITE));
     }
 
-    @FXML
-    public void handleEventLogAction(MouseEvent event)
-    {
-        System.out.println("You clicked me!");
-        FxmlLoader object = new FxmlLoader();
-        Pane view = object.getPage("EventLogScreen");
-        viewScreen.setCenter(view);
-    }
-
-    @FXML
-    public void handleActiveGamesAction(MouseEvent event)
-    {
-        System.out.println("You clicked me!");
-        FxmlLoader object = new FxmlLoader();
-        Pane view = object.getPage("ActiveGamesScreen");
-        viewScreen.setCenter(view);
-    }
-
-    @FXML
-    public void handleCompletedGamesAction(MouseEvent event)
-    {
-        System.out.println("You clicked me!");
-        FxmlLoader object = new FxmlLoader();
-        Pane view = object.getPage("CompletedGamesScreen");
-        viewScreen.setCenter(view);
-    }
-
-    @FXML
-    public void handlePlayersAction(MouseEvent event)
-    {
-        System.out.println("You clicked me!");
-        FxmlLoader object = new FxmlLoader();
-        Pane view = object.getPage("PlayersScreen");
-        viewScreen.setCenter(view);
-    }
 }
