@@ -1,6 +1,8 @@
 package edu.saddleback.cs4b.Backend.Server;
 
+import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Objects.*;
+import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.Subject;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
@@ -27,6 +29,7 @@ public class TTTGame implements Subject, Runnable, Game {
     private String gameId;
     private GameRules rules;
     private GameLogicService checker = GameLogicService.getInstance();
+    private AbstractMessageFactory factory = MessageFactoryProducer.getFactory(FactoryTypes.GAME_FACT.getTypes());
 
     /**
      * note creator is by default the start player
@@ -190,7 +193,6 @@ public class TTTGame implements Subject, Runnable, Game {
                     int c = move.getCoordinate().getYCoord();
                     board.setToken(r, c, tokenMap.get(currentTurn.getUsername()));
                     moves.addMove(move);
-                    // notify observers
                     return true;
                 }
                 return false;
@@ -226,15 +228,23 @@ public class TTTGame implements Subject, Runnable, Game {
         waitForPlayers();
         isActive = true;
         winner = null;
-        while (isActive) {
+        while (isActive && moves.getMoves().size() < 9) {
             waitForMove();
             String winningToken = checker.findWinner(board);
             if (winningToken != null) {
-                // notify users of the winning token 
+                isActive = false;
+                break;
             }
             swapCurrentTurn();
         }
 
+        // notify all of the observers of this game who has won
+        GameResultMessage msg = (GameResultMessage) factory.createMessage(MsgTypes.GAME_RESULT.getType());
+        msg.setWinner(currentTurn.getUsername());
+        if (winner != null) {
+            msg.setWinType(WinType.NORMAL_WIN);
+        }
+        notifyObserver(new MessageEvent(msg));
     }
 
     // hold in an infinite loop until another move has been added to the game
