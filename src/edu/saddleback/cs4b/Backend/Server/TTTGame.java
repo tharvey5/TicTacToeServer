@@ -186,6 +186,7 @@ public class TTTGame implements Subject, Runnable, Game {
      * @return false if the move is invalid or its not your turn
      */
     public boolean playMove(Move move) {
+        // if the person trying to move is the one whose turn it is
         if (move.getPlayerID().equals(currentTurn.getId())) {
             synchronized (this) {
                 if (checker.validMove(board, move)) {
@@ -193,8 +194,14 @@ public class TTTGame implements Subject, Runnable, Game {
                     int c = move.getCoordinate().getYCoord();
                     board.setToken(r, c, tokenMap.get(currentTurn.getUsername()));
                     moves.addMove(move);
+
+                    ValidMoveMessage validMoveMsg = (ValidMoveMessage) factory.createMessage(MsgTypes.VALID_MOVE.getType());
+                    // set the valid move here
+                    notifyObserver(new MessageEvent(validMoveMsg));
                     return true;
                 }
+                InvalidMoveMessage invalidMove = (InvalidMoveMessage) factory.createMessage(MsgTypes.INVALID_MOVE.getType());
+                notifyObserver(new MessageEvent(invalidMove));
                 return false;
             }
         } else {
