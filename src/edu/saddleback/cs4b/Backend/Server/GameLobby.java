@@ -42,6 +42,7 @@ public class GameLobby {
         return lobby;
     }
 
+    // what if they want to play against the AI
     public Board createGame(PublicUser player) {
         // create the new game
         // request the id from the DB
