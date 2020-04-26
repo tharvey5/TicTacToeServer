@@ -7,9 +7,7 @@ import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
 import java.time.LocalDateTime;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TTTGame implements Subject, Runnable, Game {
     private Map<String, Token> tokenMap; // maps players to tokens
@@ -18,6 +16,9 @@ public class TTTGame implements Subject, Runnable, Game {
     private PublicUser startPlayer;
     private PublicUser otherPlayer;
     private PublicUser creator;
+    private List<Observer> observers;
+    private List<PublicUser> viewers;  // todo this seems kind of redundant
+                                       // couldn't we deduce if not player its a viewer
 
     /**
      * note creator is by default the start player
@@ -27,7 +28,7 @@ public class TTTGame implements Subject, Runnable, Game {
         setStartTime(LocalDateTime.now());
         setCreator(creator);
         startPlayer = this.creator;
-
+        this.observers = new ArrayList<>();
     }
 
     @Override
@@ -161,7 +162,7 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public List<PublicUser> viewers() {
-        return null;
+        return Collections.unmodifiableList(viewers);
     }
 
     @Override
@@ -171,17 +172,21 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public void addObserver(Observer o) {
-
+        observers.add(o);
     }
 
     @Override
     public void removeObserver(Observer o) {
-
+        observers.removeIf(observer-> observer == o );
     }
 
     @Override
     public void notifyObserver(SystemEvent e) {
-
+        for (Iterator<Observer> iterator = observers.iterator(); iterator.hasNext();) {
+            Observer ob = iterator.next();
+            // ob.update(null);
+            // todo update with the move
+        }
     }
 
     @Override
