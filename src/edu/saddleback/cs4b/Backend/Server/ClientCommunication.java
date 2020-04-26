@@ -103,8 +103,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
             log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
         } else if (message instanceof RegistrationMessage) {
             handleRegistration(message);
-
-
+        } else if (message instanceof UpdateProfileMessage) {
+            updateChanges(message);
         } else if (message instanceof AcctDeactivationMessage) {
 
             // call on the Registration service to deactivate the account
@@ -113,7 +113,25 @@ public class ClientCommunication implements Runnable, ClientConnection {
             notifyClient(packet);
         }
     }
-    
+
+    private void updateChanges(BaseMessage message) throws IOException {
+        UpdateProfileMessage updateMsg = (UpdateProfileMessage)message;
+        Profile existingProfile = updateMsg.getProfile();
+        existingProfile.setId(userProfile.getId());
+        if (regSvc.setAccountDetails(existingProfile)) {
+            log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
+
+            userProfile = existingProfile;
+            BaseMessage retMsg = msgFactory.createMessage(MsgTypes.SUCCESS_UPDATE_PROFILE.getType());
+            ((SuccessfulUpdateProfileMessage)retMsg).setUser(userProfile.getUser());
+            notifyClient(new Packet(retMsg));
+            
+            log.log(new MessageEvent(new UserAddedMessage(userProfile.getUser())));
+        } else {
+            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.INVALID_PROFILE_UPDATE.getType())));
+        }
+    }
+
     private void handleRegistration(BaseMessage message) throws IOException {
         RegistrationMessage msg = (RegistrationMessage) message;
         Profile newProfile = msg.getProfile();
