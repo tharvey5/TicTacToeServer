@@ -41,5 +41,5 @@ public interface Game
     List<PublicUser> viewers();
     void addViewer(PublicUser user);
 
-    void playMove(Move move);
+    boolean playMove(Move move);
 }
