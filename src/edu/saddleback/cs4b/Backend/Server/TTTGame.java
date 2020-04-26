@@ -35,8 +35,8 @@ public class TTTGame implements Subject, Runnable, Game {
         startPlayer = this.creator;
         this.observers = new ArrayList<>();
         this.isActive = false;
+        this.board = new TTTBoard();
 
-        // set the new TTTBoard
     }
 
     @Override
@@ -131,7 +131,15 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public void addMove(Move newMove) {
-        //
+        if (moves.getMoves().size() == 0) {
+            moves.addMove(newMove);
+        } else {
+            int lastMove = moves.getMoves().size() - 1;
+            String lastPlayMadeBy = moves.getMoves().get(lastMove).getPlayerID();
+            if (!newMove.getPlayerID().equals(lastPlayMadeBy)) {
+                moves.addMove(newMove);
+            }
+        }
     }
 
     @Override
@@ -200,5 +208,4 @@ public class TTTGame implements Subject, Runnable, Game {
     @Override
     public void run() {
     }
-
 }
