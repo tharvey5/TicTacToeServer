@@ -1,6 +1,7 @@
 package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
+import edu.saddleback.cs4b.Backend.Objects.Game;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.Profile;
@@ -10,8 +11,9 @@ import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,7 +30,9 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private Logger log = ServerLogger.getInstance();
     private RegistrationService regSvc = RegistrationService.getInstance();
 
-    // todo contain a list of games that the player is observing
+
+    // maps a game to its game id
+    private Map<String, Game> gameMap;
 
     public ClientCommunication(Socket socket) {
         this.socket = socket;
@@ -36,6 +40,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
         SystemInfoService.getInstance().markUserAsOnline(this);
         this.msgFactory = new AdminMessageFactory();
         this.authenticator = AuthenticationService.getInstance();
+        this.gameMap = new Hashtable<>();
     }
 
     private void initiateStreams() {
@@ -115,6 +120,22 @@ public class ClientCommunication implements Runnable, ClientConnection {
             RegistrationService.getInstance().deactivateAccount(userProfile);
             Packet packet = new Packet(msgFactory.createMessage(MsgTypes.DEACTIVATION_CONFIRM.getType()));
             notifyClient(packet);
+        } else if (message instanceof CreateGameMessage) {
+            Game newGame = GameLobby.getInstance().createGame(userProfile.getUser());
+            gameMap.put(newGame.getGameID(), newGame);
+
+            GameSuccessfullyCreatedMessage gameMsg =
+                    (GameSuccessfullyCreatedMessage) msgFactory.createMessage(MsgTypes.GAME_CREATED.getType());
+
+            // todo return a board and maybe who you are playing -- set here
+            notifyClient(new Packet(gameMsg));
+
+        } else if (message instanceof JoinGameRequestMessage) {
+            // user would like to join a game
+        } else if (message instanceof ViewGameRequestMessage) {
+            // user would like to view a game
+        } else if (message instanceof MoveMessage) {
+            //Game game = gameMap.get()
         }
     }
 
