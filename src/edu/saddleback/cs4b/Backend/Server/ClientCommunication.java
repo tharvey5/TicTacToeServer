@@ -28,6 +28,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private Logger log = ServerLogger.getInstance();
     private RegistrationService regSvc = RegistrationService.getInstance();
 
+    // todo contain a list of games that the player is observing
+
     public ClientCommunication(Socket socket) {
         this.socket = socket;
         initiateStreams();
@@ -169,6 +171,15 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
     @Override
     public void update(SystemEvent e) {
-        // do something
+        if (e instanceof MessageEvent) {
+            BaseMessage bm = ((MessageEvent) e).getMessage();
+
+            // forward the message
+            try {
+                notifyClient(new Packet(bm));
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+        }
     }
 }
