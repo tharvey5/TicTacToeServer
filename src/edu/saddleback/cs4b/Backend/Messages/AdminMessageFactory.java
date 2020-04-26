@@ -12,12 +12,13 @@ public class AdminMessageFactory implements AbstractMessageFactory {
         {
             message = new AcctDeactivationMessage();
         }
-        else if (type.equals(MsgTypes.ACTIVE_USER.getType())) {
-            message = new ActiveUserMessage();
-        }
         else if (type.equals(MsgTypes.ACTIVE_USER_RESPONSE.getType()))
         {
             message = new ActiveUserResponseMessage();
+        }
+        else if (type.equals(MsgTypes.ACTIVE_USER.getType()))
+        {
+            message = new ActiveUserMessage();
         }
         else if (type.equals(MsgTypes.AUTHENTICATION.getType()))
         {
@@ -41,7 +42,7 @@ public class AdminMessageFactory implements AbstractMessageFactory {
         }
         else if (type.equals(MsgTypes.REGISTRATION.getType()))
         {
-            message = new RegistrationErrorMessage();
+            message = new RegistrationMessage();
         }
         else if (type.equals(MsgTypes.SIGN_IN.getType()))
         {
@@ -51,7 +52,7 @@ public class AdminMessageFactory implements AbstractMessageFactory {
         {
             message = new SignOutMessage();
         }
-        else if (type.equals(MsgTypes.SIGN_OUT_CONFIRM))
+        else if (type.equals(MsgTypes.SIGN_OUT_CONFIRM.getType()))
         {
             message = new SignOutConfirmationMessage();
         }
@@ -63,11 +64,6 @@ public class AdminMessageFactory implements AbstractMessageFactory {
         {
             message = new SuccessfulUpdateProfileMessage();
         }
-
-
-
-
-
         else if (type.equals(MsgTypes.UPDATE_PROFILE.getType()))
         {
             message = new UpdateProfileMessage();

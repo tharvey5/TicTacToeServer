@@ -26,6 +26,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private AbstractMessageFactory msgFactory;
     private Authenticator authenticator;
     private Logger log = ServerLogger.getInstance();
+    private RegistrationService regSvc = RegistrationService.getInstance();
 
     public ClientCommunication(Socket socket) {
         this.socket = socket;
@@ -93,57 +94,63 @@ public class ClientCommunication implements Runnable, ClientConnection {
         } else if (message instanceof ActiveUserMessage) {
 
             // todo change this out with more efficient way of getting the message
-            ActiveUserMessage usrMsg = (ActiveUserMessage) msgFactory.createMessage(MsgTypes.ACTIVE_USER_REQ.getType());
+            ActiveUserResponseMessage usrMsg = (ActiveUserResponseMessage) msgFactory.createMessage(MsgTypes.ACTIVE_USER_RESPONSE.getType());
             usrMsg.setActiveUsers(getActiveUsers());
             Packet packet = new Packet(usrMsg);
             notifyClient(packet);
         } else if (message instanceof SignOutMessage) {
-
             SystemInfoService.getInstance().removeOnlineUser(this);
-            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SIGN_OUT.getType())));
-            // todo finish this up
-            // propagate to the users
+            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SIGN_OUT_CONFIRM.getType())));
 
-            // log the new user on the UI
             log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
-        } else if (message instanceof ProfileMessage) {
-
-            Profile profileToProcess = ((ProfileMessage) message).getProfile();
-            handleProfile(profileToProcess);
+        } else if (message instanceof RegistrationMessage) {
+            handleRegistration(message);
+        } else if (message instanceof UpdateProfileMessage) {
+            updateChanges(message);
         } else if (message instanceof AcctDeactivationMessage) {
 
             // call on the Registration service to deactivate the account
             RegistrationService.getInstance().deactivateAccount(userProfile);
-            Packet packet = new Packet(msgFactory.createMessage(MsgTypes.DEACTIVATION.getType()));
+            Packet packet = new Packet(msgFactory.createMessage(MsgTypes.DEACTIVATION_CONFIRM.getType()));
             notifyClient(packet);
         }
     }
 
-    private void handleProfile(Profile profileToProcess) throws IOException {
-        // if a user already exists
-        if (userProfile != null && !userProfile.getId().equals("-1")) {
-            profileToProcess.setId(userProfile.getId());
+    private void updateChanges(BaseMessage message) throws IOException {
+        UpdateProfileMessage updateMsg = (UpdateProfileMessage)message;
+        Profile existingProfile = updateMsg.getProfile();
+        existingProfile.setId(userProfile.getId());
+        if (regSvc.setAccountDetails(existingProfile)) {
+            log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
+
+            userProfile = existingProfile;
+            BaseMessage retMsg = msgFactory.createMessage(MsgTypes.SUCCESS_UPDATE_PROFILE.getType());
+            //BaseMessage retMsg = new SuccessfulUpdateProfileMessage();
+            ((SuccessfulUpdateProfileMessage)retMsg).setUser(userProfile.getUser());
+            notifyClient(new Packet(retMsg));
+            
+            log.log(new MessageEvent(new UserAddedMessage(userProfile.getUser())));
+        } else {
+            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.INVALID_PROFILE_UPDATE.getType())));
         }
+    }
 
-        if (RegistrationService.getInstance().setAccountDetails(profileToProcess)) {
-
-            if (userProfile != null && !userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
-                System.out.println("occurs");
-                log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
-            }
-            // display the updated user name
-            if (userProfile != null && !userProfile.getUser().getUsername().equals(profileToProcess.getUser().getUsername())){
-                log.log(new MessageEvent(new UserAddedMessage(profileToProcess.getUser())));
-            }
-
-            userProfile = profileToProcess;
-            SuccessfulRegistration msg = (SuccessfulRegistration)msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType());
-            msg.setUser(userProfile.getUser());
-            notifyClient(new Packet(msg));
+    private void handleRegistration(BaseMessage message) throws IOException {
+        RegistrationMessage msg = (RegistrationMessage) message;
+        Profile newProfile = msg.getProfile();
+        newProfile.setId("-1");
+        if (regSvc.setAccountDetails(newProfile)) {
+            int id = regSvc.getUsersId(newProfile);
+            newProfile.setId(Integer.toString(id));
+            userProfile = newProfile;
+            BaseMessage retMsg = msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType());
+            ((SuccessfulRegistrationMessage)retMsg).setUser(userProfile.getUser());
+            notifyClient(new Packet(retMsg));
         } else {
             notifyClient(new Packet(msgFactory.createMessage(MsgTypes.REG_ERROR.getType())));
         }
     }
+
 
     private void notifyClient(Packet packet) throws IOException {
         os.writeObject(packet);
