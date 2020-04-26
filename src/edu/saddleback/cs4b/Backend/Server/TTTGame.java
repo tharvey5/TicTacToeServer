@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class TTTGame implements Subject, Runnable, Game {
-    private Map<String, Token> tokenMap; // maps players to tokens
+    private Map<String, Token> tokenMap; // key = username, value = token maps players to tokens
     private LocalDateTime start;
     private LocalDateTime end;
     private volatile PublicUser startPlayer;
@@ -189,9 +189,11 @@ public class TTTGame implements Subject, Runnable, Game {
                     int r = move.getCoordinate().getXCoord();
                     int c = move.getCoordinate().getYCoord();
                     board.setToken(r, c, tokenMap.get(currentTurn.getUsername()));
+                    moves.addMove(move);
+                    // notify observers
                     return true;
                 }
-                return false; 
+                return false;
             }
         } else {
             return false;
@@ -221,5 +223,36 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public void run() {
+        waitForPlayers();
+        isActive = true;
+        winner = null;
+        while (isActive) {
+            waitForMove();
+            String winningToken = checker.findWinner(board);
+            if (winningToken != null) {
+                // notify users of the winning token 
+            }
+            swapCurrentTurn();
+        }
+
+    }
+
+    // hold in an infinite loop until another move has been added to the game
+    private void waitForMove() {
+        int moveCnt = moves.getMoves().size();
+        while (moves.getMoves().size() == moveCnt) {}
+    }
+
+    // hold in an infinite loop until both players have joined
+    private void waitForPlayers() {
+        while (startPlayer == null && otherPlayer == null) {}
+    }
+
+    private void swapCurrentTurn() {
+        if (currentTurn == startPlayer) {
+            currentTurn = otherPlayer;
+        } else {
+            currentTurn = startPlayer;
+        }
     }
 }

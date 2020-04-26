@@ -31,7 +31,7 @@ public class GameLogicService {
     }
 
     /**
-     * returns the user name of the winner or "" if no winner
+     * returns the token id that won or null for no winner
      */
     public String findWinner(Board board) {
         return rules.gameWinner(board);
