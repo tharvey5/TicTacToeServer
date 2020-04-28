@@ -8,6 +8,7 @@ import edu.saddleback.cs4b.Backend.PubSub.Subject;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -23,7 +24,7 @@ public class TTTGame implements Subject, Runnable, Game {
     private List<Observer> observers;
     private List<PublicUser> viewers;  // todo this seems kind of redundant
                                        // couldn't we deduce if not player its a viewer
-    private Moves moves;
+    private List<Move> moves;
     boolean isActive;
     private Board board;
     private String gameId;
@@ -44,11 +45,13 @@ public class TTTGame implements Subject, Runnable, Game {
         this.board = new TTTBoard();
         this.currentTurn = creator;
         this.rules = new TTTRules();
+        this.moves = new ArrayList<>();
+        setToken(()->"1", creator);
     }
 
     @Override
     public void setToken(Token token, PublicUser user) {
-
+        tokenMap.put(user.getUsername(), token);
     }
 
     @Override
@@ -130,7 +133,7 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public Moves getMoves() {
-        return moves;
+        return null;
     }
 
     @Override
@@ -187,18 +190,20 @@ public class TTTGame implements Subject, Runnable, Game {
      */
     public boolean playMove(Move move) {
         // if the person trying to move is the one whose turn it is
+        System.out.println("request to move");
         if (isActive && move.getPlayerID().equals(currentTurn.getId())) {
             synchronized (this) {
                 if (checker.validMove(board, move)) {
                     int r = move.getCoordinate().getXCoord();
                     int c = move.getCoordinate().getYCoord();
                     board.setToken(r, c, tokenMap.get(currentTurn.getUsername()));
-                    moves.addMove(move);
+                    moves.add(move);
 
                     ValidMoveMessage validMoveMsg =
                             new ValidMoveMessage(new TTTPosition(r, c),
                             gameId,tokenMap.get(currentTurn.getUsername()),
                             currentTurn.getUsername());
+                    System.out.println("Return move");
 
                     notifyObserver(new MessageEvent(validMoveMsg));
                     return true;
@@ -234,10 +239,10 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public void run() {
-        waitForPlayers();
+        //waitForPlayers();
         isActive = true;
         winner = null;
-        while (isActive && moves.getMoves().size() < 9) {
+        while (isActive && moves.size() < 9) {
             waitForMove();
             String winningToken = checker.findWinner(board);
             if (winningToken != null) {
@@ -258,8 +263,8 @@ public class TTTGame implements Subject, Runnable, Game {
 
     // hold in an infinite loop until another move has been added to the game
     private void waitForMove() {
-        int moveCnt = moves.getMoves().size();
-        while (moves.getMoves().size() == moveCnt) {}
+        int moveCnt = moves.size();
+        while (moves.size() == moveCnt) {}
     }
 
     // hold in an infinite loop until both players have joined

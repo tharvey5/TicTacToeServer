@@ -129,7 +129,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
             GameSuccessfullyCreatedMessage gameMsg =
                     (GameSuccessfullyCreatedMessage) gameFactory.createMessage(MsgTypes.GAME_CREATED.getType());
-            gameMsg.setGame(newGame);
+            gameMsg.setGame(null);
             notifyClient(new Packet(gameMsg));
 
         } else if (message instanceof JoinGameRequestMessage) {
@@ -139,7 +139,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 gameMap.put(newGame.getGameID(), newGame);
                 AvailableGameMessage gameMsg =
                         (AvailableGameMessage) gameFactory.createMessage(MsgTypes.AVAILABLE_GAME.getType());
-                gameMsg.setGame(newGame);
+                gameMsg.setGame(null);
                 notifyClient(new Packet(gameMsg));
             } else {
                 notifyClient(new Packet(gameFactory.createMessage(MsgTypes.UNAVAILABLE_GAME.getType())));
