@@ -49,6 +49,7 @@ public class GameLobby {
         gameThread.start();
 
         // request the id from the DB
+        newGame.setGameID("1"); // todo for testing
         // assign the id to the game
         activeGames.put(newGame.getGameID(), newGame);
         playableGames.put(newGame.getGameID(), newGame);

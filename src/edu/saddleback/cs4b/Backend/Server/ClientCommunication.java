@@ -26,7 +26,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
     private ObjectInputStream is;
     private Profile userProfile; // set when registered
     // probably hold the profile information?
-    private AbstractMessageFactory msgFactory;
+    private AbstractMessageFactory adminFactory;
+    private AbstractMessageFactory gameFactory;
     private Authenticator authenticator;
     private Logger log = ServerLogger.getInstance();
     private RegistrationService regSvc = RegistrationService.getInstance();
@@ -38,7 +39,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
     public ClientCommunication(Socket socket) {
         this.socket = socket;
         initiateStreams();
-        this.msgFactory = new AdminMessageFactory();
+        this.adminFactory = MessageFactoryProducer.getFactory(FactoryTypes.ADMIN_FACT.getTypes());
+        this.gameFactory = MessageFactoryProducer.getFactory(FactoryTypes.GAME_FACT.getTypes());
         this.authenticator = AuthenticationService.getInstance();
         this.gameMap = new Hashtable<>();
     }
@@ -84,7 +86,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
             if (userProcessed != null) {
 
                  // if the user was authenticated, then set the user profile
-                AuthenticatedMessage authMsg = (AuthenticatedMessage) msgFactory.createMessage(MsgTypes.AUTHENTICATION.getType());
+                AuthenticatedMessage authMsg = (AuthenticatedMessage) adminFactory.createMessage(MsgTypes.AUTHENTICATION.getType());
                 authMsg.setAuthUser(userProcessed);
                 notifyClient(new Packet(authMsg));
                 userProfile = new TTTProfile((TTTUser)userProcessed);
@@ -96,19 +98,19 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 log.log(new MessageEvent(new UserAddedMessage(userProfile.getUser())));
             } else {
                 // output a message that denied the access to the system
-                 notifyClient(new Packet(msgFactory.createMessage(MsgTypes.DENIED.getType())));
+                 notifyClient(new Packet(adminFactory.createMessage(MsgTypes.DENIED.getType())));
             }
 
         } else if (message instanceof ActiveUserMessage) {
 
             // todo change this out with more efficient way of getting the message
-            ActiveUserResponseMessage usrMsg = (ActiveUserResponseMessage) msgFactory.createMessage(MsgTypes.ACTIVE_USER_RESPONSE.getType());
+            ActiveUserResponseMessage usrMsg = (ActiveUserResponseMessage) adminFactory.createMessage(MsgTypes.ACTIVE_USER_RESPONSE.getType());
             usrMsg.setActiveUsers(getActiveUsers());
             Packet packet = new Packet(usrMsg);
             notifyClient(packet);
         } else if (message instanceof SignOutMessage) {
             SystemInfoService.getInstance().removeOnlineUser(this);
-            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.SIGN_OUT_CONFIRM.getType())));
+            notifyClient(new Packet(adminFactory.createMessage(MsgTypes.SIGN_OUT_CONFIRM.getType())));
 
             log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
         } else if (message instanceof RegistrationMessage) {
@@ -119,14 +121,14 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
             // call on the Registration service to deactivate the account
             RegistrationService.getInstance().deactivateAccount(userProfile);
-            Packet packet = new Packet(msgFactory.createMessage(MsgTypes.DEACTIVATION_CONFIRM.getType()));
+            Packet packet = new Packet(adminFactory.createMessage(MsgTypes.DEACTIVATION_CONFIRM.getType()));
             notifyClient(packet);
         } else if (message instanceof CreateGameMessage) {
             Game newGame = GameLobby.getInstance().createGame(userProfile.getUser());
             gameMap.put(newGame.getGameID(), newGame);
 
             GameSuccessfullyCreatedMessage gameMsg =
-                    (GameSuccessfullyCreatedMessage) msgFactory.createMessage(MsgTypes.GAME_CREATED.getType());
+                    (GameSuccessfullyCreatedMessage) gameFactory.createMessage(MsgTypes.GAME_CREATED.getType());
             gameMsg.setGame(newGame);
             notifyClient(new Packet(gameMsg));
 
@@ -136,11 +138,11 @@ public class ClientCommunication implements Runnable, ClientConnection {
             if (newGame != null) {
                 gameMap.put(newGame.getGameID(), newGame);
                 AvailableGameMessage gameMsg =
-                        (AvailableGameMessage) msgFactory.createMessage(MsgTypes.AVAILABLE_GAME.getType());
+                        (AvailableGameMessage) gameFactory.createMessage(MsgTypes.AVAILABLE_GAME.getType());
                 gameMsg.setGame(newGame);
                 notifyClient(new Packet(gameMsg));
             } else {
-                notifyClient(new Packet(msgFactory.createMessage(MsgTypes.UNAVAILABLE_GAME.getType())));
+                notifyClient(new Packet(gameFactory.createMessage(MsgTypes.UNAVAILABLE_GAME.getType())));
             }
 
         } else if (message instanceof ViewGameRequestMessage) {
@@ -160,14 +162,14 @@ public class ClientCommunication implements Runnable, ClientConnection {
             log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
 
             userProfile = existingProfile;
-            BaseMessage retMsg = msgFactory.createMessage(MsgTypes.SUCCESS_UPDATE_PROFILE.getType());
+            BaseMessage retMsg = adminFactory.createMessage(MsgTypes.SUCCESS_UPDATE_PROFILE.getType());
             //BaseMessage retMsg = new SuccessfulUpdateProfileMessage();
             ((SuccessfulUpdateProfileMessage)retMsg).setUser(userProfile.getUser());
             notifyClient(new Packet(retMsg));
             
             log.log(new MessageEvent(new UserAddedMessage(userProfile.getUser())));
         } else {
-            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.INVALID_PROFILE_UPDATE.getType())));
+            notifyClient(new Packet(adminFactory.createMessage(MsgTypes.INVALID_PROFILE_UPDATE.getType())));
         }
     }
 
@@ -179,11 +181,11 @@ public class ClientCommunication implements Runnable, ClientConnection {
             int id = regSvc.getUsersId(newProfile);
             newProfile.setId(Integer.toString(id));
             userProfile = newProfile;
-            BaseMessage retMsg = msgFactory.createMessage(MsgTypes.SUCCESS_REG.getType());
+            BaseMessage retMsg = adminFactory.createMessage(MsgTypes.SUCCESS_REG.getType());
             ((SuccessfulRegistrationMessage)retMsg).setUser(userProfile.getUser());
             notifyClient(new Packet(retMsg));
         } else {
-            notifyClient(new Packet(msgFactory.createMessage(MsgTypes.REG_ERROR.getType())));
+            notifyClient(new Packet(adminFactory.createMessage(MsgTypes.REG_ERROR.getType())));
         }
     }
 

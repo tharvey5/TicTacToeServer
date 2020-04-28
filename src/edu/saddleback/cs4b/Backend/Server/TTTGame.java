@@ -187,7 +187,7 @@ public class TTTGame implements Subject, Runnable, Game {
      */
     public boolean playMove(Move move) {
         // if the person trying to move is the one whose turn it is
-        if (move.getPlayerID().equals(currentTurn.getId())) {
+        if (isActive && move.getPlayerID().equals(currentTurn.getId())) {
             synchronized (this) {
                 if (checker.validMove(board, move)) {
                     int r = move.getCoordinate().getXCoord();
