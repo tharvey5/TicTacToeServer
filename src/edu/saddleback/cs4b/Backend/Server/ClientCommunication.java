@@ -38,7 +38,6 @@ public class ClientCommunication implements Runnable, ClientConnection {
     public ClientCommunication(Socket socket) {
         this.socket = socket;
         initiateStreams();
-        SystemInfoService.getInstance().markUserAsOnline(this);
         this.msgFactory = new AdminMessageFactory();
         this.authenticator = AuthenticationService.getInstance();
         this.gameMap = new Hashtable<>();
@@ -93,6 +92,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 userProfile.setId(Integer.toString(id));
 
                 // log the new user on the UI
+                SystemInfoService.getInstance().markUserAsOnline(this);
                 log.log(new MessageEvent(new UserAddedMessage(userProfile.getUser())));
             } else {
                 // output a message that denied the access to the system
