@@ -1,6 +1,8 @@
 package edu.saddleback.cs4b.Backend.Objects;
 
-public class TTTRules implements GameRules {
+import java.io.Serializable;
+
+public class TTTRules implements GameRules, Serializable {
     @Override
     public boolean acceptablePlacement(Board board, Move move) {
         Coordinate coord = move.getCoordinate();
