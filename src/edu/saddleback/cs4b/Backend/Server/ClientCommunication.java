@@ -131,7 +131,18 @@ public class ClientCommunication implements Runnable, ClientConnection {
             notifyClient(new Packet(gameMsg));
 
         } else if (message instanceof JoinGameRequestMessage) {
-            // user would like to join a game
+            JoinGameRequestMessage reqMsg = (JoinGameRequestMessage)message;
+            Game newGame = GameLobby.getInstance().joinGame(userProfile.getUser(), reqMsg.getGameID());
+            if (newGame != null) {
+                gameMap.put(newGame.getGameID(), newGame);
+                AvailableGameMessage gameMsg =
+                        (AvailableGameMessage) msgFactory.createMessage(MsgTypes.AVAILABLE_GAME.getType());
+                gameMsg.setGame(newGame);
+                notifyClient(new Packet(gameMsg));
+            } else {
+                notifyClient(new Packet(msgFactory.createMessage(MsgTypes.UNAVAILABLE_GAME.getType())));
+            }
+
         } else if (message instanceof ViewGameRequestMessage) {
             // user would like to view a game
         } else if (message instanceof MoveMessage) {
