@@ -35,8 +35,8 @@ public class TTTRules implements GameRules, Serializable {
 
     private String horizontalWinner(Board board) {
         for (int r = 0; r < board.rows(); ++r) {
-            if (board.getToken(r, 0).equals(board.getToken(r, 1)) &&
-                board.getToken(r, 1).equals(board.getToken(r, 2)) &&
+            if (board.getToken(r, 0) == board.getToken(r, 1) &&
+                board.getToken(r, 1) == board.getToken(r, 2 ) &&
                 board.getToken(r, 0) != null) {
                 return board.getToken(r, 0).getTokenID();
             }
@@ -46,8 +46,8 @@ public class TTTRules implements GameRules, Serializable {
 
     private String verticalWinner(Board board) {
         for (int c = 0; c < board.cols(); ++c) {
-            if (board.getToken(0, c).equals(board.getToken(1, c)) &&
-                board.getToken(1, c).equals(board.getToken(2, c)) &&
+            if (board.getToken(0, c) == board.getToken(1, c) &&
+                board.getToken(1, c) == board.getToken(2, c) &&
                 board.getToken(0, c) != null) {
                 return board.getToken(0, c).getTokenID();
             }
@@ -56,14 +56,14 @@ public class TTTRules implements GameRules, Serializable {
     }
 
     private String checkDiagonalWinner(Board board) {
-        if (board.getToken(0, 0).equals(board.getToken(1, 1)) &&
-            board.getToken(1, 1).equals(board.getToken(2, 2)) &&
+        if (board.getToken(0, 0) == board.getToken(1, 1) &&
+            board.getToken(1, 1) == board.getToken(2, 2) &&
             board.getToken(0, 0) != null) {
             return board.getToken(1, 1).getTokenID();
         }
 
-        if (board.getToken(0,2).equals(board.getToken(1,1)) &&
-            board.getToken(1, 1).equals(board.getToken(2,0)) &&
+        if (board.getToken(0,2) == board.getToken(1,1) &&
+            board.getToken(1, 1) == board.getToken(2,0) &&
             board.getToken(0,2) != null) {
             return board.getToken(1,1).getTokenID();
         }
