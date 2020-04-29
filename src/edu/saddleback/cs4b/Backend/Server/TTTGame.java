@@ -24,8 +24,8 @@ public class TTTGame implements Subject, Runnable, Game {
     private List<Observer> observers;
     private List<PublicUser> viewers;  // todo this seems kind of redundant
                                        // couldn't we deduce if not player its a viewer
-    private List<Move> moves;
-    boolean isActive;
+    private volatile List<Move> moves;
+    private volatile boolean isActive;
     private Board board;
     private String gameId;
     private GameRules rules;
@@ -46,7 +46,7 @@ public class TTTGame implements Subject, Runnable, Game {
         this.currentTurn = creator;
         this.rules = new TTTRules();
         this.moves = new ArrayList<>();
-        setToken(()->"1", creator);
+        setToken(new TTTToken("1"), creator);
     }
 
     @Override
@@ -190,7 +190,6 @@ public class TTTGame implements Subject, Runnable, Game {
      */
     public boolean playMove(Move move) {
         // if the person trying to move is the one whose turn it is
-        System.out.println("request to move");
         if (isActive && move.getPlayerID().equals(currentTurn.getId())) {
             synchronized (this) {
                 if (checker.validMove(board, move)) {
@@ -208,6 +207,8 @@ public class TTTGame implements Subject, Runnable, Game {
                     notifyObserver(new MessageEvent(validMoveMsg));
                     return true;
                 }
+                System.out.println(move.getCoordinate().getXCoord() + "," + move.getCoordinate().getYCoord());
+                System.out.println("invalid move");
                 InvalidMoveMessage invalidMove = (InvalidMoveMessage) factory.createMessage(MsgTypes.INVALID_MOVE.getType());
                 notifyObserver(new MessageEvent(invalidMove));
                 return false;
@@ -244,12 +245,15 @@ public class TTTGame implements Subject, Runnable, Game {
         winner = null;
         while (isActive && moves.size() < 9) {
             waitForMove();
+            System.out.println("Move was made");
             String winningToken = checker.findWinner(board);
             if (winningToken != null) {
                 isActive = false;
                 break;
             }
-            swapCurrentTurn();
+
+            // todo reinstate
+            //swapCurrentTurn();
         }
 
         // notify all of the observers of this game who has won
@@ -258,7 +262,8 @@ public class TTTGame implements Subject, Runnable, Game {
         if (winner != null) {
             msg.setWinType(WinType.NORMAL_WIN);
         }
-        notifyObserver(new MessageEvent(msg));
+        //notifyObserver(new MessageEvent(msg));
+        System.out.println("Game ended");
     }
 
     // hold in an infinite loop until another move has been added to the game
