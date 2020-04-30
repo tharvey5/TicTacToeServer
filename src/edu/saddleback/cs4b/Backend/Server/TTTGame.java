@@ -256,8 +256,6 @@ public class TTTGame implements Subject, Runnable, Game {
                 isActive = false;
                 break;
             }
-
-            // todo reinstate
             swapCurrentTurn();
         }
 
