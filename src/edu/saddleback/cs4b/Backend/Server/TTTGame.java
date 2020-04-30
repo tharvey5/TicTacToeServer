@@ -254,6 +254,7 @@ public class TTTGame implements Subject, Runnable, Game {
             System.out.println("Move was made");
             String winningToken = checker.findWinner(board);
             if (winningToken != null) {
+                winner = currentTurn;
                 isActive = false;
                 break;
             }
