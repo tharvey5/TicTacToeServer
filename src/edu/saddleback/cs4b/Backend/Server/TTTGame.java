@@ -246,6 +246,7 @@ public class TTTGame implements Subject, Runnable, Game {
     @Override
     public void run() {
         waitForPlayers();
+        System.out.println("Both players have joined");
         isActive = true;
         winner = null;
         while (isActive && moves.size() < 9) {
@@ -277,7 +278,7 @@ public class TTTGame implements Subject, Runnable, Game {
 
     // hold in an infinite loop until both players have joined
     private void waitForPlayers() {
-        while (startPlayer == null && otherPlayer == null) {}
+        while (otherPlayer == null) {}
     }
 
     private void swapCurrentTurn() {
