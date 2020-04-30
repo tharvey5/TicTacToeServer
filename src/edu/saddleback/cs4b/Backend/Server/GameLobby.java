@@ -1,7 +1,12 @@
 package edu.saddleback.cs4b.Backend.Server;
 
+import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
+import edu.saddleback.cs4b.Backend.Messages.GameResultMessage;
 import edu.saddleback.cs4b.Backend.Objects.Board;
 import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
+import edu.saddleback.cs4b.Backend.PubSub.Observer;
+import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
 import java.util.Hashtable;
@@ -12,7 +17,7 @@ import java.util.Map;
  * This will allow people to create games and view games
  * It will run on its own thread and thats
  */
-public class GameLobby {
+public class GameLobby implements Observer {
     private volatile static GameLobby lobby = null;
     private Map<String, Game> activeGames;  // key = gameID, value = Game
                                             // don't return game but maybe
@@ -54,6 +59,7 @@ public class GameLobby {
         activeGames.put(newGame.getGameID(), newGame);
         playableGames.put(newGame.getGameID(), newGame);
         newGame.addObserver(sysInfo.getConnection(player.getUsername()));
+        newGame.addObserver(this);
         return newGame;
     }
 
@@ -95,5 +101,19 @@ public class GameLobby {
             games.put(id, playableGames.get(id).getCreator().getUsername());
         }
         return games;
+    }
+
+    @Override
+    public void update(SystemEvent e) {
+        if (e instanceof MessageEvent) {
+            BaseMessage bm = ((MessageEvent) e).getMessage();
+            if (bm instanceof GameResultMessage) {
+                String id = ((GameResultMessage) bm).getGameId();
+                // todo is post results to db once done
+                activeGames.remove(id);
+
+                System.out.println(id + "HAS BEEN REMOVED");
+            }
+        }
     }
 }
