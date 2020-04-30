@@ -150,7 +150,11 @@ public class ClientCommunication implements Runnable, ClientConnection {
         } else if (message instanceof MoveMessage) {
             MoveMessage moveMsg = (MoveMessage)message;
             Game game = gameMap.get(moveMsg.getGameId());
-            game.playMove(new TTTMove(moveMsg.getGameId(), userProfile.getId(), moveMsg.getCoordinate()));
+            boolean validMove = game.playMove(new TTTMove(moveMsg.getGameId(), userProfile.getId(), moveMsg.getCoordinate()));
+            if (!validMove) {
+                InvalidMoveMessage invalidMove = (InvalidMoveMessage) gameFactory.createMessage(MsgTypes.INVALID_MOVE.getType());
+                notifyClient(new Packet(invalidMove));
+            }
         }
     }
 

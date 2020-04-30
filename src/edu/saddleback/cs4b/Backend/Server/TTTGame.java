@@ -214,8 +214,8 @@ public class TTTGame implements Subject, Runnable, Game {
                 }
                 System.out.println(move.getCoordinate().getXCoord() + "," + move.getCoordinate().getYCoord());
                 System.out.println("invalid move");
-                InvalidMoveMessage invalidMove = (InvalidMoveMessage) factory.createMessage(MsgTypes.INVALID_MOVE.getType());
-                notifyObserver(new MessageEvent(invalidMove));
+                //InvalidMoveMessage invalidMove = (InvalidMoveMessage) factory.createMessage(MsgTypes.INVALID_MOVE.getType());
+                //notifyObserver(new MessageEvent(invalidMove));
                 return false;
             }
         } else {
