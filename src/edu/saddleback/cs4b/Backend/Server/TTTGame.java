@@ -260,13 +260,17 @@ public class TTTGame implements Subject, Runnable, Game {
             swapCurrentTurn();
         }
 
-        // notify all of the observers of this game who has won
-        GameResultMessage msg = (GameResultMessage) factory.createMessage(MsgTypes.GAME_RESULT.getType());
-        msg.setWinner(currentTurn.getUsername());
+        GameResultMessage resMsg = (GameResultMessage) factory.createMessage(MsgTypes.GAME_RESULT.getType());
         if (winner != null) {
-            msg.setWinType(WinType.NORMAL_WIN);
+            resMsg.setWinner(currentTurn.getUsername());
         }
-        //notifyObserver(new MessageEvent(msg));
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        notifyObserver(new MessageEvent(resMsg));
+
         System.out.println("Game ended");
     }
 
