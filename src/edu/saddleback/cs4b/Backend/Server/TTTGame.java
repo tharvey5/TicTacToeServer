@@ -39,13 +39,15 @@ public class TTTGame implements Subject, Runnable, Game {
         tokenMap = new Hashtable<>();
         setStartTime(LocalDateTime.now());
         setCreator(creator);
-        startPlayer = this.creator;
+        this.startPlayer = this.creator;
         this.observers = new ArrayList<>();
         this.isActive = false;
         this.board = new TTTBoard();
         this.currentTurn = creator;
         this.rules = new TTTRules();
         this.moves = new ArrayList<>();
+
+        // todo fix this
         setToken(new TTTToken("1"), creator);
     }
 
@@ -107,7 +109,7 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public void setCreator(PublicUser user) {
-        if (user != null && creator != null) {
+        if (user != null && creator == null) {
             this.creator = user;
         }
     }
@@ -128,6 +130,9 @@ public class TTTGame implements Subject, Runnable, Game {
     public void setOtherPlayer(PublicUser user) {
         if (otherPlayer == null) {
             otherPlayer = user;
+
+            // todo handle this better
+            setToken(new TTTToken("2"), user);
         }
     }
 
@@ -240,7 +245,7 @@ public class TTTGame implements Subject, Runnable, Game {
 
     @Override
     public void run() {
-        //waitForPlayers();
+        waitForPlayers();
         isActive = true;
         winner = null;
         while (isActive && moves.size() < 9) {
@@ -253,7 +258,7 @@ public class TTTGame implements Subject, Runnable, Game {
             }
 
             // todo reinstate
-            //swapCurrentTurn();
+            swapCurrentTurn();
         }
 
         // notify all of the observers of this game who has won
