@@ -77,12 +77,12 @@ public class GameLobby implements Observer {
         }
     }
 
-    public Board viewGame(PublicUser viewer, String gameId) {
+    public Game viewGame(PublicUser viewer, String gameId) {
         Game game = activeGames.get(gameId);
 
         game.addObserver(sysInfo.getConnection(viewer.getUsername()));
         // call system service to get their connection and set as observer
-        return game.getGameBoard();
+        return game;
     }
 
     public Map<String, List<String>> getAllGames(){

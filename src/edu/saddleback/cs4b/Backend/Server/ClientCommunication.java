@@ -146,7 +146,16 @@ public class ClientCommunication implements Runnable, ClientConnection {
             }
 
         } else if (message instanceof ViewGameRequestMessage) {
-            // user would like to view a game
+            ViewGameRequestMessage viewMsg = (ViewGameRequestMessage)message;
+            Game game = GameLobby.getInstance().viewGame(userProfile.getUser(), viewMsg.getGameID());
+            if (game != null) {
+                SuccessfulViewGameMessage successView = (SuccessfulViewGameMessage)gameFactory.createMessage(MsgTypes.SUCCESS_VIEW_GAME.getType());
+                successView.setGameID(game.getGameID());
+                notifyClient(new Packet(successView));
+            } else {
+                notifyClient(new Packet(gameFactory.createMessage(MsgTypes.NO_GAME_TO_VIEW.getType())));
+            }
+
         } else if (message instanceof MoveMessage) {
             MoveMessage moveMsg = (MoveMessage)message;
             Game game = gameMap.get(moveMsg.getGameId());
