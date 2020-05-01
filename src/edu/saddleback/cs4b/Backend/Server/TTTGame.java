@@ -128,7 +128,7 @@ public class TTTGame implements Subject, Runnable, Game {
     // the other player
     @Override
     public void setOtherPlayer(PublicUser user) {
-        if (otherPlayer == null) {
+        if (otherPlayer == null && user != creator) {
             otherPlayer = user;
 
             // todo handle this better
