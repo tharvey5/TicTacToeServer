@@ -1,24 +1,6 @@
 package edu.saddleback.cs4b.UI;
-
-
-<<<<<<< Updated upstream:src/edu/saddleback/cs4b/UI/ServerScreenController.java
-import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
-import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
-import edu.saddleback.cs4b.Backend.PubSub.Observer;
-import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
-import edu.saddleback.cs4b.Backend.Server.ServerLogger;
-import edu.saddleback.cs4b.Backend.Server.UserAddedMessage;
-import edu.saddleback.cs4b.Backend.Server.UserRemovedMessage;
-import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
-=======
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
->>>>>>> Stashed changes:src/edu/saddleback/cs4b/UI/ServerController.java
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -40,85 +22,6 @@ public class ServerController
     @FXML
     private BorderPane viewScreen;
 
-<<<<<<< Updated upstream:src/edu/saddleback/cs4b/UI/ServerScreenController.java
-    @FXML
-    private ListView<String> tempArea;
-
-
-    public ServerScreenController()
-    {
-        ServerLogger.getInstance().addObserver(this);
-    }
-
-    @Override
-    public void update(SystemEvent e)
-    {
-        if (e instanceof MessageEvent)
-        {
-            handleMessage(((MessageEvent) e).getMessage());
-        }
-    }
-
-    private void handleMessage(BaseMessage message)
-    {
-        if (message instanceof UserAddedMessage)
-        {
-            displayUser(((UserAddedMessage) message).getUser());
-        }
-        else if (message instanceof UserRemovedMessage)
-        {
-            removeUser(((UserRemovedMessage) message).getUser());
-        }
-    }
-
-    private void removeUser(PublicUser user)
-    {
-        Platform.runLater(()-> tempArea.getItems().remove("user: " + user.getUsername()));
-    }
-
-    private void displayUser(PublicUser user)
-    {
-        Platform.runLater(()-> tempArea.getItems().add("user: " + user.getUsername()));
-    }
-
-    @FXML
-    public void handleEventLogAction(MouseEvent event)
-    {
-        System.out.println("You clicked me!");
-        FxmlLoader object = new FxmlLoader();
-        Pane view = object.getPage("EventLogScreen");
-        viewScreen.setCenter(view);
-    }
-
-    @FXML
-    public void handleActiveGamesAction(MouseEvent event)
-    {
-        System.out.println("You clicked me!");
-        FxmlLoader object = new FxmlLoader();
-        Pane view = object.getPage("ActiveGamesScreen");
-        viewScreen.setCenter(view);
-    }
-
-    @FXML
-    public void handleCompletedGamesAction(MouseEvent event)
-    {
-        System.out.println("You clicked me!");
-        FxmlLoader object = new FxmlLoader();
-        Pane view = object.getPage("CompletedGamesScreen");
-        viewScreen.setCenter(view);
-    }
-
-    @FXML
-    public void handlePlayersAction(MouseEvent event)
-    {
-        System.out.println("You clicked me!");
-        FxmlLoader object = new FxmlLoader();
-        Pane view = object.getPage("PlayersScreen");
-        viewScreen.setCenter(view);
-    }
-
-=======
->>>>>>> Stashed changes:src/edu/saddleback/cs4b/UI/ServerController.java
     /**
      * WHEN THIS METHOD IS CALLED THE 'EVENT LOG' BUTTON WILL CHANGE COLOR WHEN THE MOUSE IS HOVERING OVER IT
      */
@@ -195,8 +98,7 @@ public class ServerController
         playersButton.setOnMouseExited(mouseEvent -> playersButton.setTextFill(Color.WHITE));
     }
 
-<<<<<<< Updated upstream:src/edu/saddleback/cs4b/UI/ServerScreenController.java
-=======
+
     @FXML
     public void handleEventLogAction()
     {
@@ -228,5 +130,4 @@ public class ServerController
         Pane view = object.getPage("Players");
         viewScreen.setCenter(view);
     }
->>>>>>> Stashed changes:src/edu/saddleback/cs4b/UI/ServerController.java
 }

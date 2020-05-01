@@ -1,17 +1,50 @@
 package edu.saddleback.cs4b.UI;
 
+import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
+import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
+import edu.saddleback.cs4b.Backend.PubSub.Observer;
+import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
+import edu.saddleback.cs4b.Backend.Server.ServerLogger;
+import edu.saddleback.cs4b.Backend.Server.UserAddedMessage;
+import edu.saddleback.cs4b.Backend.Server.UserRemovedMessage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 
-public class CompletedGamesController
+public class CompletedGamesController implements Observer
 {
     @FXML
     Button refreshButton;
 
     @FXML
     private TableView completedGamesTable;
+
+    public CompletedGamesController()
+    {
+        ServerLogger.getInstance().addObserver(this);
+    }
+
+    @Override
+    public void update(SystemEvent e)
+    {
+        if(e instanceof MessageEvent)
+        {
+            handleMessage(((MessageEvent) e).getMessage());
+        }
+    }
+
+    private void handleMessage(BaseMessage message)
+    {
+        if (message instanceof UserAddedMessage)
+        {
+
+        }
+        else if (message instanceof UserRemovedMessage)
+        {
+
+        }
+    }
 
     @FXML
     public void handleRefreshAction()

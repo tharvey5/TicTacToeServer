@@ -12,17 +12,14 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<<<<<<< Updated upstream:src/edu/saddleback/cs4b/UI/ServerScreen.fxml
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.ServerScreenController">
-=======
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.ServerController">
->>>>>>> Stashed changes:src/edu/saddleback/cs4b/UI/Server.fxml
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.ServerController">
    <children>
-      <AnchorPane prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;">
+      <AnchorPane prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #2A363B;">
          <children>
             <VBox layoutX="14.0" layoutY="171.0" prefHeight="259.0" prefWidth="190.0" spacing="10.0">
                <children>
-                  <Button fx:id="eventLogButton" alignment="TOP_LEFT" mnemonicParsing="false" onMouseClicked="#handleEventLogAction" onMouseEntered="#highlightEventLog" onMouseExited="#resetEventLog" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Event Log" textFill="WHITE">
+                  <Button fx:id="eventLogButton" alignment="TOP_LEFT" mnemonicParsing="false" onMouseClicked="#handleEventLogAction" onMouseEntered="#highlightEventLog" onMouseExited="#resetEventLog" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #2A363B;" text="Event Log" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -30,7 +27,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="activeGamesButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleActiveGamesAction" onMouseEntered="#highlightActiveGames" onMouseExited="#resetActiveGames" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Active Games" textFill="WHITE">
+                  <Button fx:id="activeGamesButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleActiveGamesAction" onMouseEntered="#highlightActiveGames" onMouseExited="#resetActiveGames" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #2A363B;" text="Active Games" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -38,7 +35,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="completedGamesButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="55.0" mnemonicParsing="false" onMouseClicked="#handleCompletedGamesAction" onMouseEntered="#highlightCompletedGames" onMouseExited="#resetCompletedGames" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Completed Games" textFill="WHITE">
+                  <Button fx:id="completedGamesButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="55.0" mnemonicParsing="false" onMouseClicked="#handleCompletedGamesAction" onMouseEntered="#highlightCompletedGames" onMouseExited="#resetCompletedGames" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #2A363B;" text="Completed Games" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -46,7 +43,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="playersButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="100.0" mnemonicParsing="false" onMouseClicked="#handlePlayersAction" onMouseEntered="#highlightPlayers" onMouseExited="#resetPlayers" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B #2A363B#2A363B;" text="Players" textFill="WHITE">
+                  <Button fx:id="playersButton" alignment="TOP_LEFT" layoutX="10.0" layoutY="100.0" mnemonicParsing="false" onMouseClicked="#handlePlayersAction" onMouseEntered="#highlightPlayers" onMouseExited="#resetPlayers" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #2A363B;" text="Players" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -77,6 +74,6 @@
             <Image url="@tictacotoeicon.png" />
          </image>
       </ImageView>
-      <BorderPane fx:id="viewScreen" layoutX="204.0" layoutY="46.0" prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #ffffff;" />
+      <BorderPane fx:id="viewScreen" layoutX="204.0" layoutY="46.0" prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #FFFFFF;" />
    </children>
 </AnchorPane>
