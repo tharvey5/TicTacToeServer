@@ -1,6 +1,7 @@
 package edu.saddleback.cs4b.UI;
 
 
+<<<<<<< Updated upstream:src/edu/saddleback/cs4b/UI/ServerScreenController.java
 import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
@@ -14,11 +15,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+=======
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+>>>>>>> Stashed changes:src/edu/saddleback/cs4b/UI/ServerController.java
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class ServerScreenController implements Observer
+public class ServerController
 {
     @FXML
     private Button eventLogButton;
@@ -35,6 +40,7 @@ public class ServerScreenController implements Observer
     @FXML
     private BorderPane viewScreen;
 
+<<<<<<< Updated upstream:src/edu/saddleback/cs4b/UI/ServerScreenController.java
     @FXML
     private ListView<String> tempArea;
 
@@ -111,6 +117,8 @@ public class ServerScreenController implements Observer
         viewScreen.setCenter(view);
     }
 
+=======
+>>>>>>> Stashed changes:src/edu/saddleback/cs4b/UI/ServerController.java
     /**
      * WHEN THIS METHOD IS CALLED THE 'EVENT LOG' BUTTON WILL CHANGE COLOR WHEN THE MOUSE IS HOVERING OVER IT
      */
@@ -187,4 +195,38 @@ public class ServerScreenController implements Observer
         playersButton.setOnMouseExited(mouseEvent -> playersButton.setTextFill(Color.WHITE));
     }
 
+<<<<<<< Updated upstream:src/edu/saddleback/cs4b/UI/ServerScreenController.java
+=======
+    @FXML
+    public void handleEventLogAction()
+    {
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("EventLog");
+        viewScreen.setCenter(view);
+    }
+
+    @FXML
+    public void handleActiveGamesAction()
+    {
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("ActiveGames");
+        viewScreen.setCenter(view);
+    }
+
+    @FXML
+    public void handleCompletedGamesAction()
+    {
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("CompletedGames");
+        viewScreen.setCenter(view);
+    }
+
+    @FXML
+    public void handlePlayersAction()
+    {
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("Players");
+        viewScreen.setCenter(view);
+    }
+>>>>>>> Stashed changes:src/edu/saddleback/cs4b/UI/ServerController.java
 }
