@@ -102,6 +102,42 @@ public class SQLDatabase implements DBManager {
         return rs.getString(this.username);
     }
 
+    @Override
+    public User getUser(int id) throws SQLException
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String username;
+        String fn;
+        String ln;
+        String password;
+
+        TTTUser user = null;
+
+        try
+        {
+            ps = connection.prepareStatement("SELECT * FROM USER WHERE UniqueID=?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            username = rs.getString(this.username);
+            fn = rs.getString(this.firstName);
+            ln = rs.getString(this.lastName);
+            password = rs.getString(this.password);
+
+            user = new TTTUser(username,fn, ln, password);
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+        return user;
+    }
+
     //Will return a User if user is found, will throw an exception if no person is found
 
     @Override
@@ -454,7 +490,25 @@ public class SQLDatabase implements DBManager {
     }
 
     @Override
-    public Game getGameInfo(int id) throws Exception {
+    public Game getGameInfo(int id) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM Game WHERE UniqueID = ?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No User found with id: " + String.valueOf(id));
+        }
+
         return null;
     }
 

@@ -23,6 +23,14 @@ public interface DBManager
     String getUsername(int id) throws SQLException;
 
     /****************************************************************
+     getUsername: returns the user with the given unique id.
+
+     - Will throw exception if the unique id is not found in the
+     system.
+     ****************************************************************/
+    User getUser(int id) throws SQLException;
+
+    /****************************************************************
      Login: returns found user with that information.
 
      - Will throw exception if username and password do not
