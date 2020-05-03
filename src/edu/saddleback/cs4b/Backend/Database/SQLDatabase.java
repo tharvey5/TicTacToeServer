@@ -1,14 +1,13 @@
 package edu.saddleback.cs4b.Backend.Database;
 
-import edu.saddleback.cs4b.Backend.Objects.Game;
-import edu.saddleback.cs4b.Backend.Objects.Move;
-import edu.saddleback.cs4b.Backend.Objects.Moves;
-import edu.saddleback.cs4b.Backend.Objects.Token;
+import edu.saddleback.cs4b.Backend.Objects.*;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
+import edu.saddleback.cs4b.Backend.Utilitys.TTTPublicUser;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SQLDatabase implements DBManager {
@@ -497,19 +496,37 @@ public class SQLDatabase implements DBManager {
 
         try
         {
-            ps = connection.prepareStatement("Select * FROM Game WHERE UniqueID = ?");
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE UniqueID = ?");
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
 
+            PublicUser startPlayer = new TTTPublicUser(String.valueOf(rs.getInt(this.player1)), instance.getUsername(rs.getInt(this.player1)));
+            PublicUser otherPlayer = new TTTPublicUser(String.valueOf(rs.getInt(this.player2)), instance.getUsername(rs.getInt(this.player2)));
+            PublicUser creator = new TTTPublicUser(String.valueOf(rs.getInt(this.creator)), instance.getUsername(rs.getInt(this.creator)));
+            PublicUser winner = new TTTPublicUser(String.valueOf(rs.getInt(this.winner)), instance.getUsername(rs.getInt(this.winner)));
+
+            List<PublicUser> viewers = new ArrayList<>();
+
+            String delimiter = ", ";
+
+            String[] stringID = rs.getString(this.viewers).split(delimiter);
+
+            for (int i = 0; i < stringID.length; i++)
+            {
+                PublicUser user = new TTTPublicUser(stringID[i], getInstance().getUsername(Integer.parseInt(stringID[i])));
+                viewers.add(user);
+            }
+
+            Game game = new DatabaseGame(rs.getString(this.startTime), rs.getString(this.endTime), startPlayer, otherPlayer, creator, winner, String.valueOf(id), viewers );
+
+            return game;
         }
         catch(Exception e)
         {
             System.out.println(e.toString());
-            throw new Exception("No User found with id: " + String.valueOf(id));
+            throw new Exception("No Game found with id: " + String.valueOf(id));
         }
-
-        return null;
     }
 
     @Override

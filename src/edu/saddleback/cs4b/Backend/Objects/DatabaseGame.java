@@ -32,6 +32,17 @@ public class DatabaseGame implements Game, Serializable
         this.viewers = viewers;
     }
 
+    public DatabaseGame(String startTime, String endTime, PublicUser startPlayer, PublicUser otherPlayer, PublicUser creator, PublicUser winner, String id, List<PublicUser> viewers) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startPlayer = startPlayer;
+        this.otherPlayer = otherPlayer;
+        this.creator = creator;
+        this.winner = winner;
+        this.id = id;
+        this.viewers = viewers;
+    }
+
     @Override
     public void setToken(Token token, PublicUser user) {
 

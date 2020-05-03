@@ -537,7 +537,7 @@ class SQLDatabaseTest {
     void addViewerToGame()
     {
 
-        TTTPublicUser Jeff = new TTTPublicUser("50","Jeff50");
+        TTTPublicUser Jeff = new TTTPublicUser("5","Jeff50");
 
         DBManager db = SQLDatabase.getInstance();
 
@@ -651,6 +651,35 @@ class SQLDatabaseTest {
         try
         {
             db.addMoveToGame(move, token);
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+
+    }
+
+    @Test
+    void getGame()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            Game game = db.getGameInfo(1234);
+
+            System.out.println("Game id: " + game.getGameID() + " Creator: " + game.getCreator().getUsername() + " Time: " + game.getStartTime());
+
+            for(int i = 0; i < game.viewers().size(); i++)
+            {
+                System.out.println("Viewer " + (i+1) + ": " + game.viewers().get(i).getUsername());
+            }
+
             error = "didnt fail";
         }
         catch(Exception e)
