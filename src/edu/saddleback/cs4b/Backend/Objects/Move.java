@@ -12,8 +12,8 @@ public interface Move
     public String getStartTime();
     public void setStartTime(LocalDateTime time);
 
-    public PublicUser getPlayerID();
-    public void setPlayerID(PublicUser newPlayerID);
+    public String getPlayerID();
+    public void setPlayerID(String newPlayerID);
 
     public Coordinate getCoordinate();
     public void setCoordinate(Coordinate newCoordinate);

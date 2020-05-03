@@ -474,7 +474,7 @@ public class SQLDatabase implements DBManager {
             ps = connection.prepareStatement("INSERT INTO MOVES(GameID, Player, XLocation, YLocation, Time, TokenType) VALUES(?,?,?,?,?,?)");
 
             ps.setInt(1, Integer.parseInt(move.getGameID()));
-            ps.setInt(2, Integer.parseInt(move.getPlayerID().getId()));
+            ps.setInt(2, Integer.parseInt(move.getPlayerID()));
             ps.setInt(3, move.getCoordinate().getXCoord());
             ps.setInt(4, move.getCoordinate().getYCoord());
             ps.setString(5, move.getStartTime());

@@ -346,6 +346,11 @@ class SQLDatabaseTest {
             public void addViewer(PublicUser user) {
 
             }
+
+            @Override
+            public boolean playMove(Move move) {
+                return false;
+            }
         };
 
         game.setGameID("1234");
@@ -502,6 +507,11 @@ class SQLDatabaseTest {
             public void addViewer(PublicUser user) {
 
             }
+
+            @Override
+            public boolean playMove(Move move) {
+                return false;
+            }
         };
 
         game.setGameID("4321");
@@ -604,12 +614,12 @@ class SQLDatabaseTest {
             }
 
             @Override
-            public PublicUser getPlayerID() {
-                return John;
+            public String getPlayerID() {
+                return John.getId();
             }
 
             @Override
-            public void setPlayerID(PublicUser newPlayerID) {
+            public void setPlayerID(String newPlayerID) {
 
             }
 
