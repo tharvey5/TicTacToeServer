@@ -173,7 +173,9 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 notifyClient(new Packet(invalidMove));
             }
         } else if (message instanceof RequestAllActiveGamesMessage) {
-
+            ReturnAllActiveGamesMessage retGames = (ReturnAllActiveGamesMessage) gameFactory.createMessage(MsgTypes.RETURN_ACTIVE_GAMES.getType());
+            retGames.setGameAndPlayers(GameLobby.getInstance().getAllGames());
+            notifyClient(new Packet(retGames));
         }
     }
 

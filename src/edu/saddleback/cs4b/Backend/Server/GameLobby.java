@@ -92,8 +92,8 @@ public class GameLobby implements Observer {
         Map<String, List<String>> games = new Hashtable<>();
         for (String id : activeGames.keySet()) {
             String p1 = activeGames.get(id).getStartPlayer().getUsername();
-            String p2 = activeGames.get(id).getOtherPlayer().getUsername();
-            games.put(id, List.of(p1, p2));
+            //String p2 = activeGames.get(id).getOtherPlayer().getUsername();
+            games.put(id, List.of(p1));
         }
         return games;
     }
