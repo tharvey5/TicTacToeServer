@@ -12,10 +12,7 @@ import edu.saddleback.cs4b.Backend.Utilitys.User;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Handles communication with a particular client
@@ -92,6 +89,15 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 userProfile = new TTTProfile((TTTUser)userProcessed);
                 int id = RegistrationService.getInstance().getUsersId(userProfile);
                 userProfile.setId(Integer.toString(id));
+
+                //todo migrate the AI sign-in to be different, this logic will only apply there
+                if (SystemInfoService.getInstance().getConnection(userProfile.getUser().getUsername()) != null) {
+                    String name = userProfile.getUser().getUsername();
+                    User otherLogin = new TTTUser(name + new Random().nextInt(50),
+                            userProfile.getUser().getFirstName(), userProfile.getUser().getLastName(),
+                            userProfile.getUser().getPassword());
+                    userProfile.setUser(otherLogin);
+                }
 
                 // log the new user on the UI
                 SystemInfoService.getInstance().markUserAsOnline(this);
