@@ -7,6 +7,8 @@ import edu.saddleback.cs4b.Backend.Objects.Game;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
+import edu.saddleback.cs4b.Backend.Utilitys.IDGenerator;
+import edu.saddleback.cs4b.Backend.Utilitys.Identifiable;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
 import java.util.Hashtable;
@@ -30,10 +32,12 @@ public class GameLobby implements Observer {
                                              // be played and will be removed once
                                              // there are two players assigned
     private SystemInfoService sysInfo = SystemInfoService.getInstance();
+    private Identifiable idGenerator;
 
     private GameLobby() {
         activeGames = new Hashtable<>();
         playableGames = new Hashtable<>();
+        idGenerator = new IDGenerator();
     }
 
     public static GameLobby getInstance() {
@@ -53,9 +57,8 @@ public class GameLobby implements Observer {
         Thread gameThread = new Thread(newGame);
         gameThread.start();
 
-        // request the id from the DB
-        newGame.setGameID("1"); // todo for testing
-        // assign the id to the game
+        newGame.setGameID(idGenerator.getId());
+
         activeGames.put(newGame.getGameID(), newGame);
         playableGames.put(newGame.getGameID(), newGame);
         newGame.addObserver(sysInfo.getConnection(player.getUsername()));
@@ -112,7 +115,7 @@ public class GameLobby implements Observer {
                 // todo is post results to db once done
                 activeGames.remove(id);
 
-                System.out.println(id + "HAS BEEN REMOVED");
+                System.out.println(id + " HAS BEEN REMOVED");
             }
         }
     }
