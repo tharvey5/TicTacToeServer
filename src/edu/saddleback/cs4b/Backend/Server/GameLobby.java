@@ -98,10 +98,10 @@ public class GameLobby implements Observer {
         return games;
     }
 
-    public Map<String, String> getAllPlayableGames(){
-        Map<String, String> games = new Hashtable<>();
+    public Map<String, List<String>> getAllPlayableGames(){
+        Map<String, List<String>> games = new Hashtable<>();
         for (String id : playableGames.keySet()) {
-            games.put(id, playableGames.get(id).getCreator().getUsername());
+            games.put(id, List.of(playableGames.get(id).getCreator().getUsername()));
         }
         return games;
     }

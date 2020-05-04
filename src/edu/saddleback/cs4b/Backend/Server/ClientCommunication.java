@@ -172,6 +172,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 InvalidMoveMessage invalidMove = (InvalidMoveMessage) gameFactory.createMessage(MsgTypes.INVALID_MOVE.getType());
                 notifyClient(new Packet(invalidMove));
             }
+        } else if (message instanceof RequestAllActiveGamesMessage) {
+
         }
     }
 
