@@ -353,7 +353,7 @@ class SQLDatabaseTest {
             }
         };
 
-        game.setGameID("1234");
+        game.setGameID("1235");
 
         String error;
 
@@ -679,6 +679,30 @@ class SQLDatabaseTest {
             {
                 System.out.println("Viewer " + (i+1) + ": " + game.viewers().get(i).getUsername());
             }
+
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+
+    }
+
+    @Test
+    void getMovesForPlayer()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getGamesOfPlayer(2);
+
+            System.out.println(games.size());
 
             error = "didnt fail";
         }

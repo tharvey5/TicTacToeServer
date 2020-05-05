@@ -325,16 +325,14 @@ public class SQLDatabase implements DBManager {
 
         StringBuilder viewersString = new StringBuilder();
 
+        viewersString.append(",");
+
 
         for(j = 0; j < game.viewers().size(); j++ )
         {
             viewersString.append(game.viewers().get(j).getId());
 
-            if((j + 1) != game.viewers().size())
-            {
-                viewersString.append(", ");
-            }
-
+            viewersString.append(",");
         }
 
         try
@@ -416,9 +414,10 @@ public class SQLDatabase implements DBManager {
         {
             viewersString.append(getCurrentViewers(id));
 
-            viewersString.append(", ");
-
             viewersString.append(viewer.getId());
+
+            viewersString.append(",");
+
 
             ps = connection.prepareStatement("UPDATE GAMES SET Viewers = ? WHERE UniqueID = ?");
             ps.setString(1, viewersString.toString());
@@ -508,11 +507,11 @@ public class SQLDatabase implements DBManager {
 
             List<PublicUser> viewers = new ArrayList<>();
 
-            String delimiter = ", ";
+            String delimiter = ",";
 
             String[] stringID = rs.getString(this.viewers).split(delimiter);
 
-            for (int i = 0; i < stringID.length; i++)
+            for (int i = 1; i < stringID.length; i++)
             {
                 PublicUser user = new TTTPublicUser(stringID[i], getInstance().getUsername(Integer.parseInt(stringID[i])));
                 viewers.add(user);
@@ -531,7 +530,40 @@ public class SQLDatabase implements DBManager {
 
     @Override
     public List<Game> getGamesOfPlayer(int id) throws Exception {
-        return null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+            String viewerID = "%," + id + ",%";
+
+
+
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE Creator = ? OR Winner = ? OR Player1 = ? OR Player2 = ? OR (Viewers LIKE ?)");
+            ps.setInt(1, id);
+            ps.setInt(2, id);
+            ps.setInt(3, id);
+            ps.setInt(4, id);
+            ps.setString(5, viewerID);
+
+
+            rs = ps.executeQuery();
+
+           while(rs.next())
+           {
+               games.add(instance.getGameInfo(rs.getInt(this.uniqueID)));
+           }
+
+           return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found for user with id: " + String.valueOf(id));
+        }
     }
 
     @Override
