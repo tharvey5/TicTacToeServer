@@ -85,19 +85,23 @@ public class ClientCommunication implements Runnable, ClientConnection {
                  // if the user was authenticated, then set the user profile
                 AuthenticatedMessage authMsg = (AuthenticatedMessage) adminFactory.createMessage(MsgTypes.AUTHENTICATION.getType());
                 authMsg.setAuthUser(userProcessed);
-                notifyClient(new Packet(authMsg));
                 userProfile = new TTTProfile((TTTUser)userProcessed);
+
+                //todo get W/L record update the profile
+                authMsg.setProfile(userProfile);
+                notifyClient(new Packet(authMsg));
+
                 int id = RegistrationService.getInstance().getUsersId(userProfile);
                 userProfile.setId(Integer.toString(id));
 
                 //todo migrate the AI sign-in to be different, this logic will only apply there
-                if (SystemInfoService.getInstance().getConnection(userProfile.getUser().getUsername()) != null) {
-                    String name = userProfile.getUser().getUsername();
-                    User otherLogin = new TTTUser(name + new Random().nextInt(50),
-                            userProfile.getUser().getFirstName(), userProfile.getUser().getLastName(),
-                            userProfile.getUser().getPassword());
-                    userProfile.setUser(otherLogin);
-                }
+//                if (SystemInfoService.getInstance().getConnection(userProfile.getUser().getUsername()) != null) {
+//                    String name = userProfile.getUser().getUsername();
+//                    User otherLogin = new TTTUser(name + new Random().nextInt(50),
+//                            userProfile.getUser().getFirstName(), userProfile.getUser().getLastName(),
+//                            userProfile.getUser().getPassword());
+//                    userProfile.setUser(otherLogin);
+//                }
 
                 // log the new user on the UI
                 SystemInfoService.getInstance().markUserAsOnline(this);
