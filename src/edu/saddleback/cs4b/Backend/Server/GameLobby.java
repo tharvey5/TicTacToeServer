@@ -2,6 +2,8 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
 import edu.saddleback.cs4b.Backend.Messages.GameResultMessage;
+import edu.saddleback.cs4b.Backend.Messages.RequestAllActiveGamesMessage;
+import edu.saddleback.cs4b.Backend.Messages.ReturnAllActiveGamesMessage;
 import edu.saddleback.cs4b.Backend.Objects.Board;
 import edu.saddleback.cs4b.Backend.Objects.Game;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
@@ -10,6 +12,7 @@ import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.IDGenerator;
 import edu.saddleback.cs4b.Backend.Utilitys.Identifiable;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
+import edu.saddleback.cs4b.UI.Utilities.UILogger;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -38,6 +41,8 @@ public class GameLobby implements Observer {
         activeGames = new Hashtable<>();
         playableGames = new Hashtable<>();
         idGenerator = new IDGenerator();
+        UILogger.getInstance().addObserver(this);
+        System.out.println("Lobby init");
     }
 
     public static GameLobby getInstance() {
@@ -92,8 +97,15 @@ public class GameLobby implements Observer {
         Map<String, List<String>> games = new Hashtable<>();
         for (String id : activeGames.keySet()) {
             String p1 = activeGames.get(id).getStartPlayer().getUsername();
-            //String p2 = activeGames.get(id).getOtherPlayer().getUsername();
-            games.put(id, List.of(p1));
+//            String p2 = activeGames.get(id).getOtherPlayer().getUsername();
+//            games.put(id, List.of(p1));
+
+            if (activeGames.get(id).getOtherPlayer() != null) {
+                String p2 = activeGames.get(id).getOtherPlayer().getUsername();
+                games.put(id, List.of(p1, p2));
+            } else {
+                games.put(id, List.of(p1));
+            }
         }
         return games;
     }
@@ -106,6 +118,7 @@ public class GameLobby implements Observer {
         return games;
     }
 
+    // listening to internal system events such as games and the UI windows
     @Override
     public void update(SystemEvent e) {
         if (e instanceof MessageEvent) {
@@ -116,6 +129,11 @@ public class GameLobby implements Observer {
                 activeGames.remove(id);
 
                 System.out.println(id + " HAS BEEN REMOVED");
+            } else if (bm instanceof RequestAllActiveGamesMessage) {
+
+                ReturnAllActiveGamesMessage retMsg = new ReturnAllActiveGamesMessage();
+                retMsg.setGameAndPlayers(getAllGames());
+                ServerLogger.getInstance().notifyObserver(new MessageEvent(retMsg));
             }
         }
     }
