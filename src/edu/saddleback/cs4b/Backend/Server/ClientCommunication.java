@@ -143,6 +143,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
             gameMsg.setGameId(newGame.getGameID());
             notifyClient(new Packet(gameMsg));
 
+            log.log(new MessageEvent(new UserAddedGameMessage(userProfile.getUser().getUsername(), newGame.getGameID())));
+
         } else if (message instanceof JoinGameRequestMessage) {
             JoinGameRequestMessage reqMsg = (JoinGameRequestMessage)message;
             Game newGame = GameLobby.getInstance().joinGame(userProfile.getUser(), reqMsg.getGameID());

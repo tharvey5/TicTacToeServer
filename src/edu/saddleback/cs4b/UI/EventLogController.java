@@ -5,6 +5,7 @@ import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Server.ServerLogger;
+import edu.saddleback.cs4b.Backend.Server.UserAddedGameMessage;
 import edu.saddleback.cs4b.Backend.Server.UserAddedMessage;
 import edu.saddleback.cs4b.Backend.Server.UserRemovedMessage;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
@@ -40,6 +41,15 @@ public class EventLogController implements Observer
         else if (message instanceof UserRemovedMessage)
         {
             removeUser(((UserRemovedMessage) message).getUser());
+        }
+        else if (message instanceof UserAddedGameMessage)
+        {
+            //todo replace with code that use a regex such that it will remove
+            // "user: " + user.getUsername() + regex;
+
+            Platform.runLater(()-> {
+                eventLog.getItems().add(((UserAddedGameMessage) message).getUsername() + " " + ((UserAddedGameMessage) message).getGameId());
+            });
         }
     }
 
