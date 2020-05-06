@@ -95,12 +95,12 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 userProfile.setId(Integer.toString(id));
 
                 //todo migrate the AI sign-in to be different, this logic will only apply there
-//                if (SystemInfoService.getInstance().getConnection(userProfile.getUser().getUsername()) != null) {
-//                    String name = userProfile.getUser().getUsername();
+//                if (SystemInfoService.getInstance().getConnection(userProfile.getUsername().getUsername()) != null) {
+//                    String name = userProfile.getUsername().getUsername();
 //                    User otherLogin = new TTTUser(name + new Random().nextInt(50),
-//                            userProfile.getUser().getFirstName(), userProfile.getUser().getLastName(),
-//                            userProfile.getUser().getPassword());
-//                    userProfile.setUser(otherLogin);
+//                            userProfile.getUsername().getFirstName(), userProfile.getUsername().getLastName(),
+//                            userProfile.getUsername().getPassword());
+//                    userProfile.setUsername(otherLogin);
 //                }
 
                 // log the new user on the UI
