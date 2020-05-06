@@ -125,6 +125,17 @@ public class GameLobby implements Observer {
             BaseMessage bm = ((MessageEvent) e).getMessage();
             if (bm instanceof GameResultMessage) {
                 String id = ((GameResultMessage) bm).getGameId();
+
+                ServerLogger.getInstance().notifyObserver(
+                        new MessageEvent(
+                        new UserRemovedGameMessage(activeGames.get(id).getStartPlayer().getUsername())));
+
+                ServerLogger.getInstance().notifyObserver(
+                        new MessageEvent(
+                        new UserRemovedGameMessage(activeGames.get(id).getOtherPlayer().getUsername())));
+
+                // todo include this for viewers as well
+
                 // todo is post results to db once done
                 activeGames.remove(id);
 

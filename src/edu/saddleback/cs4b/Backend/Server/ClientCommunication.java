@@ -155,6 +155,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 gameMsg.setGame(null); //todo replace later TTTGame not fully serializable
                 gameMsg.setGameId(newGame.getGameID());
                 notifyClient(new Packet(gameMsg));
+
+                log.log(new MessageEvent(new UserAddedGameMessage(userProfile.getUser().getUsername(), newGame.getGameID())));
             } else {
                 notifyClient(new Packet(gameFactory.createMessage(MsgTypes.UNAVAILABLE_GAME.getType())));
             }
@@ -166,6 +168,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 SuccessfulViewGameMessage successView = (SuccessfulViewGameMessage)gameFactory.createMessage(MsgTypes.SUCCESS_VIEW_GAME.getType());
                 successView.setGameID(game.getGameID());
                 notifyClient(new Packet(successView));
+                log.log(new MessageEvent(new UserAddedGameMessage(userProfile.getUser().getUsername(), game.getGameID())));
             } else {
                 notifyClient(new Packet(gameFactory.createMessage(MsgTypes.NO_GAME_TO_VIEW.getType())));
             }
