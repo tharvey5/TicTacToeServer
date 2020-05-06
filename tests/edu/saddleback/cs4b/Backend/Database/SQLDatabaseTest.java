@@ -222,10 +222,6 @@ class SQLDatabaseTest {
 
         List<PublicUser> viewers = new ArrayList<PublicUser>();
 
-        viewers.add(John);
-        viewers.add(Smith);
-
-
         DBManager db = SQLDatabase.getInstance();
 
         Game game = new Game() {
@@ -259,7 +255,7 @@ class SQLDatabaseTest {
 
             @Override
             public String getEndTime() {
-                return "2:20 PM";
+                return null;
             }
 
             @Override
@@ -309,7 +305,7 @@ class SQLDatabaseTest {
 
             @Override
             public PublicUser getWinner() {
-                return Isaac;
+                return null;
             }
 
             @Override
@@ -353,7 +349,7 @@ class SQLDatabaseTest {
             }
         };
 
-        game.setGameID("1235");
+        game.setGameID("XX");
 
         String error;
 
@@ -375,16 +371,10 @@ class SQLDatabaseTest {
     @Test
     void updateGame()
     {
-
-        TTTPublicUser John = new TTTPublicUser("1","John1");
-        TTTPublicUser Smith = new TTTPublicUser("25","Smith2");
         TTTPublicUser Erica = new TTTPublicUser("3","Erica3");
         TTTPublicUser Isaac = new TTTPublicUser("4","Isaac4");
 
         List<PublicUser> viewers = new ArrayList<PublicUser>();
-
-        viewers.add(John);
-        viewers.add(Smith);
 
 
         DBManager db = SQLDatabase.getInstance();
@@ -392,6 +382,8 @@ class SQLDatabaseTest {
         Game game = new Game() {
 
             String id;
+            String endTime = null;
+            PublicUser winner = null;
 
             @Override
             public void setToken(Token token, PublicUser user) {
@@ -415,12 +407,12 @@ class SQLDatabaseTest {
 
             @Override
             public void setEndTime(LocalDateTime endTime) {
-
+                this.endTime = endTime.toString();
             }
 
             @Override
             public String getEndTime() {
-                return "2:20 PM";
+                return endTime;
             }
 
             @Override
@@ -470,12 +462,12 @@ class SQLDatabaseTest {
 
             @Override
             public PublicUser getWinner() {
-                return Isaac;
+                return winner;
             }
 
             @Override
             public void setWinner(PublicUser user) {
-
+                winner = user;
             }
 
             @Override
@@ -513,8 +505,10 @@ class SQLDatabaseTest {
                 return false;
             }
         };
-
-        game.setGameID("4321");
+        
+        game.setGameID("XX");
+        game.setEndTime(LocalDateTime.now());
+        game.setWinner(Isaac);
 
         String error;
 
@@ -538,6 +532,8 @@ class SQLDatabaseTest {
     {
 
         TTTPublicUser Jeff = new TTTPublicUser("5","Jeff50");
+        TTTPublicUser John = new TTTPublicUser("1","John1");
+        TTTPublicUser Smith = new TTTPublicUser("2","Smith2");
 
         DBManager db = SQLDatabase.getInstance();
 
@@ -545,7 +541,7 @@ class SQLDatabaseTest {
 
         try
         {
-            db.addViewerToGame(1234, Jeff);
+            db.addViewerToGame("XX", Smith);
             error = "didnt fail";
         }
         catch(Exception e)
@@ -595,12 +591,12 @@ class SQLDatabaseTest {
 
             @Override
             public String getGameID() {
-                return "4321";
+                return id;
             }
 
             @Override
             public void setGameID(String newGameID) {
-
+                id = newGameID;
             }
 
             @Override
@@ -634,10 +630,12 @@ class SQLDatabaseTest {
             }
         };
 
+        move.setGameID("XX");
+
         Token token = new Token() {
             @Override
             public String getTokenID() {
-                return "X";
+                return "XX";
             }
         };
 
@@ -650,7 +648,7 @@ class SQLDatabaseTest {
 
         try
         {
-            db.addMoveToGame(move, token);
+            db.addMoveToGame(move);
             error = "didnt fail";
         }
         catch(Exception e)
@@ -671,7 +669,7 @@ class SQLDatabaseTest {
 
         try
         {
-            Game game = db.getGameInfo(1234);
+            Game game = db.getGameInfo("XX");
 
             System.out.println("Game id: " + game.getGameID() + " Creator: " + game.getCreator().getUsername() + " Time: " + game.getStartTime());
 
@@ -693,14 +691,14 @@ class SQLDatabaseTest {
     }
 
     @Test
-    void getMovesForPlayer()
+    void getGamesForPlayer()
     {
         DBManager db = SQLDatabase.getInstance();
         String error;
 
         try
         {
-            List<Game> games = db.getGamesOfPlayer(2);
+            List<Game> games = db.getGamesOfPlayer(1);
 
             System.out.println(games.size());
 
@@ -715,5 +713,81 @@ class SQLDatabaseTest {
         assertEquals("didnt fail", error);
 
     }
+
+    @Test
+    void getGamesForPlayerWhereWinner()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getGamesOfPlayerWhereWinner(1);
+
+            System.out.println(games.size());
+
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+
+    }
+
+    @Test
+    void getGamesForPlayerWhereViewer()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getGamesOfPlayerWhereViewer(5);
+
+            System.out.println(games.size());
+
+            error = "didnt fail";
+
+            System.out.println(games.get(0).getGameID());
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+    }
+
+    @Test
+    void getMovesForGame()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getGamesOfPlayerWhereViewer(5);
+
+            Moves moves = db.getMovesOfGame(games.get(0).getGameID());
+
+            System.out.println(moves.getMoves().size());
+
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+
+    }
+
 
 }

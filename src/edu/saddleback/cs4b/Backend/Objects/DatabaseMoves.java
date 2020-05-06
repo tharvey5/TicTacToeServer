@@ -6,9 +6,18 @@ import java.util.List;
 public class DatabaseMoves implements Moves, Serializable {
     private List<Move> moves;
 
+    public DatabaseMoves(List<Move> moves) {
+        this.moves = moves;
+    }
+
     @Override
     public List<Move> getMoves() {
         return moves;
+    }
+
+    @Override
+    public String toString() {
+        return moves.toString();
     }
 
     @Override

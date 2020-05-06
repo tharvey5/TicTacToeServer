@@ -16,14 +16,17 @@ public class SQLDatabase implements DBManager {
 
     private int uniqueID  = 1;
 
-
+    //Users
     private int username  = 2;
     private int password  = 3;
     private int firstName = 4;
     private int lastName  = 5;
     private int status    = 6;
+    private int wins      = 7;
+    private int losses    = 8;
+    private int totalGames= 9;
 
-
+    //Games
     private int creator  = 2;
     private int winner   = 3;
     private int player1  = 4;
@@ -31,6 +34,13 @@ public class SQLDatabase implements DBManager {
     private int viewers  = 6;
     private int startTime  = 7;
     private int endTime  = 8;
+
+    //Moves
+    private int gameID  = 2;
+    private int player  = 3;
+    private int x       = 4;
+    private int y       = 5;
+    private int time    = 6;
 
 
     public static SQLDatabase getInstance()
@@ -213,12 +223,16 @@ public class SQLDatabase implements DBManager {
 
         try
         {
-            ps = connection.prepareStatement("INSERT INTO USER(Username, Password, FirstName, LastName, Status) VALUES(?,?,?,?,?)");
+            ps = connection.prepareStatement("INSERT INTO USER(Username, Password, FirstName, LastName, Status, Wins, Losses, TotalGames) VALUES(?,?,?,?,?,?,?,?)");
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getFirstName());
             ps.setString(4, user.getLastName());
             ps.setString(5, "Active");
+            ps.setInt(6, 0);
+            ps.setInt(7, 0);
+            ps.setInt(8, 0);
+
 
             counter = ps.executeUpdate();
 
@@ -314,8 +328,176 @@ public class SQLDatabase implements DBManager {
     }
 
     @Override
+    public int getUserWins(int id) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM USER WHERE UniqueID = ?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No User found with id: " + String.valueOf(id));
+        }
+
+        return rs.getInt(this.wins);
+    }
+
+    @Override
+    public int getUserLosses(int id) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM USER WHERE UniqueID = ?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No User found with id: " + String.valueOf(id));
+        }
+
+        return rs.getInt(this.losses);
+    }
+
+    @Override
+    public int getUserTotalGames(int id) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM USER WHERE UniqueID = ?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No User found with id: " + String.valueOf(id));
+        }
+
+        return rs.getInt(this.totalGames);
+    }
+
+
+    private void addWin(int id) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        int totalWins;
+
+        try
+        {
+            totalWins = instance.getUserWins(id);
+
+            totalWins++;
+
+            ps = connection.prepareStatement("UPDATE USER SET Wins = ? WHERE UniqueID = ?");
+            ps.setInt(1, totalWins);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No User found with id: " + String.valueOf(id));
+        }
+    }
+
+
+    private void addLoss(int id) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        int totalLosses;
+
+        try
+        {
+            totalLosses = instance.getUserLosses(id);
+
+            totalLosses++;
+
+            ps = connection.prepareStatement("UPDATE USER SET Losses = ? WHERE UniqueID = ?");
+            ps.setInt(1, totalLosses);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No User found with id: " + String.valueOf(id));
+        }
+    }
+
+
+    private void addTotalGame(int id) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        int totalGames;
+
+        try
+        {
+            System.out.println(id);
+
+            totalGames = instance.getUserTotalGames(id);
+
+            totalGames++;
+
+            ps = connection.prepareStatement("UPDATE USER SET TotalGames = ? WHERE UniqueID = ?");
+            ps.setInt(1, totalGames);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No User found with id: " + String.valueOf(id));
+        }
+    }
+
+    @Override
     public void createNewGame(Game game) throws Exception
     {
+
+        //Add Games to the player including who won and who loss
+
+
+        if(game.getWinner() != null || game.getEndTime() != null)
+        {
+            instance.addTotalGame(Integer.parseInt(game.getStartPlayer().getId()));
+            instance.addTotalGame(Integer.parseInt(game.getOtherPlayer().getId()));
+            instance.addWin(Integer.parseInt(game.getWinner().getId()));
+
+            if(game.getWinner().getId() == game.getStartPlayer().getId())
+            {
+                instance.addLoss(Integer.parseInt(game.getOtherPlayer().getId()));
+            }
+            else
+            {
+                instance.addLoss(Integer.parseInt(game.getStartPlayer().getId()));
+            }
+        }
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -323,32 +505,52 @@ public class SQLDatabase implements DBManager {
 
         int j;
 
-        StringBuilder viewersString = new StringBuilder();
-
-        viewersString.append(",");
-
-
-        for(j = 0; j < game.viewers().size(); j++ )
-        {
-            viewersString.append(game.viewers().get(j).getId());
-
-            viewersString.append(",");
-        }
-
         try
         {
-            ps = connection.prepareStatement("INSERT INTO GAMES(UniqueID, Creator, Winner, Player1, Player2, Viewers, StartTime, EndTime) VALUES(?,?,?,?,?,?,?,?)");
 
-            ps.setInt(1, Integer.parseInt(game.getGameID()));
-            ps.setInt(2, Integer.parseInt(game.getCreator().getId()));
-            ps.setInt(3, Integer.parseInt(game.getWinner().getId()));
-            ps.setInt(4, Integer.parseInt(game.getStartPlayer().getId()));
-            ps.setInt(5, Integer.parseInt(game.getOtherPlayer().getId()));
-            ps.setString(6, viewersString.toString());
-            ps.setString(7, game.getStartTime());
-            ps.setString(8, game.getEndTime());
+            if(game.getWinner() != null || game.getEndTime() != null) {
+                ps = connection.prepareStatement("INSERT INTO GAMES(UniqueID, Creator, Winner, Player1, Player2, Viewers, StartTime, EndTime) VALUES(?,?,?,?,?,?,?,?)");
 
-            counter = ps.executeUpdate();
+                ps.setString(1, game.getGameID());
+                ps.setInt(2, Integer.parseInt(game.getCreator().getId()));
+                ps.setInt(3, Integer.parseInt(game.getWinner().getId()));
+                ps.setInt(4, Integer.parseInt(game.getStartPlayer().getId()));
+                ps.setInt(5, Integer.parseInt(game.getOtherPlayer().getId()));
+                ps.setString(6, ",");
+                ps.setString(7, game.getStartTime());
+                ps.setString(8, game.getEndTime());
+
+                counter = ps.executeUpdate();
+            }
+            else if (game.getWinner() != null)
+            {
+                ps = connection.prepareStatement("INSERT INTO GAMES(UniqueID, Creator, Winner, Player1, Player2, Viewers, StartTime, EndTime) VALUES(?,?,?,?,?,?,?,?)");
+
+                ps.setString(1, game.getGameID());
+                ps.setInt(2, Integer.parseInt(game.getCreator().getId()));
+                ps.setInt(3, -1);
+                ps.setInt(4, Integer.parseInt(game.getStartPlayer().getId()));
+                ps.setInt(5, Integer.parseInt(game.getOtherPlayer().getId()));
+                ps.setString(6, ",");
+                ps.setString(7, game.getStartTime());
+                ps.setString(8, game.getEndTime());
+
+                counter = ps.executeUpdate();
+            }
+            else{
+                ps = connection.prepareStatement("INSERT INTO GAMES(UniqueID, Creator, Winner, Player1, Player2, Viewers, StartTime, EndTime) VALUES(?,?,?,?,?,?,?,?)");
+
+                ps.setString(1, game.getGameID());
+                ps.setInt(2, Integer.parseInt(game.getCreator().getId()));
+                ps.setInt(3, -1);
+                ps.setInt(4, Integer.parseInt(game.getStartPlayer().getId()));
+                ps.setInt(5, Integer.parseInt(game.getOtherPlayer().getId()));
+                ps.setString(6, ",");
+                ps.setString(7, game.getStartTime());
+                ps.setString(8, "");
+
+                counter = ps.executeUpdate();
+            }
         }
         catch(Exception e)
         {
@@ -360,6 +562,27 @@ public class SQLDatabase implements DBManager {
     @Override
     public void updateGameInfo(Game game) throws Exception
     {
+
+        //Add Games to the player including who won and who loss
+        instance.addTotalGame(Integer.parseInt(game.getStartPlayer().getId()));
+
+        instance.addTotalGame(Integer.parseInt(game.getOtherPlayer().getId()));
+
+        if(game.getWinner() != null)
+        {
+            instance.addWin(Integer.parseInt(game.getWinner().getId()));
+
+            if(game.getWinner().getId() == game.getStartPlayer().getId())
+            {
+                instance.addLoss(Integer.parseInt(game.getOtherPlayer().getId()));
+            }
+            else
+            {
+                instance.addLoss(Integer.parseInt(game.getStartPlayer().getId()));
+            }
+        }
+
+
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -367,30 +590,18 @@ public class SQLDatabase implements DBManager {
 
         int j;
 
-        StringBuilder viewersString = new StringBuilder();
-
-        for(j = 0; j < game.viewers().size(); j++ )
-        {
-            viewersString.append(game.viewers().get(j).getId());
-
-            if((j + 1) != game.viewers().size())
-            {
-                viewersString.append(", ");
-            }
-        }
 
         try
         {
-            ps = connection.prepareStatement("UPDATE GAMES SET Creator = ? , Winner = ?, Player1 = ?, Player2 = ? , Viewers = ?, StartTime = ?, EndTime = ? WHERE UniqueID = ?");
+            ps = connection.prepareStatement("UPDATE GAMES SET Creator = ? , Winner = ?, Player1 = ?, Player2 = ? , StartTime = ?, EndTime = ? WHERE UniqueID = ?");
 
             ps.setInt(1, Integer.parseInt(game.getCreator().getId()));
             ps.setInt(2, Integer.parseInt(game.getWinner().getId()));
             ps.setInt(3, Integer.parseInt(game.getStartPlayer().getId()));
             ps.setInt(4, Integer.parseInt(game.getOtherPlayer().getId()));
-            ps.setString(5, viewersString.toString());
-            ps.setString(6, game.getStartTime());
-            ps.setString(7, game.getEndTime());
-            ps.setInt(8, Integer.parseInt(game.getGameID()));
+            ps.setString(5, game.getStartTime());
+            ps.setString(6, game.getEndTime());
+            ps.setString(7, game.getGameID());
 
             counter = ps.executeUpdate();
         }
@@ -402,7 +613,7 @@ public class SQLDatabase implements DBManager {
     }
 
     @Override
-    public void addViewerToGame(int id, PublicUser viewer) throws Exception
+    public void addViewerToGame(String id, PublicUser viewer) throws Exception
     {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -421,7 +632,7 @@ public class SQLDatabase implements DBManager {
 
             ps = connection.prepareStatement("UPDATE GAMES SET Viewers = ? WHERE UniqueID = ?");
             ps.setString(1, viewersString.toString());
-            ps.setInt(2, id);
+            ps.setString(2, id);
 
             val = ps.executeUpdate();
 
@@ -433,7 +644,7 @@ public class SQLDatabase implements DBManager {
         }
     }
 
-    private String getCurrentViewers(int id) throws Exception {
+    private String getCurrentViewers(String id) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -441,7 +652,7 @@ public class SQLDatabase implements DBManager {
         try
         {
             ps = connection.prepareStatement("Select Viewers FROM GAMES WHERE UniqueID = ?");
-            ps.setInt(1, id);
+            ps.setString(1, id);
 
             rs = ps.executeQuery();
 
@@ -456,27 +667,20 @@ public class SQLDatabase implements DBManager {
     }
 
     @Override
-    public void addMovesToGame(Moves moves) throws Exception
-    {
-
-    }
-
-    @Override
-    public void addMoveToGame(Move move, Token token) throws Exception {
+    public void addMoveToGame(Move move) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         int counter = 0;
 
         try {
-            ps = connection.prepareStatement("INSERT INTO MOVES(GameID, Player, XLocation, YLocation, Time, TokenType) VALUES(?,?,?,?,?,?)");
+            ps = connection.prepareStatement("INSERT INTO MOVES(GameID, Player, XLocation, YLocation, Time) VALUES(?,?,?,?,?)");
 
-            ps.setInt(1, Integer.parseInt(move.getGameID()));
+            ps.setString(1, move.getGameID());
             ps.setInt(2, Integer.parseInt(move.getPlayerID()));
             ps.setInt(3, move.getCoordinate().getXCoord());
             ps.setInt(4, move.getCoordinate().getYCoord());
             ps.setString(5, move.getStartTime());
-            ps.setString(6, token.getTokenID());
 
             counter = ps.executeUpdate();
         }
@@ -488,7 +692,7 @@ public class SQLDatabase implements DBManager {
     }
 
     @Override
-    public Game getGameInfo(int id) throws Exception
+    public Game getGameInfo(String id) throws Exception
     {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -496,14 +700,24 @@ public class SQLDatabase implements DBManager {
         try
         {
             ps = connection.prepareStatement("Select * FROM GAMES WHERE UniqueID = ?");
-            ps.setInt(1, id);
+            ps.setString(1, id);
 
             rs = ps.executeQuery();
 
             PublicUser startPlayer = new TTTPublicUser(String.valueOf(rs.getInt(this.player1)), instance.getUsername(rs.getInt(this.player1)));
             PublicUser otherPlayer = new TTTPublicUser(String.valueOf(rs.getInt(this.player2)), instance.getUsername(rs.getInt(this.player2)));
             PublicUser creator = new TTTPublicUser(String.valueOf(rs.getInt(this.creator)), instance.getUsername(rs.getInt(this.creator)));
-            PublicUser winner = new TTTPublicUser(String.valueOf(rs.getInt(this.winner)), instance.getUsername(rs.getInt(this.winner)));
+
+            PublicUser dataWinner;
+
+            if(rs.getInt(this.winner) == -1)
+            {
+                dataWinner = null;
+            }
+            else
+            {
+                dataWinner = new TTTPublicUser(String.valueOf(rs.getInt(this.winner)), instance.getUsername(rs.getInt(this.winner)));
+            }
 
             List<PublicUser> viewers = new ArrayList<>();
 
@@ -517,7 +731,18 @@ public class SQLDatabase implements DBManager {
                 viewers.add(user);
             }
 
-            Game game = new DatabaseGame(rs.getString(this.startTime), rs.getString(this.endTime), startPlayer, otherPlayer, creator, winner, String.valueOf(id), viewers );
+            String dataEndTime;
+
+            if(rs.getString(this.endTime) == "")
+            {
+                dataEndTime = null;
+            }
+            else
+            {
+                dataEndTime = rs.getString(this.endTime);
+            }
+
+            Game game = new DatabaseGame(rs.getString(this.startTime), dataEndTime, startPlayer, otherPlayer, creator, dataWinner, String.valueOf(id), viewers );
 
             return game;
         }
@@ -554,7 +779,7 @@ public class SQLDatabase implements DBManager {
 
            while(rs.next())
            {
-               games.add(instance.getGameInfo(rs.getInt(this.uniqueID)));
+               games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
            }
 
            return games;
@@ -567,17 +792,181 @@ public class SQLDatabase implements DBManager {
     }
 
     @Override
-    public Moves getMovesOfGame(int id) throws Exception {
-        return null;
+    public List<Game> getGamesOfPlayerWhereCreator(int id) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE Creator = ? ");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found for user with id: " + String.valueOf(id));
+        }
     }
 
-//    public List<User> getAllUsers()
-//    {
-//
-//    }
-//
-//    public List<User> getUsers(String filter)
-//    {
-//        List<User> users = new ArrayList<>();
-//    }
+    @Override
+    public List<Game> getGamesOfPlayerWhereWinner(int id) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE Winner = ?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found for user with id: " + String.valueOf(id));
+        }
+    }
+
+    @Override
+    public List<Game> getGamesOfPlayerWhereStartPlayer(int id) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE Player1 = ?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found for user with id: " + String.valueOf(id));
+        }
+    }
+
+    @Override
+    public List<Game> getGamesOfPlayerWhereOtherPlayer(int id) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE Player2 = ?");
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found for user with id: " + String.valueOf(id));
+        }
+    }
+
+    @Override
+    public List<Game> getGamesOfPlayerWhereViewer(int id) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+            String viewerID = "%," + id + ",%";
+
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE (Viewers LIKE ?)");
+            ps.setString(1, viewerID);
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found for user with id: " + String.valueOf(id));
+        }
+    }
+
+    @Override
+    public Moves getMovesOfGame(String id) throws Exception
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM MOVES WHERE GameID = ?");
+            ps.setString(1, id);
+
+            rs = ps.executeQuery();
+
+            List<Move> movesList = new ArrayList<>();
+
+            while(rs.next())
+            {
+                Coordinate cord = new TTTPosition(rs.getInt(this.x), rs.getInt(this.y));
+
+                Move move = new TTTMove(id, String.valueOf(rs.getInt(this.player)), cord);
+
+                movesList.add(move);
+            }
+
+            return new DatabaseMoves(movesList);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Move(s) found for user with id: " + String.valueOf(id));
+        }
+    }
+
 }
