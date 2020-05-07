@@ -476,6 +476,8 @@ public class SQLDatabase implements DBManager {
         }
     }
 
+
+
     @Override
     public void createNewGame(Game game) throws Exception
     {
