@@ -133,6 +133,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
             RegistrationService.getInstance().deactivateAccount(userProfile);
             Packet packet = new Packet(adminFactory.createMessage(MsgTypes.DEACTIVATION_CONFIRM.getType()));
             notifyClient(packet);
+
+            log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
         } else if (message instanceof CreateGameMessage) {
             Game newGame = GameLobby.getInstance().createGame(userProfile.getUser());
             gameMap.put(newGame.getGameID(), newGame);
