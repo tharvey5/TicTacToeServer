@@ -764,6 +764,81 @@ class SQLDatabaseTest {
     }
 
     @Test
+    void getGamesForPlayerWhereCreator()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getGamesOfPlayerWhereCreator(5);
+
+            System.out.println(games.size());
+
+            error = "didnt fail";
+
+            System.out.println(games.get(0).getGameID());
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+    }
+
+    @Test
+    void getGamesForPlayerWhereStartPlayer()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getGamesOfPlayerWhereStartPlayer(5);
+
+            System.out.println(games.size());
+
+            error = "didnt fail";
+
+            System.out.println(games.get(0).getGameID());
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+    }
+
+    @Test
+    void getGamesForPlayerWhereOtherPlayer()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getGamesOfPlayerWhereOtherPlayer(5);
+
+            System.out.println(games.size());
+
+            error = "didnt fail";
+
+            System.out.println(games.get(0).getGameID());
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+    }
+
+    @Test
     void getMovesForGame()
     {
         DBManager db = SQLDatabase.getInstance();
@@ -786,8 +861,5 @@ class SQLDatabaseTest {
         }
 
         assertEquals("didnt fail", error);
-
     }
-
-
 }
