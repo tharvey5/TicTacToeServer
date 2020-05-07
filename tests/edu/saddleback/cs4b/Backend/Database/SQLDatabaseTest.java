@@ -66,14 +66,14 @@ class SQLDatabaseTest {
 
     @Test
     void addUser() throws Exception {
-        String username = "Boxhead3";
+        String username = "Hello";
         String password = "1234";
         String firstName = "Isaac";
         String lastName = "Estrada";
 
         DBManager db = SQLDatabase.getInstance();
 
-        User user = new TTTUser(username, password, firstName, lastName);
+        User user = new TTTUser(username, firstName, lastName, password);
         String error;
         int id;
 

@@ -161,7 +161,7 @@ public class SQLDatabase implements DBManager {
 
             rs = ps.executeQuery();
 
-            if (rs.getString(this.status) == "Inactive")
+            if (rs.getString(this.status).equals("Inactive"))
             {
                 throw new Exception("User is Inactive");
             }
