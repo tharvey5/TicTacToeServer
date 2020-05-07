@@ -26,7 +26,19 @@ public class ActiveGamesController implements Observer
 
     @FXML
     private TableView activeGamesTable;
-    private TableColumn<String, String> id;
+
+    @FXML
+    private TableColumn idCol;
+
+    @FXML
+    private TableColumn gameCol;
+
+    @FXML
+    private TableColumn p1Col;
+
+    @FXML
+    private TableColumn p2Col;
+
 
     public ActiveGamesController() {
         ServerLogger.getInstance().addObserver(this);
@@ -55,6 +67,8 @@ public class ActiveGamesController implements Observer
         for (Map.Entry<String,List<String>> entry : map.entrySet()) {
            //id.setCellFactory(new PropertyValueFactory<String, List<String>>("id"));
             System.out.println(entry.getKey());
+
+            // print the players
             for (String player : map.get(entry.getKey())) {
                 System.out.println(player);
             }
