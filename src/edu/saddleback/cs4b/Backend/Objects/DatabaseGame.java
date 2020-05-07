@@ -1,5 +1,7 @@
 package edu.saddleback.cs4b.Backend.Objects;
 
+import edu.saddleback.cs4b.Backend.PubSub.Observer;
+import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
 import java.io.Serializable;
@@ -171,5 +173,17 @@ public class DatabaseGame implements Game, Serializable
     @Override
     public boolean playMove(Move move) {
         return false;
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+    }
+
+    @Override
+    public void notifyObserver(SystemEvent e) {
     }
 }
