@@ -40,6 +40,9 @@ class SQLDatabaseTest {
         {
             user = db.Login(username, password);
             error = "Login didnt fail";
+
+
+
         }
         catch(Exception e)
         {

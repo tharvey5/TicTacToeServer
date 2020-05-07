@@ -150,39 +150,31 @@ public class SQLDatabase implements DBManager {
     //Will return a User if user is found, will throw an exception if no person is found
 
     @Override
-    public User Login(String username, String password) throws Exception
-    {
+    public User Login(String username, String password) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        try
-        {
+        try {
             ps = connection.prepareStatement("Select * FROM USER WHERE Username = ? AND Password = ?");
             ps.setString(1, username);
             ps.setString(2, password);
 
             rs = ps.executeQuery();
 
+            if (rs.getString(this.status) == "Inactive")
+            {
+                throw new Exception("User is Inactive");
+            }
+
             User user = new TTTUser(rs.getString(this.username), rs.getString(this.firstName), rs.getString(this.lastName), rs.getString(this.password));
 
             return user;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             System.out.println(e.toString());
-            throw new Exception("incorrect Username or Password");
+            throw new Exception("incorrect Username or Password or user is Inactive");
         }
-//        finally
-//        {
-//            if (ps!=null)
-//            {
-//                ps.close();
-//            }
-//            if(connection!=null)
-//            {
-//                connection.close();
-//            }
-//        }
     }
 
     @Override
