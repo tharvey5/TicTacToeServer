@@ -1,12 +1,21 @@
 package edu.saddleback.cs4b.Backend.Server;
 
+import edu.saddleback.cs4b.Backend.Database.DBManager;
+import edu.saddleback.cs4b.Backend.Database.SQLDatabase;
+import edu.saddleback.cs4b.Backend.Objects.Game;
+
+import java.util.List;
+
 /**
  * This service will return information about completed games
  */
 public class GameInfoService {
     private volatile static GameInfoService gameInfoService = null;
+    private DBManager database;
 
-    private GameInfoService() {}
+    private GameInfoService() {
+        this.database = SQLDatabase.getInstance();
+    }
 
     public static GameInfoService getInstance() {
         if (gameInfoService == null) {
@@ -17,5 +26,25 @@ public class GameInfoService {
             }
         }
         return gameInfoService;
+    }
+
+    public List<Game> completeGames() {
+        try {
+            return database.getAllCompletedGames();
+        } catch (Exception e) {
+            // thrown if a query fails
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Game> activeGames() {
+        try {
+            return database.getAllActiveGames();
+        } catch (Exception e) {
+            // thrown if a query fails
+            e.printStackTrace();
+        }
+        return null;
     }
 }

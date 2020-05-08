@@ -188,6 +188,22 @@ public class ClientCommunication implements Runnable, ClientConnection {
             retGames.setGameAndPlayers(GameLobby.getInstance().getAllGames());
             notifyClient(new Packet(retGames));
         }
+//        else if (message instanceof RequestAllCompletedGamesMessage) {
+//            ReturnAllCompletedGamesMessage retGames = new ReturnAllCompletedGamesMessage();
+//            List<Game> games = GameInfoService.getInstance().completeGames();
+//            retGames.setGames(games);
+//            notifyClient(new Packet(retGames));
+//        } else if (message instanceof RequestSingleGame) {
+//            ReturnSingleGame retGame = new ReturnSingleGame();
+//            Game requestedGame;
+//            retGame.setGame(game);
+//            notifyClient(new Packet(retGame));
+//        } else if (message instanceof GameHistoryRequestMessage) {
+//            GameHistoryResponseMessage responseMsg = (GameHistoryResponseMessage) gameFactory.createMessage(MsgTypes.GAME_HISTORY_RESPONSE.getType());
+//            List<Game> games;
+//            responseMsg.setGames(games);
+//            notifyClient(new Packet(responseMsg));
+//        }
     }
 
     private void updateChanges(BaseMessage message) throws IOException {
