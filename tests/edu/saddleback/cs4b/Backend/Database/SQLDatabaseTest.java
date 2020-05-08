@@ -30,7 +30,7 @@ class SQLDatabaseTest {
     @Test
     void login()
     {
-        String username = "Boxhead2";
+        String username = "SOCAL1";
         String password = "1234";
 
         User user = null;
@@ -42,8 +42,6 @@ class SQLDatabaseTest {
         {
             user = db.Login(username, password);
             error = "Login didnt fail";
-
-
 
         }
         catch(Exception e)
@@ -66,7 +64,7 @@ class SQLDatabaseTest {
 
     @Test
     void addUser() throws Exception {
-        String username = "Hello";
+        String username = "SOCAL1";
         String password = "1234";
         String firstName = "Isaac";
         String lastName = "Estrada";
@@ -96,7 +94,7 @@ class SQLDatabaseTest {
     void inactivateUser()
     {
         String error;
-        int idOfInactivateUser = 1;
+        int idOfInactivateUser = 22;
 
         DBManager db = SQLDatabase.getInstance();
 
@@ -124,6 +122,7 @@ class SQLDatabaseTest {
             System.out.println(e.toString());
         }
     }
+
 
     @Test
     void activateUser()
@@ -368,7 +367,7 @@ class SQLDatabaseTest {
             }
         };
 
-        game.setGameID("XX");
+        game.setGameID("XXXX");
 
         String error;
 
@@ -885,6 +884,75 @@ class SQLDatabaseTest {
             Moves moves = db.getMovesOfGame(games.get(0).getGameID());
 
             System.out.println(moves.getMoves().size());
+
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+    }
+
+    @Test
+    void getAllCompletedGames()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getAllCompletedGames();
+
+            System.out.println(games.size());
+
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+    }
+
+    @Test
+    void getAllActiveGames()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getAllActiveGames();
+
+            System.out.println(games.size());
+
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+    }
+
+    @Test
+    void getAllGames()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getAllGames();
+
+            System.out.println(games.size());
 
             error = "didnt fail";
         }

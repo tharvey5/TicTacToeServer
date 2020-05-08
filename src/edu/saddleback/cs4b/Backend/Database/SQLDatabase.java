@@ -963,4 +963,90 @@ public class SQLDatabase implements DBManager {
         }
     }
 
+    @Override
+    public List<Game> getAllCompletedGames() throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE EndTime != ?");
+            ps.setString(1, "");
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                    games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found");
+        }
+    }
+
+    @Override
+    public List<Game> getAllActiveGames() throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE EndTime = ?");
+            ps.setString(1, "");
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                    games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found");
+        }
+    }
+
+    @Override
+    public List<Game> getAllGames() throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+
+            ps = connection.prepareStatement("Select * FROM GAMES");
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                    games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found");
+        }
+    }
+
 }

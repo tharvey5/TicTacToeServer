@@ -249,4 +249,12 @@ public interface DBManager
      - Should not throw an error.
      ****************************************************************/
     Moves getMovesOfGame(String id) throws Exception;
+
+    List<Game> getAllCompletedGames() throws Exception;
+
+    List<Game> getAllActiveGames() throws Exception;
+
+    List<Game> getAllGames() throws Exception;
+
+
 }
