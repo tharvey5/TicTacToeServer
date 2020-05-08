@@ -88,6 +88,11 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 userProfile = new TTTProfile((TTTUser)userProcessed);
 
                 //todo get W/L record update the profile
+                List<Integer> record = GameInfoService.getInstance().getWLandTotalGames(Integer.parseInt(userProfile.getId()));
+                ((TTTProfile)userProfile).getGameRecord().setWins(record.get(0));
+                ((TTTProfile)userProfile).getGameRecord().setLosses(record.get(1));
+                ((TTTProfile)userProfile).getGameRecord().setTotalGames(record.get(2));
+
                 authMsg.setProfile(userProfile);
                 notifyClient(new Packet(authMsg));
 

@@ -8,7 +8,6 @@ import edu.saddleback.cs4b.Backend.PubSub.Subject;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -219,6 +218,7 @@ public class TTTGame implements Subject, Runnable, Game {
                             currentTurn.getUsername());
                     System.out.println("Return move");
 
+                    GameInfoService.getInstance().writeMove(move);
                     notifyObserver(new MessageEvent(validMoveMsg));
                     return true;
                 }

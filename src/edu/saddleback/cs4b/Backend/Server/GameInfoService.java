@@ -6,12 +6,14 @@ import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
 import edu.saddleback.cs4b.Backend.Messages.RequestAllCompletedGameMessage;
 import edu.saddleback.cs4b.Backend.Messages.ReturnAllCompletedGamesMessage;
 import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.Objects.Move;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 import edu.saddleback.cs4b.UI.Utilities.UILogger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,13 +52,33 @@ public class GameInfoService implements Observer {
         return gameInfoService;
     }
 
+    public boolean writeMove(Move move) {
+        try {
+            SQLDatabase.getInstance().addMoveToGame(move);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * idx 0 = wins, idx 1 = lost
+     */
+    public List<Integer> getWLandTotalGames(int id) {
+        List<Integer> winLossTotal = new ArrayList<>();
+        try {
+            winLossTotal.add(database.getUserWins(id));
+            winLossTotal.add(database.getUserLosses(id));
+            winLossTotal.add(database.getUserTotalGames(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return winLossTotal;
+    }
+
     public void addGameToDB(Game game) {
         try {
-            System.out.println(game.getGameID());
-            System.out.println(game.getStartPlayer());
-            System.out.println(game.getOtherPlayer());
-            System.out.println(game.getCreator());
-            System.out.println(game.getStartTime());
             database.createNewGame(game);
         } catch (Exception e) {
             // this will throw if the game id isn't unique
