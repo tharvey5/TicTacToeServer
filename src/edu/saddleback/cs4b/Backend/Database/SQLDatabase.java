@@ -901,7 +901,8 @@ public class SQLDatabase implements DBManager {
     }
 
     @Override
-    public List<Game> getGamesOfPlayerWhereViewer(int id) throws Exception {
+    public List<Game> getGamesOfPlayerWhereViewer(int id) throws Exception
+    {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -929,6 +930,8 @@ public class SQLDatabase implements DBManager {
             throw new Exception("No Game(s) found for user with id: " + String.valueOf(id));
         }
     }
+
+
 
     @Override
     public Moves getMovesOfGame(String id) throws Exception
@@ -960,6 +963,35 @@ public class SQLDatabase implements DBManager {
         {
             System.out.println(e.toString());
             throw new Exception("No Move(s) found for user with id: " + String.valueOf(id));
+        }
+    }
+
+    @Override
+    public List<Game> getGamesOfPlayerWhereStartPlayerOrOtherPlayer(int id) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE Player1 = ? OR Player2 = ?");
+            ps.setInt(1, id);
+            ps.setInt(2, id);
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found for user with id: " + String.valueOf(id));
         }
     }
 
@@ -1048,5 +1080,4 @@ public class SQLDatabase implements DBManager {
             throw new Exception("No Game(s) found");
         }
     }
-
 }
