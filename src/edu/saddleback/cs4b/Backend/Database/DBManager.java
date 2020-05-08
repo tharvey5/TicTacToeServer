@@ -250,10 +250,46 @@ public interface DBManager
      ****************************************************************/
     Moves getMovesOfGame(String id) throws Exception;
 
+    /****************************************************************
+     getGamesOfPlayerWhereStartPlayerOrOtherPlayer: List<Game>, will
+     return an Array list of game where the player with the given ID
+     was either a StartPlayer or OtherPlayer.
+
+     If the user was in not the StartPlayer or OtherPlayer for any
+     games then the list size will be zero.
+
+     - Should not throw an error.
+     ****************************************************************/
+    List<Game> getGamesOfPlayerWhereStartPlayerOrOtherPlayer(int id) throws Exception;
+
+    /****************************************************************
+     getAllCompletedGames: List<Game>, will return an Array list of
+     games that are completed. (there is an EndTime)
+
+     If the there are no completed games the list size will be 0
+
+     - Should not throw an error.
+     ****************************************************************/
     List<Game> getAllCompletedGames() throws Exception;
 
+    /****************************************************************
+     getAllActiveGames: List<Game>, will return an Array list of
+     games that are Active. (there is no EndTime)
+
+     If the there are no completed games the list size will be 0
+
+     - Should not throw an error.
+     ****************************************************************/
     List<Game> getAllActiveGames() throws Exception;
 
+    /****************************************************************
+     getAllGames: List<Game>, will return an Array list of
+     all games. (there may or may not be an EndTime)
+
+     If the there are no completed games the list size will be 0
+
+     - Should not throw an error.
+     ****************************************************************/
     List<Game> getAllGames() throws Exception;
 
 
