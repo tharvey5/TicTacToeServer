@@ -161,7 +161,7 @@ public class SQLDatabase implements DBManager {
 
             rs = ps.executeQuery();
 
-            if (rs.getString(this.status) == "Inactive")
+            if (rs.getString(this.status).equals("Inactive"))
             {
                 throw new Exception("User is Inactive");
             }
@@ -960,6 +960,92 @@ public class SQLDatabase implements DBManager {
         {
             System.out.println(e.toString());
             throw new Exception("No Move(s) found for user with id: " + String.valueOf(id));
+        }
+    }
+
+    @Override
+    public List<Game> getAllCompletedGames() throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE EndTime != ?");
+            ps.setString(1, "");
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                    games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found");
+        }
+    }
+
+    @Override
+    public List<Game> getAllActiveGames() throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+
+            ps = connection.prepareStatement("Select * FROM GAMES WHERE EndTime = ?");
+            ps.setString(1, "");
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                    games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found");
+        }
+    }
+
+    @Override
+    public List<Game> getAllGames() throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<Game> games = new ArrayList<>();
+
+        try
+        {
+
+            ps = connection.prepareStatement("Select * FROM GAMES");
+
+            rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                    games.add(instance.getGameInfo(rs.getString(this.uniqueID)));
+            }
+
+            return games;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            throw new Exception("No Game(s) found");
         }
     }
 
