@@ -263,6 +263,7 @@ public class TTTGame implements Subject, Runnable, Game {
 
         GameResultMessage resMsg = (GameResultMessage) factory.createMessage(MsgTypes.GAME_RESULT.getType());
         resMsg.setGameId(gameId);
+        setEndTime(LocalDateTime.now());
         if (winner != null) {
             resMsg.setWinner(currentTurn.getUsername());
         }
