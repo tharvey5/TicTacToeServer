@@ -196,7 +196,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
 //            notifyClient(new Packet(retGames));
 //        } else if (message instanceof RequestSingleGame) {
 //            ReturnSingleGame retGame = new ReturnSingleGame();
-//            Game requestedGame;
+//            Game requestedGame = GameInfoService.getInstance().getGame(((RequestSingleGame)message).getGameId());
 //            retGame.setGame(game);
 //            notifyClient(new Packet(retGame));
 //        } else if (message instanceof GameHistoryRequestMessage) {

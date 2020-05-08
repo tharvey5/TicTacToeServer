@@ -3,6 +3,7 @@ package edu.saddleback.cs4b.Backend.Server;
 import edu.saddleback.cs4b.Backend.Database.DBManager;
 import edu.saddleback.cs4b.Backend.Database.SQLDatabase;
 import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class GameInfoService {
 
     public void addGameToDB(Game game) {
         try {
-            SQLDatabase.getInstance().createNewGame(game);
+            database.createNewGame(game);
         } catch (Exception e) {
             // this will throw if the game id isn't unique
             e.printStackTrace();
@@ -39,7 +40,7 @@ public class GameInfoService {
 
     public void saveGameResultToDB(Game game) {
         try {
-            SQLDatabase.getInstance().updateGameInfo(game);
+            database.updateGameInfo(game);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,6 +61,16 @@ public class GameInfoService {
             return database.getAllActiveGames();
         } catch (Exception e) {
             // thrown if a query fails
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Game getGame(String gameId) {
+        try {
+            return database.getGameInfo(gameId);
+        } catch (Exception e) {
+            // thrown if the id doesn't match any of the given
             e.printStackTrace();
         }
         return null;
