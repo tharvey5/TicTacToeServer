@@ -28,6 +28,14 @@ public class GameInfoService {
         return gameInfoService;
     }
 
+    public void writeGameToDB(Game game) {
+        try {
+            SQLDatabase.getInstance().createNewGame(game);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Game> completeGames() {
         try {
             return database.getAllCompletedGames();
