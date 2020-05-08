@@ -964,4 +964,26 @@ class SQLDatabaseTest {
 
         assertEquals("didnt fail", error);
     }
+    @Test
+    void getGamesOfPlayerWhereStartPlayerOrOtherPlayer()
+    {
+        DBManager db = SQLDatabase.getInstance();
+        String error;
+
+        try
+        {
+            List<Game> games = db.getGamesOfPlayerWhereStartPlayerOrOtherPlayer(1);
+
+            System.out.println(games.size());
+
+            error = "didnt fail";
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+            error = "Failed";
+        }
+
+        assertEquals("didnt fail", error);
+    }
 }
