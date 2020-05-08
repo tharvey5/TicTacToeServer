@@ -695,7 +695,7 @@ public class SQLDatabase implements DBManager {
 
             String dataEndTime;
 
-            if(rs.getString(this.endTime) == "")
+            if(rs.getString(this.endTime).equals(""))
             {
                 dataEndTime = null;
             }
