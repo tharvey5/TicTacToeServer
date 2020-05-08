@@ -28,9 +28,18 @@ public class GameInfoService {
         return gameInfoService;
     }
 
-    public void writeGameToDB(Game game) {
+    public void addGameToDB(Game game) {
         try {
             SQLDatabase.getInstance().createNewGame(game);
+        } catch (Exception e) {
+            // this will throw if the game id isn't unique
+            e.printStackTrace();
+        }
+    }
+
+    public void saveGameResultToDB(Game game) {
+        try {
+            SQLDatabase.getInstance().updateGameInfo(game);
         } catch (Exception e) {
             e.printStackTrace();
         }

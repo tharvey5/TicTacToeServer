@@ -1,6 +1,5 @@
 package edu.saddleback.cs4b.Backend.Server;
 
-import edu.saddleback.cs4b.Backend.Database.SQLDatabase;
 import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Objects.Game;
 import edu.saddleback.cs4b.Backend.Objects.TTTMove;
@@ -159,7 +158,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 gameMsg.setGameId(newGame.getGameID());
                 notifyClient(new Packet(gameMsg));
 
-                GameInfoService.getInstance().writeGameToDB(newGame);
+                GameInfoService.getInstance().addGameToDB(newGame);
                 log.log(new MessageEvent(new UserAddedGameMessage(userProfile.getUser().getUsername(), newGame.getGameID())));
             } else {
                 notifyClient(new Packet(gameFactory.createMessage(MsgTypes.UNAVAILABLE_GAME.getType())));

@@ -136,7 +136,7 @@ public class GameLobby implements Observer {
 
                 // todo include this for viewers as well
 
-                // todo is post results to db once done
+                GameInfoService.getInstance().saveGameResultToDB(activeGames.get(id));
                 activeGames.remove(id);
 
                 System.out.println(id + " HAS BEEN REMOVED");
