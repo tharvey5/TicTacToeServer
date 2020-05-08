@@ -111,23 +111,28 @@ public class ClientCommunication implements Runnable, ClientConnection {
                  notifyClient(new Packet(adminFactory.createMessage(MsgTypes.DENIED.getType())));
             }
 
-        } else if (message instanceof ActiveUserMessage) {
+        }
+        else if (message instanceof ActiveUserMessage) {
 
             // todo change this out with more efficient way of getting the message
             ActiveUserResponseMessage usrMsg = (ActiveUserResponseMessage) adminFactory.createMessage(MsgTypes.ACTIVE_USER_RESPONSE.getType());
             usrMsg.setActiveUsers(getActiveUsers());
             Packet packet = new Packet(usrMsg);
             notifyClient(packet);
-        } else if (message instanceof SignOutMessage) {
+        }
+        else if (message instanceof SignOutMessage) {
             SystemInfoService.getInstance().removeOnlineUser(this);
             notifyClient(new Packet(adminFactory.createMessage(MsgTypes.SIGN_OUT_CONFIRM.getType())));
 
             log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
-        } else if (message instanceof RegistrationMessage) {
+        }
+        else if (message instanceof RegistrationMessage) {
             handleRegistration(message);
-        } else if (message instanceof UpdateProfileMessage) {
+        }
+        else if (message instanceof UpdateProfileMessage) {
             updateChanges(message);
-        } else if (message instanceof AcctDeactivationMessage) {
+        }
+        else if (message instanceof AcctDeactivationMessage) {
 
             // call on the Registration service to deactivate the account
             RegistrationService.getInstance().deactivateAccount(userProfile);
@@ -135,7 +140,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
             notifyClient(packet);
 
             log.log(new MessageEvent(new UserRemovedMessage(userProfile.getUser())));
-        } else if (message instanceof CreateGameMessage) {
+        }
+        else if (message instanceof CreateGameMessage) {
             Game newGame = GameLobby.getInstance().createGame(userProfile.getUser());
             gameMap.put(newGame.getGameID(), newGame);
 
@@ -147,7 +153,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
             log.log(new MessageEvent(new UserAddedGameMessage(userProfile.getUser().getUsername(), newGame.getGameID())));
 
-        } else if (message instanceof JoinGameRequestMessage) {
+        }
+        else if (message instanceof JoinGameRequestMessage) {
             JoinGameRequestMessage reqMsg = (JoinGameRequestMessage)message;
             Game newGame = GameLobby.getInstance().joinGame(userProfile.getUser(), reqMsg.getGameID());
             if (newGame != null) {
@@ -164,7 +171,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 notifyClient(new Packet(gameFactory.createMessage(MsgTypes.UNAVAILABLE_GAME.getType())));
             }
 
-        } else if (message instanceof ViewGameRequestMessage) {
+        }
+        else if (message instanceof ViewGameRequestMessage) {
             ViewGameRequestMessage viewMsg = (ViewGameRequestMessage)message;
             Game game = GameLobby.getInstance().viewGame(userProfile.getUser(), viewMsg.getGameID());
             if (game != null) {
@@ -176,7 +184,8 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 notifyClient(new Packet(gameFactory.createMessage(MsgTypes.NO_GAME_TO_VIEW.getType())));
             }
 
-        } else if (message instanceof MoveMessage) {
+        }
+        else if (message instanceof MoveMessage) {
             MoveMessage moveMsg = (MoveMessage)message;
             Game game = gameMap.get(moveMsg.getGameId());
             boolean validMove = game.playMove(new TTTMove(moveMsg.getGameId(), userProfile.getId(), moveMsg.getCoordinate()));
@@ -184,27 +193,30 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 InvalidMoveMessage invalidMove = (InvalidMoveMessage) gameFactory.createMessage(MsgTypes.INVALID_MOVE.getType());
                 notifyClient(new Packet(invalidMove));
             }
-        } else if (message instanceof RequestAllActiveGamesMessage) {
+        }
+        else if (message instanceof RequestAllActiveGamesMessage) {
             ReturnAllActiveGamesMessage retGames = (ReturnAllActiveGamesMessage) gameFactory.createMessage(MsgTypes.RETURN_ACTIVE_GAMES.getType());
             retGames.setGameAndPlayers(GameLobby.getInstance().getAllGames());
             notifyClient(new Packet(retGames));
         }
-//        else if (message instanceof RequestAllCompletedGamesMessage) {
-//            ReturnAllCompletedGamesMessage retGames = new ReturnAllCompletedGamesMessage();
-//            List<Game> games = GameInfoService.getInstance().completeGames();
-//            retGames.setGames(games);
-//            notifyClient(new Packet(retGames));
-//        } else if (message instanceof RequestSingleGame) {
-//            ReturnSingleGame retGame = new ReturnSingleGame();
-//            Game requestedGame = GameInfoService.getInstance().getGame(((RequestSingleGame)message).getGameId());
-//            retGame.setGame(game);
-//            notifyClient(new Packet(retGame));
-//        } else if (message instanceof GameHistoryRequestMessage) {
-//            GameHistoryResponseMessage responseMsg = (GameHistoryResponseMessage) gameFactory.createMessage(MsgTypes.GAME_HISTORY_RESPONSE.getType());
-//            List<Game> games;
-//            responseMsg.setGames(games);
-//            notifyClient(new Packet(responseMsg));
-//        }
+        else if (message instanceof RequestAllCompletedGameMessage) {
+            ReturnAllCompletedGamesMessage retGames = new ReturnAllCompletedGamesMessage();
+            List<Game> games = GameInfoService.getInstance().completeGames();
+            retGames.setGames(games);
+            notifyClient(new Packet(retGames));
+        }
+        else if (message instanceof RequestSingleGameMessage) {
+            ReturnSingleGameMessage retGame = new ReturnSingleGameMessage();
+            Game requestedGame = GameInfoService.getInstance().getGame(((RequestSingleGameMessage)message).getGameId());
+            retGame.setGame(requestedGame);
+            notifyClient(new Packet(retGame));
+        }
+        else if (message instanceof GameHistoryRequestMessage) {
+            GameHistoryResponseMessage responseMsg = (GameHistoryResponseMessage) gameFactory.createMessage(MsgTypes.GAME_HISTORY_RESPONSE.getType());
+            List<Game> games = GameInfoService.getInstance().gameHistory(Integer.parseInt(userProfile.getId()));
+            responseMsg.setGames(games);
+            notifyClient(new Packet(responseMsg));
+        }
     }
 
     private void updateChanges(BaseMessage message) throws IOException {

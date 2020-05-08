@@ -75,4 +75,13 @@ public class GameInfoService {
         }
         return null;
     }
+
+    public List<Game> gameHistory(int playerId) {
+        try {
+            return database.getGamesOfPlayerWhereStartPlayerOrOtherPlayer(playerId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
