@@ -121,5 +121,4 @@ public class PlayersController implements Observer, Initializable
     {
         refreshButton.setOnMouseExited(mouseEvent -> refreshButton.setTextFill(Color.BLACK));
     }
-
 }

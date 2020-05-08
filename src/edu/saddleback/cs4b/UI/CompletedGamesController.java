@@ -8,16 +8,22 @@ import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Server.*;
 import edu.saddleback.cs4b.UI.Utilities.GameInfo;
 import edu.saddleback.cs4b.UI.Utilities.UILogger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +35,9 @@ public class CompletedGamesController implements Observer, Initializable
 
     @FXML
     Button refreshButton;
+
+    @FXML
+    Button showGameDetailsBtn;
 
     @FXML
     private TableView<GameInfo> completedGamesTable;
@@ -48,7 +57,8 @@ public class CompletedGamesController implements Observer, Initializable
     private ObservableList<GameInfo> gameInfo = FXCollections.observableArrayList();
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         gameCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         p1Col.setCellValueFactory(new PropertyValueFactory<>("p1"));
@@ -71,14 +81,17 @@ public class CompletedGamesController implements Observer, Initializable
 
     private void handleMessage(BaseMessage message)
     {
-        if (message instanceof ReturnAllCompletedGamesMessage) {
+        if (message instanceof ReturnAllCompletedGamesMessage)
+        {
             displayToUI((ReturnAllCompletedGamesMessage)message);
         }
     }
 
-    private void displayToUI(ReturnAllCompletedGamesMessage message) {
+    private void displayToUI(ReturnAllCompletedGamesMessage message)
+    {
         List<Game> games = message.getGames();
-        for (Game g : games) {
+        for (Game g : games)
+        {
             GameInfo info = new GameInfo();
             info.setId(g.getGameID());
             info.setP1(g.getStartPlayer().getUsername());
@@ -99,6 +112,12 @@ public class CompletedGamesController implements Observer, Initializable
         logger.log(new MessageEvent(reqMsg));
     }
 
+    @FXML
+    public void handleShowGameDetailsAction() throws IOException
+    {
+        swapShowGameDetails("/edu/saddleback/cs4b/UI/CompletedGames.fxml", showGameDetailsBtn);
+    }
+
     /**
      * WHEN THIS METHOD IS CALLED THE 'REFRESH' BUTTON WILL CHANGE COLOR WHEN THE MOUSE IS HOVERING OVER IT
      */
@@ -117,4 +136,41 @@ public class CompletedGamesController implements Observer, Initializable
     {
         refreshButton.setOnMouseExited(mouseEvent -> refreshButton.setTextFill(Color.BLACK));
     }
+
+    /**
+     * WHEN THIS METHOD IS CALLED THE 'SHOW GAME DETAILS' BUTTON WILL CHANGE COLOR WHEN THE MOUSE IS HOVERING OVER IT
+     */
+    @FXML
+    public void highlightShowGameDetails()
+    {
+        showGameDetailsBtn.setOnMouseEntered(mouseEvent -> showGameDetailsBtn.setTextFill(Color.valueOf("#FFD700")));
+    }
+
+    /**
+     * WHEN THIS METHOD IS CALLED THE 'SHOW GAME DETAILS' BUTTON WILL CHANGE BACK TO THE DEFAULT TEXT COLOR WHEN THE MOUSE IS
+     * NO LONGER HOVERING OVER IT
+     */
+    @FXML
+    public void resetShowGameDetails()
+    {
+        showGameDetailsBtn.setOnMouseExited(mouseEvent -> showGameDetailsBtn.setTextFill(Color.BLACK));
+    }
+
+    public void swapShowGameDetails(String sceneLocation, Button button) throws IOException
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(sceneLocation));
+        Parent root = loader.load();
+        Scene scene  = new Scene(root);
+        Stage window = (Stage)(button).getScene().getWindow();
+
+        ServerController crtl = loader.getController();
+        crtl.handleShowGameDetailsAction();
+
+        Platform.runLater(()->
+        {
+            window.setScene(scene);
+            window.show();
+        });
+    }
+
 }

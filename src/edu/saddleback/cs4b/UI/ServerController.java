@@ -130,4 +130,20 @@ public class ServerController
         Pane view = object.getPage("Players");
         viewScreen.setCenter(view);
     }
+
+    @FXML
+    public void handleShowCompletedGamesAction()
+    {
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("CompletedGames");
+        viewScreen.setCenter(view);
+    }
+
+    @FXML
+    public void handleShowGameDetailsAction()
+    {
+        FxmlLoader object = new FxmlLoader();
+        Pane view = object.getPage("ShowGameDetails");
+        viewScreen.setCenter(view);
+    }
 }
