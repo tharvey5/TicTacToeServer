@@ -100,6 +100,7 @@ public class ActiveGamesController implements Observer, Initializable
     @FXML
     public void handleRefreshAction()
     {
+        activeGamesTable.getItems().clear();
         RequestAllActiveGamesMessage reqMsg = new RequestAllActiveGamesMessage();
         logger.log(new MessageEvent(reqMsg));
     }

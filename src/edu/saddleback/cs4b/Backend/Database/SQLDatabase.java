@@ -1048,4 +1048,39 @@ public class SQLDatabase implements DBManager {
             throw new Exception("No Game(s) found");
         }
     }
+
+    @Override
+    public List<User> getAllRegisteredUsers() throws SQLException
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<User> users = new ArrayList<>();
+
+        try
+        {
+            ps = connection.prepareStatement("SELECT * FROM USER WHERE Username != ? AND Username != ?");
+            ps.setString(1, "HardAI" );
+            ps.setString(2, "HardAI2" );
+
+            rs = ps.executeQuery();
+
+            while (rs.next())
+            {
+                User user = new TTTUser(rs.getString(this.username), rs.getString(this.firstName), rs.getString(this.lastName), "*");
+
+                user.setId(String.valueOf(rs.getInt(this.uniqueID)));
+
+                users.add(user);
+            }
+
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+        return users;
+    }
 }
