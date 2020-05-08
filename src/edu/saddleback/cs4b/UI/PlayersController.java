@@ -1,28 +1,68 @@
 package edu.saddleback.cs4b.UI;
 
 import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
+import edu.saddleback.cs4b.Backend.Messages.RequestAllCompletedGameMessage;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
-import edu.saddleback.cs4b.Backend.Server.ServerLogger;
-import edu.saddleback.cs4b.Backend.Server.UserAddedMessage;
-import edu.saddleback.cs4b.Backend.Server.UserRemovedMessage;
+import edu.saddleback.cs4b.Backend.Server.*;
+import edu.saddleback.cs4b.UI.Utilities.GameInfo;
+import edu.saddleback.cs4b.UI.Utilities.PlayerInfo;
+import edu.saddleback.cs4b.UI.Utilities.UILogger;
+import javafx.beans.property.Property;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 
-public class PlayersController implements Observer
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class PlayersController implements Observer, Initializable
 {
+    private Logger logger = UILogger.getInstance();
+
     @FXML
     Button refreshButton;
 
     @FXML
-    private TableView playersTable;
+    private TableView<PlayerInfo> playersTable;
+
+    @FXML
+    private TableColumn<PlayerInfo, String> idCol;
+
+    @FXML
+    private TableColumn<PlayerInfo, String> usernameCol;
+
+    @FXML
+    private TableColumn<PlayerInfo, String> firstNameCol;
+
+    @FXML
+    private TableColumn<PlayerInfo, String> lastNameCol;
+
+    @FXML
+    private TableColumn<PlayerInfo, String> statusCol;
+
+    private ObservableList<PlayerInfo> playerInfo = FXCollections.observableArrayList();
 
     public PlayersController()
     {
         ServerLogger.getInstance().addObserver(this);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
     }
 
     @Override
@@ -46,27 +86,21 @@ public class PlayersController implements Observer
         }
     }
 
+    public void displayToTable()
+    {
+
+
+
+        playersTable.setItems(playerInfo);
+    }
+
     @FXML
     public void handleRefreshAction()
     {
-//        @FXML
-//        public void refresh() {
-//
-//        Task<List<Participant>> task = new Task<List<Participant>>() {
-//            @Override
-//            protected List<Participant> call() throws Exception {
-//                return fetchData();
-//            }
-//
-//            @Override
-//            protected void succeeded() {
-//                tblParticipants.getItems().clear();
-//                tblParticipants.getItems().addAll( getValue() );
-//            }
-//        };
-//
-//        new Thread(task).start();
-//    }
+        playersTable.getItems().clear();
+        RequestAllCompletedGameMessage reqMsg = new RequestAllCompletedGameMessage();
+        GameInfoService.getInstance();
+        logger.log(new MessageEvent(reqMsg));
     }
 
     /**
@@ -87,5 +121,4 @@ public class PlayersController implements Observer
     {
         refreshButton.setOnMouseExited(mouseEvent -> refreshButton.setTextFill(Color.BLACK));
     }
-
 }

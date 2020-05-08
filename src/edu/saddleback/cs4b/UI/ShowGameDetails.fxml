@@ -9,16 +9,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.CompletedGamesController">
+
+<AnchorPane prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.ShowGameDetailsController">
    <children>
-      <TableView fx:id="completedGamesTable" layoutY="60.0" prefHeight="480.0" prefWidth="580.0">
-         <columns>
-            <TableColumn fx:id="idCol" prefWidth="122.0" text="ID" />
-            <TableColumn fx:id="gameCol" prefWidth="187.0" text="GameTitle" />
-            <TableColumn fx:id="p1Col" prefWidth="140.0" text="Player 1" />
-            <TableColumn fx:id="p2Col" prefWidth="130.0" text="Player 2" />
-         </columns>
+      <TableView fx:id="gameDetailsTable" layoutY="60.0" prefHeight="480.0" prefWidth="580.0">
+        <columns>
+          <TableColumn fx:id="gameMovesCol" prefWidth="290.0" text="Game Moves" />
+          <TableColumn fx:id="gameViewersCol" prefWidth="290.0" text="Game Viewers" />
+        </columns>
       </TableView>
+      <Button fx:id="showCompletedGamesBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#handleShowCompletedGamesAction" onMouseEntered="#highlightShowCompletedGames" onMouseExited="#resetShowCompletedGames" style="-fx-background-color: #FFFFFF;" text="Show Completed Games">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
       <Button fx:id="refreshButton" graphicTextGap="10.0" layoutX="426.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#handleRefreshAction" onMouseEntered="#highlightRefresh" onMouseExited="#resetRefresh" prefHeight="3.0" prefWidth="140.0" style="-fx-background-color: #FFFFFF;" text="Refresh">
          <font>
             <Font size="20.0" />
@@ -33,11 +37,6 @@
                </image>
             </ImageView>
          </graphic>
-      </Button>
-      <Button fx:id="showGameDetailsBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#handleShowGameDetailsAction" onMouseEntered="#highlightShowGameDetails" onMouseExited="#resetShowGameDetails" style="-fx-background-color: #FFFFFF;" text="Show Game Details">
-         <font>
-            <Font size="20.0" />
-         </font>
       </Button>
    </children>
 </AnchorPane>
