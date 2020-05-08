@@ -255,7 +255,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
     }
 
 
-    private void notifyClient(Packet packet) throws IOException {
+    private synchronized void notifyClient(Packet packet) throws IOException {
         os.writeObject(packet);
         os.flush();
     }

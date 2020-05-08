@@ -31,6 +31,11 @@ public class GameInfoService {
 
     public void addGameToDB(Game game) {
         try {
+            System.out.println(game.getGameID());
+            System.out.println(game.getStartPlayer());
+            System.out.println(game.getOtherPlayer());
+            System.out.println(game.getCreator());
+            System.out.println(game.getStartTime());
             database.createNewGame(game);
         } catch (Exception e) {
             // this will throw if the game id isn't unique

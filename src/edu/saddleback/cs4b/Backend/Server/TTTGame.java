@@ -38,6 +38,7 @@ public class TTTGame implements Subject, Runnable, Game {
     public TTTGame(PublicUser creator) {
         tokenMap = new Hashtable<>();
         setStartTime(LocalDateTime.now());
+
         setCreator(creator);
         this.startPlayer = this.creator;
         this.observers = new ArrayList<>();
@@ -46,6 +47,7 @@ public class TTTGame implements Subject, Runnable, Game {
         this.currentTurn = creator;
         this.rules = new TTTRules();
         this.moves = new ArrayList<>();
+        this.viewers = new ArrayList<>();
 
         // todo fix this
         setToken(new TTTToken("1"), creator);
@@ -68,23 +70,25 @@ public class TTTGame implements Subject, Runnable, Game {
 
     private String formatTime(LocalDateTime time) {
         StringBuilder sb = new StringBuilder();
-        sb.append(time.getHour());
-        sb.append(":");
-        sb.append(time.getMinute());
+        if (time != null) {
+            sb.append(time.getHour());
+            sb.append(":");
+            sb.append(time.getMinute());
+        }
         return sb.toString();
     }
 
 
     @Override
     public void setStartTime(LocalDateTime newTime) {
-        if (start != null) {
+        if (newTime != null) {
             this.start = newTime;
         }
     }
 
     @Override
     public void setEndTime(LocalDateTime endTime) {
-        if (end != null) {
+        if (endTime != null) {
             this.end = endTime;
         }
     }
@@ -102,15 +106,19 @@ public class TTTGame implements Subject, Runnable, Game {
     // only use if you want p2 to start, creator is start by default
     @Override
     public void setStartPlayer(PublicUser user) {
-        if (user != null && startPlayer == null) {
-            startPlayer = user;
+        synchronized (this) {
+            if (user != null && startPlayer == null) {
+                startPlayer = user;
+            }
         }
     }
 
     @Override
     public void setCreator(PublicUser user) {
-        if (user != null && creator == null) {
-            this.creator = user;
+        synchronized (this) {
+            if (user != null && creator == null) {
+                this.creator = user;
+            }
         }
     }
 
@@ -128,11 +136,13 @@ public class TTTGame implements Subject, Runnable, Game {
     // the other player
     @Override
     public void setOtherPlayer(PublicUser user) {
-        if (otherPlayer == null && user != creator) {
-            otherPlayer = user;
+        synchronized (this) {
+            if (otherPlayer == null && user != creator) {
+                otherPlayer = user;
 
-            // todo handle this better
-            setToken(new TTTToken("2"), user);
+                // todo handle this better
+                setToken(new TTTToken("2"), user);
+            }
         }
     }
 
