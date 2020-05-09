@@ -59,7 +59,6 @@ public class CompletedGamesController implements Observer, Initializable
     private TableColumn<GameInfo, String> p2Col;
 
     private ObservableList<GameInfo> gameInfo = FXCollections.observableArrayList();
-    private Map<String, Game> gameMap = new Hashtable<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -90,6 +89,11 @@ public class CompletedGamesController implements Observer, Initializable
         {
             displayToUI((ReturnAllCompletedGamesMessage)message);
         }
+        else if (message instanceof RespondMovesMessage)
+        {
+            List<Move> moves = ((RespondMovesMessage) message).getMoves();
+            CachedMoves.getInstance().setMoves(moves);
+        }
     }
 
     private void displayToUI(ReturnAllCompletedGamesMessage message)
@@ -98,7 +102,6 @@ public class CompletedGamesController implements Observer, Initializable
         for (Game g : games)
         {
             GameInfo info = new GameInfo();
-            gameMap.put(g.getGameID(), g);
 
             info.setId(g.getGameID());
             info.setP1(g.getStartPlayer().getUsername());
@@ -163,10 +166,11 @@ public class CompletedGamesController implements Observer, Initializable
         showGameDetailsBtn.setOnMouseExited(mouseEvent -> showGameDetailsBtn.setTextFill(Color.BLACK));
     }
 
+    @FXML
     public void onRowClicked() {
         if(completedGamesTable.getSelectionModel().getSelectedItem() != null)
         {
-           CachedMoves.getInstance().setMoves(gameMap.get(completedGamesTable.getSelectionModel().getSelectedItem().getId()).getMoves().getMoves());
+            logger.log(new MessageEvent(new RequestMovesOfGameMessage(completedGamesTable.getSelectionModel().getSelectedItem().getId())));
         }
     }
 

@@ -57,6 +57,7 @@ public class ShowGameDetailsController implements Initializable
     @FXML
     public void handleRefreshAction() {
         List<Move> moves = CachedMoves.getInstance().getMoves();
+        System.out.println(moves.size());
         for (Move m : moves) {
             coordList.add((TTTPosition)m.getCoordinate());
         }

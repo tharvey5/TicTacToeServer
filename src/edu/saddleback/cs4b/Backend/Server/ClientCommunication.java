@@ -87,17 +87,17 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 authMsg.setAuthUser(userProcessed);
                 userProfile = new TTTProfile((TTTUser)userProcessed);
 
+                int id = RegistrationService.getInstance().getUsersId(userProfile);
+                userProfile.setId(Integer.toString(id));
+
                 //todo get W/L record update the profile
-//                List<Integer> record = GameInfoService.getInstance().getWLandTotalGames(Integer.parseInt(userProfile.getId()));
-//                ((TTTProfile)userProfile).getGameRecord().setWins(record.get(0));
-//                ((TTTProfile)userProfile).getGameRecord().setLosses(record.get(1));
-//                ((TTTProfile)userProfile).getGameRecord().setTotalGames(record.get(2));
+                List<Integer> record = GameInfoService.getInstance().getWLandTotalGames(Integer.parseInt(userProfile.getId()));
+                ((TTTProfile)userProfile).getGameRecord().setWins(record.get(0));
+                ((TTTProfile)userProfile).getGameRecord().setLosses(record.get(1));
+                ((TTTProfile)userProfile).getGameRecord().setTotalGames(record.get(2));
 
                 authMsg.setProfile(userProfile);
                 notifyClient(new Packet(authMsg));
-
-                int id = RegistrationService.getInstance().getUsersId(userProfile);
-                userProfile.setId(Integer.toString(id));
 
                 //todo migrate the AI sign-in to be different, this logic will only apply there
 //                if (SystemInfoService.getInstance().getConnection(userProfile.getUsername().getUsername()) != null) {

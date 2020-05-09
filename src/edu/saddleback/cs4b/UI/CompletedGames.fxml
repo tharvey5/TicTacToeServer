@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.CompletedGamesController">
    <children>
-      <TableView fx:id="completedGamesTable" layoutY="60.0" prefHeight="480.0" prefWidth="580.0">
+      <TableView fx:id="completedGamesTable" layoutY="60.0" onMouseClicked="#onRowClicked" prefHeight="480.0" prefWidth="580.0">
          <columns>
             <TableColumn fx:id="idCol" prefWidth="122.0" text="ID" />
             <TableColumn fx:id="gameCol" prefWidth="187.0" text="GameTitle" />

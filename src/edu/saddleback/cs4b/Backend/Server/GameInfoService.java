@@ -2,9 +2,7 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Database.DBManager;
 import edu.saddleback.cs4b.Backend.Database.SQLDatabase;
-import edu.saddleback.cs4b.Backend.Messages.BaseMessage;
-import edu.saddleback.cs4b.Backend.Messages.RequestAllCompletedGameMessage;
-import edu.saddleback.cs4b.Backend.Messages.ReturnAllCompletedGamesMessage;
+import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Objects.Game;
 import edu.saddleback.cs4b.Backend.Objects.Move;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
@@ -44,6 +42,12 @@ public class GameInfoService implements Observer {
                 List<User> users = allRegisteredUsers();
                 retUsers.setAllUsers(users);
                 ServerLogger.getInstance().log(new MessageEvent(retUsers));
+            }
+            else if (bm instanceof RequestMovesOfGameMessage) {
+                RespondMovesMessage respMsg = new RespondMovesMessage();
+                List<Move> moves = getAllMoves(((RequestMovesOfGameMessage) bm).getGameId());
+                respMsg.setMoves(moves);
+                ServerLogger.getInstance().log(new MessageEvent(respMsg));
             }
         }
     }
@@ -115,6 +119,15 @@ public class GameInfoService implements Observer {
             return database.getAllCompletedGames();
         } catch (Exception e) {
             // thrown if a query fails
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Move> getAllMoves(String gameId) {
+        try {
+            return database.getMovesOfGame(gameId).getMoves();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
