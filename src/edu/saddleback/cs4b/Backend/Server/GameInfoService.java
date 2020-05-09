@@ -11,6 +11,7 @@ import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
+import edu.saddleback.cs4b.Backend.Utilitys.User;
 import edu.saddleback.cs4b.UI.Utilities.UILogger;
 
 import java.util.ArrayList;
@@ -38,7 +39,22 @@ public class GameInfoService implements Observer {
                 retGames.setGames(games);
                 ServerLogger.getInstance().log(new MessageEvent(retGames));
             }
+            else if (bm instanceof RequestAllRegisteredUsersMessage) {
+                ReturnAllRegisteredUsersMessage retUsers = new ReturnAllRegisteredUsersMessage();
+                List<User> users = allRegisteredUsers();
+                retUsers.setAllUsers(users);
+                ServerLogger.getInstance().log(new MessageEvent(retUsers));
+            }
         }
+    }
+
+    private List<User> allRegisteredUsers() {
+        try {
+            return database.getAllRegisteredUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static GameInfoService getInstance() {

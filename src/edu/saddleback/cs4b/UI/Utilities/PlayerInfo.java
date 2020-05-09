@@ -1,51 +1,43 @@
 package edu.saddleback.cs4b.UI.Utilities;
 
+import edu.saddleback.cs4b.Backend.Utilitys.User;
+
 public class PlayerInfo
 {
-    private String id;
-    private String username;
-    private String firstName;
-    private String lastName;
+//    private String id;
+//    private String username;
+//    private String firstName;
+//    private String lastName;
     private String status;
+    private User user;
+
+    public PlayerInfo() {
+        status = " ";
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getId()
     {
-        return id;
+        return user.getId();
     }
-
-    public void setId(String id)
-    {
-        this.id = id;
-    }
-
     public String getUsername()
     {
-        return username;
+        return user.getUsername();
     }
-
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-
     public String getFirstName()
     {
-        return firstName;
+        return user.getFirstName();
     }
-
-    public void setFirstName(String firstName)
-    {
-        this.firstName = firstName;
-    }
-
     public String getLastName()
     {
-        return lastName;
-    }
-
-    public void setLastName(String lastName)
-    {
-        this.lastName = lastName;
+        return user.getLastName();
     }
 
     public String getStatus()

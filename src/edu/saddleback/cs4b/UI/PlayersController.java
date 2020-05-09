@@ -6,6 +6,7 @@ import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Server.*;
+import edu.saddleback.cs4b.Backend.Utilitys.User;
 import edu.saddleback.cs4b.UI.Utilities.GameInfo;
 import edu.saddleback.cs4b.UI.Utilities.PlayerInfo;
 import edu.saddleback.cs4b.UI.Utilities.UILogger;
@@ -21,6 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class PlayersController implements Observer, Initializable
@@ -48,7 +50,7 @@ public class PlayersController implements Observer, Initializable
     @FXML
     private TableColumn<PlayerInfo, String> statusCol;
 
-    private ObservableList<PlayerInfo> playerInfo = FXCollections.observableArrayList();
+    private ObservableList<PlayerInfo> playerList = FXCollections.observableArrayList();
 
     public PlayersController()
     {
@@ -76,29 +78,27 @@ public class PlayersController implements Observer, Initializable
 
     private void handleMessage(BaseMessage message)
     {
-        if (message instanceof UserAddedMessage)
-        {
-
-        }
-        else if (message instanceof UserRemovedMessage)
-        {
-
+        if (message instanceof ReturnAllRegisteredUsersMessage) {
+            displayToTable((ReturnAllRegisteredUsersMessage)message);
         }
     }
 
-    public void displayToTable()
+    public void displayToTable(ReturnAllRegisteredUsersMessage message)
     {
-
-
-
-        playersTable.setItems(playerInfo);
+        List<User> users = message.getAllUsers();
+        for (User u : users) {
+            PlayerInfo info = new PlayerInfo();
+            info.setUser(u);
+            playerList.add(info);
+        }
+        playersTable.setItems(playerList);
     }
 
     @FXML
     public void handleRefreshAction()
     {
         playersTable.getItems().clear();
-        RequestAllCompletedGameMessage reqMsg = new RequestAllCompletedGameMessage();
+        RequestAllRegisteredUsersMessage reqMsg = new RequestAllRegisteredUsersMessage();
         GameInfoService.getInstance();
         logger.log(new MessageEvent(reqMsg));
     }
