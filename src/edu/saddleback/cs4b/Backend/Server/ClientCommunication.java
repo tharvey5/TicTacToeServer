@@ -2,6 +2,7 @@ package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.Objects.Move;
 import edu.saddleback.cs4b.Backend.Objects.TTTMove;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
@@ -9,6 +10,7 @@ import edu.saddleback.cs4b.Backend.Utilitys.Profile;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTProfile;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
 import edu.saddleback.cs4b.Backend.Utilitys.User;
+import edu.saddleback.cs4b.UI.Utilities.GameInfo;
 
 import java.io.*;
 import java.net.Socket;
@@ -215,6 +217,12 @@ public class ClientCommunication implements Runnable, ClientConnection {
             List<Game> games = GameInfoService.getInstance().gameHistory(Integer.parseInt(userProfile.getId()));
             responseMsg.setGames(games);
             notifyClient(new Packet(responseMsg));
+        }
+        else if (message instanceof RequestMovesOfGameMessage) {
+            RespondMovesMessage respMsg = new RespondMovesMessage();
+            List<Move> moves = GameInfoService.getInstance().getAllMoves(((RequestMovesOfGameMessage) message).getGameId());
+            respMsg.setMoves(moves);
+            notifyClient(new Packet(respMsg));
         }
     }
 
