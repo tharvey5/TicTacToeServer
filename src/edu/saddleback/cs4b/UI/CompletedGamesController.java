@@ -2,10 +2,13 @@ package edu.saddleback.cs4b.UI;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
 import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.Objects.Move;
+import edu.saddleback.cs4b.Backend.Objects.TTTPosition;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Server.*;
+import edu.saddleback.cs4b.UI.Utilities.CachedMoves;
 import edu.saddleback.cs4b.UI.Utilities.GameInfo;
 import edu.saddleback.cs4b.UI.Utilities.UILogger;
 import javafx.application.Platform;
@@ -25,6 +28,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -55,6 +59,7 @@ public class CompletedGamesController implements Observer, Initializable
     private TableColumn<GameInfo, String> p2Col;
 
     private ObservableList<GameInfo> gameInfo = FXCollections.observableArrayList();
+    private Map<String, Game> gameMap = new Hashtable<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -93,6 +98,8 @@ public class CompletedGamesController implements Observer, Initializable
         for (Game g : games)
         {
             GameInfo info = new GameInfo();
+            gameMap.put(g.getGameID(), g);
+
             info.setId(g.getGameID());
             info.setP1(g.getStartPlayer().getUsername());
             info.setP2(g.getOtherPlayer().getUsername());
@@ -154,6 +161,13 @@ public class CompletedGamesController implements Observer, Initializable
     public void resetShowGameDetails()
     {
         showGameDetailsBtn.setOnMouseExited(mouseEvent -> showGameDetailsBtn.setTextFill(Color.BLACK));
+    }
+
+    public void onRowClicked() {
+        if(completedGamesTable.getSelectionModel().getSelectedItem() != null)
+        {
+           CachedMoves.getInstance().setMoves(gameMap.get(completedGamesTable.getSelectionModel().getSelectedItem().getId()).getMoves().getMoves());
+        }
     }
 
     public void swapShowGameDetails(String sceneLocation, Button button) throws IOException

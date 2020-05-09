@@ -1,23 +1,52 @@
 package edu.saddleback.cs4b.UI;
 
+import edu.saddleback.cs4b.Backend.Objects.Game;
+import edu.saddleback.cs4b.Backend.Objects.Move;
+import edu.saddleback.cs4b.Backend.Objects.TTTPosition;
+import edu.saddleback.cs4b.UI.Utilities.CachedMoves;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class ShowGameDetailsController
+public class ShowGameDetailsController implements Initializable
 {
     @FXML
     Button refreshButton;
 
     @FXML
     Button showCompletedGamesBtn;
+
+    @FXML
+    TableColumn<TTTPosition, String> gameMovesCol;
+
+    @FXML
+    TableColumn gameViewersCol;
+
+    @FXML
+    TableView<TTTPosition> gameDetailsTable;
+
+    private ObservableList<TTTPosition> coordList = FXCollections.observableArrayList();
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        gameMovesCol.setCellValueFactory(new PropertyValueFactory<>("positionAsString"));
+    }
 
     @FXML
     public void handleShowCompletedGamesAction() throws IOException
@@ -27,7 +56,11 @@ public class ShowGameDetailsController
 
     @FXML
     public void handleRefreshAction() {
-
+        List<Move> moves = CachedMoves.getInstance().getMoves();
+        for (Move m : moves) {
+            coordList.add((TTTPosition)m.getCoordinate());
+        }
+        gameDetailsTable.setItems(coordList);
     }
 
     /**
