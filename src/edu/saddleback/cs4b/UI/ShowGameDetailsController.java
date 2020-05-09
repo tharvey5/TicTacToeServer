@@ -22,7 +22,12 @@ public class ShowGameDetailsController
     @FXML
     public void handleShowCompletedGamesAction() throws IOException
     {
-        swapShowCompletedGames("/edu/saddleback/cs4b/UI/CompletedGames.fxml", showCompletedGamesBtn);
+        swapShowCompletedGames("/edu/saddleback/cs4b/UI/Server.fxml", showCompletedGamesBtn);
+    }
+
+    @FXML
+    public void handleRefreshAction() {
+
     }
 
     /**

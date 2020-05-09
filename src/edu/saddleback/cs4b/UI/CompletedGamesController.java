@@ -115,7 +115,7 @@ public class CompletedGamesController implements Observer, Initializable
     @FXML
     public void handleShowGameDetailsAction() throws IOException
     {
-        swapShowGameDetails("/edu/saddleback/cs4b/UI/CompletedGames.fxml", showGameDetailsBtn);
+        swapShowGameDetails("/edu/saddleback/cs4b/UI/Server.fxml", showGameDetailsBtn);
     }
 
     /**
