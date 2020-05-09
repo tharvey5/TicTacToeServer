@@ -44,8 +44,17 @@ public class ShowGameDetailsController implements Initializable
     private ObservableList<TTTPosition> coordList = FXCollections.observableArrayList();
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
         gameMovesCol.setCellValueFactory(new PropertyValueFactory<>("positionAsString"));
+
+        List<Move> moves = CachedMoves.getInstance().getMoves();
+        System.out.println(moves.size());
+        for (Move m : moves)
+        {
+            coordList.add((TTTPosition)m.getCoordinate());
+        }
+        gameDetailsTable.setItems(coordList);
     }
 
     @FXML
@@ -55,10 +64,12 @@ public class ShowGameDetailsController implements Initializable
     }
 
     @FXML
-    public void handleRefreshAction() {
+    public void handleRefreshAction()
+    {
         List<Move> moves = CachedMoves.getInstance().getMoves();
         System.out.println(moves.size());
-        for (Move m : moves) {
+        for (Move m : moves)
+        {
             coordList.add((TTTPosition)m.getCoordinate());
         }
         gameDetailsTable.setItems(coordList);
