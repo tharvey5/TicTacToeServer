@@ -42,4 +42,8 @@ public class SystemInfoService {
     public ClientConnection getConnection(String onlineUser) {
         return onlineUsers.get(onlineUser);
     }
+
+    public int numberConnectedUsers() {
+        return onlineUsers.size();
+    }
 }

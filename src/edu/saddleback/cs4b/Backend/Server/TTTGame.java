@@ -21,8 +21,7 @@ public class TTTGame implements Subject, Runnable, Game {
     private PublicUser currentTurn;
     private PublicUser winner;
     private List<Observer> observers;
-    private List<PublicUser> viewers;  // todo this seems kind of redundant
-                                       // couldn't we deduce if not player its a viewer
+    private List<PublicUser> viewers;
     private volatile List<Move> moves;
     private volatile boolean isActive;
     private Board board;

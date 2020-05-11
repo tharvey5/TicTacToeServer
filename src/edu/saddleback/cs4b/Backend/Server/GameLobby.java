@@ -89,7 +89,8 @@ public class GameLobby implements Observer {
         Game game = activeGames.get(gameId);
 
         game.addObserver(sysInfo.getConnection(viewer.getUsername()));
-        // call system service to get their connection and set as observer
+        GameInfoService.getInstance().writeViewer(gameId, viewer);
+
         return game;
     }
 

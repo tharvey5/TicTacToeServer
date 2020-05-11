@@ -92,7 +92,6 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 int id = RegistrationService.getInstance().getUsersId(userProfile);
                 userProfile.setId(Integer.toString(id));
 
-                //todo get W/L record update the profile
                 List<Integer> record = GameInfoService.getInstance().getWLandTotalGames(Integer.parseInt(userProfile.getId()));
                 ((TTTProfile)userProfile).getGameRecord().setWins(record.get(0));
                 ((TTTProfile)userProfile).getGameRecord().setLosses(record.get(1));
@@ -101,7 +100,11 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 authMsg.setProfile(userProfile);
                 notifyClient(new Packet(authMsg));
 
-                //todo migrate the AI sign-in to be different, this logic will only apply there
+                //todo since there is an ai for each user logged in, just grab the number of users logged in
+                // if its an AI && the second condition below is met 
+                if (SystemInfoService.getInstance().numberConnectedUsers() > 1) {
+
+                }
 //                if (SystemInfoService.getInstance().getConnection(userProfile.getUsername().getUsername()) != null) {
 //                    String name = userProfile.getUsername().getUsername();
 //                    User otherLogin = new TTTUser(name + new Random().nextInt(50),

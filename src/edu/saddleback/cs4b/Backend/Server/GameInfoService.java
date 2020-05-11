@@ -72,6 +72,16 @@ public class GameInfoService implements Observer {
         return gameInfoService;
     }
 
+    public boolean writeViewer(String gameID, PublicUser viewer)  {
+        try {
+            database.addViewerToGame(gameID, viewer);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean writeMove(Move move) {
         try {
             SQLDatabase.getInstance().addMoveToGame(move);
