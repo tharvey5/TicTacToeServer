@@ -65,6 +65,11 @@ public class PlayersController implements Observer, Initializable
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        playersTable.getItems().clear();
+        RequestAllRegisteredUsersMessage reqMsg = new RequestAllRegisteredUsersMessage();
+        GameInfoService.getInstance();
+        logger.log(new MessageEvent(reqMsg));
     }
 
     @Override

@@ -67,6 +67,11 @@ public class CompletedGamesController implements Observer, Initializable
         gameCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         p1Col.setCellValueFactory(new PropertyValueFactory<>("p1"));
         p2Col.setCellValueFactory(new PropertyValueFactory<>("p2"));
+
+        completedGamesTable.getItems().clear();
+        RequestAllCompletedGameMessage reqMsg = new RequestAllCompletedGameMessage();
+        GameInfoService.getInstance();
+        logger.log(new MessageEvent(reqMsg));
     }
 
     public CompletedGamesController()
@@ -167,9 +172,11 @@ public class CompletedGamesController implements Observer, Initializable
     }
 
     @FXML
-    public void onRowClicked() {
+    public void onRowClicked()
+    {
         if(completedGamesTable.getSelectionModel().getSelectedItem() != null)
         {
+            showGameDetailsBtn.setDisable(false);
             logger.log(new MessageEvent(new RequestMovesOfGameMessage(completedGamesTable.getSelectionModel().getSelectedItem().getId())));
         }
     }

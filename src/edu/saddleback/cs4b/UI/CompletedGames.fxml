@@ -34,7 +34,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="showGameDetailsBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#handleShowGameDetailsAction" onMouseEntered="#highlightShowGameDetails" onMouseExited="#resetShowGameDetails" style="-fx-background-color: #FFFFFF;" text="Show Game Details">
+      <Button fx:id="showGameDetailsBtn" disable="true" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#handleShowGameDetailsAction" onMouseEntered="#highlightShowGameDetails" onMouseExited="#resetShowGameDetails" style="-fx-background-color: #FFFFFF;" text="Show Game Details">
          <font>
             <Font size="20.0" />
          </font>

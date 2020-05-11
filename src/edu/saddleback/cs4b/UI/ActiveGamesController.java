@@ -59,6 +59,10 @@ public class ActiveGamesController implements Observer, Initializable
         gameCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         p1Col.setCellValueFactory(new PropertyValueFactory<>("p1"));
         p2Col.setCellValueFactory(new PropertyValueFactory<>("p2"));
+
+        activeGamesTable.getItems().clear();
+        RequestAllActiveGamesMessage reqMsg = new RequestAllActiveGamesMessage();
+        logger.log(new MessageEvent(reqMsg));
     }
 
     // recieves information when ever the server logger gets log called
