@@ -11,13 +11,20 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.CompletedGamesController">
    <children>
-      <TableView fx:id="completedGamesTable" layoutY="60.0" onMouseClicked="#onRowClicked" prefHeight="480.0" prefWidth="580.0">
+      <TableView fx:id="completedGamesTable" fixedCellSize="0.0" layoutY="60.0" onMouseClicked="#onRowClicked" prefHeight="480.0" prefWidth="580.0">
          <columns>
-            <TableColumn fx:id="idCol" prefWidth="122.0" text="ID" />
-            <TableColumn fx:id="gameCol" prefWidth="187.0" text="GameTitle" />
-            <TableColumn fx:id="p1Col" prefWidth="140.0" text="Player 1" />
-            <TableColumn fx:id="p2Col" prefWidth="130.0" text="Player 2" />
+            <TableColumn fx:id="idCol" prefWidth="50.0" resizable="false" text="ID" />
+            <TableColumn fx:id="gameCol" prefWidth="90.0" resizable="false" text="GameTitle" />
+            <TableColumn fx:id="p1Col" resizable="false" text="Player 1" />
+            <TableColumn fx:id="p2Col" resizable="false" text="Player 2" />
+            <TableColumn fx:id="dateCol" prefWidth="70.0" resizable="false" text="Date" />
+            <TableColumn fx:id="startTimeCol" minWidth="20.0" prefWidth="70.0" resizable="false" text="Start Time" />
+            <TableColumn fx:id="endTimeCol" prefWidth="70.0" resizable="false" text="End Time" />
+            <TableColumn fx:id="resultCol" prefWidth="70.0" resizable="false" text="Result" />
          </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <Button fx:id="refreshButton" graphicTextGap="10.0" layoutX="426.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#handleRefreshAction" onMouseEntered="#highlightRefresh" onMouseExited="#resetRefresh" prefHeight="3.0" prefWidth="140.0" style="-fx-background-color: #FFFFFF;" text="Refresh">
          <font>

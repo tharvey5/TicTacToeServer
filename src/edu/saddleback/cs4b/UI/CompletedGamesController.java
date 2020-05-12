@@ -59,6 +59,18 @@ public class CompletedGamesController implements Observer, Initializable
     @FXML
     private TableColumn<GameInfo, String> p2Col;
 
+    @FXML
+    private TableColumn<GameInfo, String> dateCol;
+
+    @FXML
+    private TableColumn<GameInfo, String> startTimeCol;
+
+    @FXML
+    private TableColumn<GameInfo, String> endTimeCol;
+
+    @FXML
+    private TableColumn<GameInfo, String> resultCol;
+
     private ObservableList<GameInfo> gameInfo = FXCollections.observableArrayList();
 
     @Override
@@ -68,6 +80,10 @@ public class CompletedGamesController implements Observer, Initializable
         gameCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         p1Col.setCellValueFactory(new PropertyValueFactory<>("p1"));
         p2Col.setCellValueFactory(new PropertyValueFactory<>("p2"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
 
         completedGamesTable.getItems().clear();
         RequestAllCompletedGameMessage reqMsg = new RequestAllCompletedGameMessage();
@@ -110,9 +126,35 @@ public class CompletedGamesController implements Observer, Initializable
             GameInfo info = new GameInfo();
             CachedGames.getInstance().addGame(g);
             info.setId(g.getGameID());
+            info.setTitle(g.getCreator().getUsername() + " \'s game");
             info.setP1(g.getStartPlayer().getUsername());
             info.setP2(g.getOtherPlayer().getUsername());
-            info.setTitle(g.getCreator().getUsername() + " \'s game");
+
+            String str = g.getStartTime();
+            String[] strings = str.split(" ", 3);
+
+            str = strings[0];
+            info.setDate(str);
+
+            str = strings[2];
+            info.setStartTime(str);
+
+            if(g.getEndTime() != null)
+            {
+                str = g.getEndTime();
+                strings = str.split(" ", 3);
+
+                str = strings[2];
+                info.setEndTime(str);
+            }
+            else
+            {
+                info.setEndTime(g.getEndTime());
+            }
+
+            info.setResult(g.getWinner().getUsername());
+
+
             gameInfo.add(info);
         }
 
