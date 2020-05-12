@@ -6,10 +6,7 @@ import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.Subject;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
-import edu.saddleback.cs4b.Backend.Server.UserAddedGameMessage;
-import edu.saddleback.cs4b.Backend.Server.UserAddedMessage;
-import edu.saddleback.cs4b.Backend.Server.UserRemovedGameMessage;
-import edu.saddleback.cs4b.Backend.Server.UserRemovedMessage;
+import edu.saddleback.cs4b.Backend.Server.*;
 
 import java.util.*;
 
@@ -25,6 +22,7 @@ public class EventLog implements Observer, Subject {
     private EventLog() {
         events = new HashSet<>();
         observers = new ArrayList<>();
+        ServerLogger.getInstance().addObserver(this);
     }
 
     public static EventLog getInstance() { return log; }
