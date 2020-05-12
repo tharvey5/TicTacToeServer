@@ -5,6 +5,7 @@ import edu.saddleback.cs4b.Backend.Messages.GameResultMessage;
 import edu.saddleback.cs4b.Backend.Messages.RequestAllActiveGamesMessage;
 import edu.saddleback.cs4b.Backend.Messages.ReturnAllActiveGamesMessage;
 import edu.saddleback.cs4b.Backend.Objects.Board;
+import edu.saddleback.cs4b.Backend.Objects.DatabaseGame;
 import edu.saddleback.cs4b.Backend.Objects.Game;
 import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
@@ -14,9 +15,7 @@ import edu.saddleback.cs4b.Backend.Utilitys.Identifiable;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 import edu.saddleback.cs4b.UI.Utilities.UILogger;
 
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This will allow people to create games and view games
@@ -92,6 +91,14 @@ public class GameLobby implements Observer {
         GameInfoService.getInstance().writeViewer(gameId, viewer);
 
         return game;
+    }
+
+    public List<Game> getActiveGames() {
+        List<Game> games = new ArrayList<>();
+        for (Map.Entry<String,Game> entry : activeGames.entrySet()) {
+            games.add(new DatabaseGame(entry.getValue()));
+        }
+        return games;
     }
 
     public Map<String, List<String>> getAllGames(){

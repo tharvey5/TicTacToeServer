@@ -1,6 +1,7 @@
 package edu.saddleback.cs4b.Backend.Server;
 
 import edu.saddleback.cs4b.Backend.Messages.*;
+import edu.saddleback.cs4b.Backend.Objects.DatabaseGame;
 import edu.saddleback.cs4b.Backend.Objects.Game;
 import edu.saddleback.cs4b.Backend.Objects.Move;
 import edu.saddleback.cs4b.Backend.Objects.TTTMove;
@@ -157,7 +158,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
 
             GameSuccessfullyCreatedMessage gameMsg =
                     (GameSuccessfullyCreatedMessage) gameFactory.createMessage(MsgTypes.GAME_CREATED.getType());
-            gameMsg.setGame(null);
+            gameMsg.setGame(new DatabaseGame(newGame));
             gameMsg.setGameId(newGame.getGameID());
             notifyClient(new Packet(gameMsg));
 
@@ -171,7 +172,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 gameMap.put(newGame.getGameID(), newGame);
                 AvailableGameMessage gameMsg =
                         (AvailableGameMessage) gameFactory.createMessage(MsgTypes.AVAILABLE_GAME.getType());
-                gameMsg.setGame(null); //todo replace later TTTGame not fully serializable
+                gameMsg.setGame(new DatabaseGame(newGame)); //todo replace later TTTGame not fully serializable
                 gameMsg.setGameId(newGame.getGameID());
                 notifyClient(new Packet(gameMsg));
 
@@ -206,7 +207,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
         }
         else if (message instanceof RequestAllActiveGamesMessage) {
             ReturnAllActiveGamesMessage retGames = (ReturnAllActiveGamesMessage) gameFactory.createMessage(MsgTypes.RETURN_ACTIVE_GAMES.getType());
-            retGames.setGameAndPlayers(GameLobby.getInstance().getAllGames());
+            retGames.setGames(GameLobby.getInstance().getActiveGames());
             notifyClient(new Packet(retGames));
         }
         else if (message instanceof RequestSingleGameMessage) {
