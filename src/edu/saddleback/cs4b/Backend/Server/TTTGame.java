@@ -69,6 +69,12 @@ public class TTTGame implements Subject, Runnable, Game {
     private String formatTime(LocalDateTime time) {
         StringBuilder sb = new StringBuilder();
         if (time != null) {
+            sb.append(time.toLocalDate().getMonth().getValue());
+            sb.append("/");
+            sb.append(time.toLocalDate().getDayOfMonth());
+            sb.append("/");
+            sb.append(time.toLocalDate().getYear());
+            sb.append(" at ");
             sb.append(time.getHour());
             sb.append(":");
             sb.append(time.getMinute());

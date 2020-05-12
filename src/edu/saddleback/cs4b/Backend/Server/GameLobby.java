@@ -71,6 +71,7 @@ public class GameLobby implements Observer {
     }
 
     public Game joinGame(PublicUser player, String gameId) {
+        if (gameId == null) return null;
         Game game = playableGames.get(gameId);
         if (game != null) {
             // call system service to get their connection and set as observer
