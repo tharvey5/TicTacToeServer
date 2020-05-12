@@ -3,6 +3,9 @@ package edu.saddleback.cs4b.UI;
 import edu.saddleback.cs4b.Backend.Objects.Game;
 import edu.saddleback.cs4b.Backend.Objects.Move;
 import edu.saddleback.cs4b.Backend.Objects.TTTPosition;
+import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
+import edu.saddleback.cs4b.Backend.Utilitys.TTTPublicUser;
+import edu.saddleback.cs4b.UI.Utilities.CachedGames;
 import edu.saddleback.cs4b.UI.Utilities.CachedMoves;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -36,25 +39,24 @@ public class ShowGameDetailsController implements Initializable
     TableColumn<TTTPosition, String> gameMovesCol;
 
     @FXML
-    TableColumn gameViewersCol;
+    TableColumn<TTTPublicUser, String> gameViewersCol;
 
     @FXML
     TableView<TTTPosition> gameDetailsTable;
 
+    @FXML
+    TableView<TTTPublicUser> gameViewersTable;
+
     private ObservableList<TTTPosition> coordList = FXCollections.observableArrayList();
+    private ObservableList<TTTPublicUser> viewerList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
         gameMovesCol.setCellValueFactory(new PropertyValueFactory<>("positionAsString"));
+        gameViewersCol.setCellValueFactory(new PropertyValueFactory<>("username"));
 
-        List<Move> moves = CachedMoves.getInstance().getMoves();
-        System.out.println(moves.size());
-        for (Move m : moves)
-        {
-            coordList.add((TTTPosition)m.getCoordinate());
-        }
-        gameDetailsTable.setItems(coordList);
+        handleRefreshAction();
     }
 
     @FXML
@@ -66,6 +68,7 @@ public class ShowGameDetailsController implements Initializable
     @FXML
     public void handleRefreshAction()
     {
+        gameDetailsTable.getItems().clear();
         List<Move> moves = CachedMoves.getInstance().getMoves();
         System.out.println(moves.size());
         for (Move m : moves)
@@ -73,6 +76,17 @@ public class ShowGameDetailsController implements Initializable
             coordList.add((TTTPosition)m.getCoordinate());
         }
         gameDetailsTable.setItems(coordList);
+
+        gameViewersTable.getItems().clear();
+        if (moves.size() > 0) {
+            String id = moves.get(0).getGameID();
+            List<PublicUser> viewers = CachedGames.getInstance().getGame(id).viewers();
+            System.out.println(viewers.size());
+            for (PublicUser u : viewers) {
+                viewerList.add((TTTPublicUser)u);
+            }
+            gameViewersTable.setItems(viewerList);
+        }
     }
 
     /**

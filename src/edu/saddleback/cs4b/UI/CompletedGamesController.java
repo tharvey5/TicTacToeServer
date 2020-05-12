@@ -8,6 +8,7 @@ import edu.saddleback.cs4b.Backend.PubSub.MessageEvent;
 import edu.saddleback.cs4b.Backend.PubSub.Observer;
 import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Server.*;
+import edu.saddleback.cs4b.UI.Utilities.CachedGames;
 import edu.saddleback.cs4b.UI.Utilities.CachedMoves;
 import edu.saddleback.cs4b.UI.Utilities.GameInfo;
 import edu.saddleback.cs4b.UI.Utilities.UILogger;
@@ -107,7 +108,7 @@ public class CompletedGamesController implements Observer, Initializable
         for (Game g : games)
         {
             GameInfo info = new GameInfo();
-
+            CachedGames.getInstance().addGame(g);
             info.setId(g.getGameID());
             info.setP1(g.getStartPlayer().getUsername());
             info.setP2(g.getOtherPlayer().getUsername());
