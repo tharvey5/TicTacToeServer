@@ -188,7 +188,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
             Game game = GameLobby.getInstance().viewGame(userProfile.getUser(), viewMsg.getGameID());
             if (game != null) {
                 SuccessfulViewGameMessage successView = (SuccessfulViewGameMessage)gameFactory.createMessage(MsgTypes.SUCCESS_VIEW_GAME.getType());
-                successView.setGameID(game.getGameID());
+                successView.setGame(new DatabaseGame(game));
                 notifyClient(new Packet(successView));
                 log.log(new MessageEvent(new UserAddedGameMessage(userProfile.getUser().getUsername(), game.getGameID())));
             } else {
