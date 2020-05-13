@@ -152,7 +152,7 @@ public class CompletedGamesController implements Observer, Initializable
                 info.setEndTime(g.getEndTime());
             }
 
-            info.setResult(g.getWinner().getUsername());
+            info.setResult(g.getWinner() == null ? "tie" : g.getWinner().getUsername());
 
 
             gameInfo.add(info);
