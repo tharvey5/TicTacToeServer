@@ -11,14 +11,16 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.PlayersController">
    <children>
-      <TableView fx:id="playersTable" layoutY="60.0" prefHeight="480.0" prefWidth="580.0">
+      <TableView fx:id="playersTable" fixedCellSize="0.0" layoutY="60.0" prefHeight="480.0" prefWidth="580.0">
          <columns>
-            <TableColumn fx:id="idCol" text="ID" />
-            <TableColumn fx:id="usernameCol" prefWidth="140.0" text="Username" />
-            <TableColumn fx:id="firstNameCol" prefWidth="140.0" text="First Name" />
-            <TableColumn fx:id="lastNameCol" prefWidth="140.0" text="Last Name" />
-            <TableColumn fx:id="statusCol" text="Status" />
+            <TableColumn fx:id="idCol" prefWidth="130.0" text="ID" />
+            <TableColumn fx:id="usernameCol" prefWidth="150.0" text="Username" />
+            <TableColumn fx:id="firstNameCol" prefWidth="150.0" text="First Name" />
+            <TableColumn fx:id="lastNameCol" prefWidth="150.0" resizable="false" text="Last Name" />
          </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <Button fx:id="refreshButton" graphicTextGap="10.0" layoutX="426.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#handleRefreshAction" onMouseEntered="#highlightRefresh" onMouseExited="#resetRefresh" prefHeight="3.0" prefWidth="140.0" style="-fx-background-color: #FFFFFF;" text="Refresh">
          <font>
