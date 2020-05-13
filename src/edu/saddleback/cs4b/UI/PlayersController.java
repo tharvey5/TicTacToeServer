@@ -47,9 +47,6 @@ public class PlayersController implements Observer, Initializable
     @FXML
     private TableColumn<PlayerInfo, String> lastNameCol;
 
-    @FXML
-    private TableColumn<PlayerInfo, String> statusCol;
-
     private ObservableList<PlayerInfo> playerList = FXCollections.observableArrayList();
 
     public PlayersController()
@@ -64,7 +61,6 @@ public class PlayersController implements Observer, Initializable
         usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         playersTable.getItems().clear();
         RequestAllRegisteredUsersMessage reqMsg = new RequestAllRegisteredUsersMessage();
