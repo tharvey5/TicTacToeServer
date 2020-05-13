@@ -145,6 +145,7 @@ public class GameLobby implements Observer {
 
                 // todo include this for viewers as well
 
+                System.out.println(activeGames.get(id).getGameID());
                 GameInfoService.getInstance().saveGameResultToDB(activeGames.get(id));
                 activeGames.remove(id);
 

@@ -98,14 +98,24 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 ((TTTProfile)userProfile).getGameRecord().setLosses(record.get(1));
                 ((TTTProfile)userProfile).getGameRecord().setTotalGames(record.get(2));
 
-                authMsg.setProfile(userProfile);
-                notifyClient(new Packet(authMsg));
 
                 //todo since there is an ai for each user logged in, just grab the number of users logged in
                 // if its an AI && the second condition below is met 
-                if (SystemInfoService.getInstance().numberConnectedUsers() > 1) {
-
+                if (SystemInfoService.getInstance().getConnection(userProfile.getUser().getUsername()) != null) {
+                    int userNum = SystemInfoService.getInstance().numberConnectedUsers();
+                    String name = userProfile.getUser().getUsername();
+                    User otherLogin = new TTTUser(name + userNum,
+                            userProfile.getUser().getFirstName(), userProfile.getUser().getLastName(),
+                            userProfile.getUser().getPassword());
+                    ((TTTUser) otherLogin).setId(id);
+                    String oldId = userProfile.getId();
+                    userProfile.setUser(otherLogin);
+                    System.out.println("occuring");
+                    authMsg.setAuthUser(otherLogin);
                 }
+
+                authMsg.setProfile(userProfile);
+                notifyClient(new Packet(authMsg));
 //                if (SystemInfoService.getInstance().getConnection(userProfile.getUsername().getUsername()) != null) {
 //                    String name = userProfile.getUsername().getUsername();
 //                    User otherLogin = new TTTUser(name + new Random().nextInt(50),
@@ -172,7 +182,7 @@ public class ClientCommunication implements Runnable, ClientConnection {
                 gameMap.put(newGame.getGameID(), newGame);
                 AvailableGameMessage gameMsg =
                         (AvailableGameMessage) gameFactory.createMessage(MsgTypes.AVAILABLE_GAME.getType());
-                gameMsg.setGame(new DatabaseGame(newGame)); //todo replace later TTTGame not fully serializable
+                gameMsg.setGame(new DatabaseGame(newGame));
                 gameMsg.setGameId(newGame.getGameID());
                 notifyClient(new Packet(gameMsg));
 
