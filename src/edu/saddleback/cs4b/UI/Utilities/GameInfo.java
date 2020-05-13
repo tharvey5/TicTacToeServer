@@ -9,6 +9,10 @@ public class GameInfo
     private String title;
     private String p1;
     private String p2;
+    private String date;
+    private String startTime;
+    private String endTime;
+    private String result;
 
     public String getTitle()
     {
@@ -48,5 +52,45 @@ public class GameInfo
     public void setId(String id)
     {
         this.id = id;
+    }
+
+    public String getStartTime()
+    {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime)
+    {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime()
+    {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime)
+    {
+        this.endTime = endTime;
+    }
+
+    public String getDate()
+    {
+        return date;
+    }
+
+    public void setDate(String date)
+    {
+        this.date = date;
+    }
+
+    public String getResult()
+    {
+        return result;
+    }
+
+    public void setResult(String result)
+    {
+        this.result = result;
     }
 }
