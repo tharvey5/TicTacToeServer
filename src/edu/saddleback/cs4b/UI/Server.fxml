@@ -12,7 +12,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.ServerController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #2A363B;">
@@ -57,23 +56,28 @@
       </AnchorPane>
       <Line endX="80.0" layoutX="109.0" layoutY="159.0" startX="-80.0" stroke="WHITE" />
       <Circle fill="WHITE" layoutX="109.0" layoutY="80.0" radius="56.0" stroke="BLACK" strokeType="INSIDE" />
-      <Label layoutX="64.0" layoutY="64.0" text="SQL INJECTORS">
+      <Label layoutX="76.0" layoutY="75.0" text="INJECTORS">
          <font>
             <Font name="Tamil MN" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="71.0" layoutY="80.0" text="TIC-TAC-TOE">
+      <Label layoutX="71.0" layoutY="88.0" text="TIC-TAC-TOE">
          <font>
             <Font name="Tamil MN" size="12.0" />
          </font>
       </Label>
       <Line endX="45.5" layoutX="110.0" layoutY="64.0" startX="-46.0" strokeWidth="0.5" />
-      <Line endX="45.5" layoutX="110.0" layoutY="96.0" startX="-46.0" strokeWidth="0.5" />
+      <Line endX="45.5" layoutX="109.0" layoutY="105.0" startX="-46.0" strokeWidth="0.5" />
       <ImageView fitHeight="29.0" fitWidth="25.0" layoutX="96.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@tictacotoeicon.png" />
          </image>
       </ImageView>
       <BorderPane fx:id="viewScreen" layoutX="204.0" layoutY="46.0" prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #FFFFFF;" />
+      <Label layoutX="70.0" layoutY="63.0" text="SADDLEBACK">
+         <font>
+            <Font name="Tamil MN" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
