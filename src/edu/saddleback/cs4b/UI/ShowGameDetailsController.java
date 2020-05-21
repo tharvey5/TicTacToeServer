@@ -47,14 +47,22 @@ public class ShowGameDetailsController implements Initializable
     @FXML
     TableView<TTTPublicUser> gameViewersTable;
 
+    @FXML
+    TableView<TTTPublicUser> playerMoveTable;
+
+    @FXML
+    TableColumn<TTTPublicUser, String> playerMoveCol;
+
     private ObservableList<TTTPosition> coordList = FXCollections.observableArrayList();
     private ObservableList<TTTPublicUser> viewerList = FXCollections.observableArrayList();
+    private ObservableList<TTTPublicUser> playerMoveList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
         gameMovesCol.setCellValueFactory(new PropertyValueFactory<>("positionAsString"));
         gameViewersCol.setCellValueFactory(new PropertyValueFactory<>("username"));
+        playerMoveCol.setCellValueFactory(new PropertyValueFactory<>("username"));
 
         handleRefreshAction();
     }
@@ -69,13 +77,24 @@ public class ShowGameDetailsController implements Initializable
     public void handleRefreshAction()
     {
         gameDetailsTable.getItems().clear();
+        playerMoveTable.getItems().clear();
         List<Move> moves = CachedMoves.getInstance().getMoves();
         System.out.println(moves.size());
         for (Move m : moves)
         {
+            Game game = CachedGames.getInstance().getGame(m.getGameID());
+            if(game.getStartPlayer().getId().equals(m.getPlayerID()))
+            {
+                playerMoveList.add((TTTPublicUser)game.getStartPlayer());
+            }
+            else
+            {
+                playerMoveList.add((TTTPublicUser)game.getOtherPlayer());
+            }
             coordList.add((TTTPosition)m.getCoordinate());
         }
         gameDetailsTable.setItems(coordList);
+        playerMoveTable.setItems(playerMoveList);
 
         gameViewersTable.getItems().clear();
         if (moves.size() > 0) {

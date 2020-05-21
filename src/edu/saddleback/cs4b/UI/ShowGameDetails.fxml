@@ -11,9 +11,9 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #2A363B;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.cs4b.UI.ShowGameDetailsController">
    <children>
-      <TableView fx:id="gameDetailsTable" layoutY="60.0" prefHeight="480.0" prefWidth="291.0">
+      <TableView fx:id="gameDetailsTable" layoutX="200.0" layoutY="60.0" prefHeight="460.0" prefWidth="180.0">
         <columns>
-          <TableColumn fx:id="gameMovesCol" prefWidth="290.0" text="Game Moves" />
+          <TableColumn fx:id="gameMovesCol" prefWidth="180.0" text="Game Moves" />
         </columns>
       </TableView>
       <Button fx:id="showCompletedGamesBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#handleShowCompletedGamesAction" onMouseEntered="#highlightShowCompletedGames" onMouseExited="#resetShowCompletedGames" style="-fx-background-color: #FFFFFF;" text="Show Completed Games">
@@ -36,10 +36,15 @@
             </ImageView>
          </graphic>
       </Button>
-      <TableView fx:id="gameViewersTable" layoutX="290.0" layoutY="60.0" prefHeight="480.0" prefWidth="291.0">
+      <TableView fx:id="gameViewersTable" layoutX="380.0" layoutY="60.0" prefHeight="460.0" prefWidth="180.0">
          <columns>
-            <TableColumn fx:id="gameViewersCol" prefWidth="290.0" text="Game Viewers" />
+            <TableColumn fx:id="gameViewersCol" prefWidth="180.0" text="Game Viewers" />
          </columns>
+      </TableView>
+      <TableView fx:id="playerMoveTable" layoutX="20.0" layoutY="60.0" prefHeight="460.0" prefWidth="180.0">
+        <columns>
+          <TableColumn fx:id="playerMoveCol" prefWidth="180.0" text="Move Made By" />
+        </columns>
       </TableView>
    </children>
 </AnchorPane>
