@@ -1,12 +1,17 @@
 package edu.saddleback.cs4b.Backend.Objects;
 
+import edu.saddleback.cs4b.Backend.PubSub.Observer;
+import edu.saddleback.cs4b.Backend.PubSub.Subject;
+import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
+import edu.saddleback.cs4b.Backend.Utilitys.TTTPublicUser;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseGame implements Game, Serializable
+public class DatabaseGame implements Game, Serializable, Subject
 {
 
     private String startTime;
@@ -18,6 +23,41 @@ public class DatabaseGame implements Game, Serializable
     private PublicUser winner;
     private String id;
     private List<PublicUser> viewers;
+    private Board gameBoard;
+
+    // copy ctor
+    public DatabaseGame(Game game) {
+        //todo refactor when the other classes are cloneable
+        this.startTime = game.getStartTime();
+        this.endTime = game.getEndTime();
+
+        if (game.getStartPlayer() != null) {
+            this.startPlayer = new TTTPublicUser(game.getStartPlayer().getId(), game.getStartPlayer().getUsername());
+            this.creator = this.startPlayer;
+        }
+        if (game.getOtherPlayer() != null) {
+            this.otherPlayer = new TTTPublicUser(game.getOtherPlayer().getId(), game.getOtherPlayer().getUsername());
+        }
+
+        //this.moves = new DatabaseMoves(new ArrayList<>(game.getMoves().getMoves()));
+        this.moves = new DatabaseMoves(new ArrayList<>());
+
+        if (game.getWinner() != null) {
+            this.winner = new TTTPublicUser(game.getWinner().getId(), game.getWinner().getUsername());
+        }
+        this.id = game.getGameID();
+        this.viewers = new ArrayList<>();
+        this.viewers.addAll(game.viewers());
+
+        this.gameBoard = new TTTBoard();
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (game.getGameBoard().getToken(i, j) != null) {
+                    this.gameBoard.setToken(i, j, new TTTToken(game.getGameBoard().getToken(i, j).getTokenID()));
+                }
+            }
+        }
+    }
 
     public DatabaseGame(String startTime, String endTime, PublicUser startPlayer, PublicUser otherPlayer, PublicUser creator, Moves moves, PublicUser winner, String id, List<PublicUser> viewers)
     {
@@ -150,7 +190,7 @@ public class DatabaseGame implements Game, Serializable
 
     @Override
     public Board getGameBoard() {
-        return null;
+        return gameBoard;
     }
 
     @Override
@@ -171,5 +211,17 @@ public class DatabaseGame implements Game, Serializable
     @Override
     public boolean playMove(Move move) {
         return false;
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+    }
+
+    @Override
+    public void notifyObserver(SystemEvent e) {
     }
 }

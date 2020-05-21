@@ -1,5 +1,7 @@
 package edu.saddleback.cs4b.Backend.Server;
 
-public interface ClientConnection {
+import edu.saddleback.cs4b.Backend.PubSub.Observer;
+
+public interface ClientConnection extends Observer {
    String identifyClient();
 }

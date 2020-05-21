@@ -292,5 +292,10 @@ public interface DBManager
      ****************************************************************/
     List<Game> getAllGames() throws Exception;
 
+    /**
+     getAllRegisteredUsers: returns a List of Users for all the user
+     that are registered in the system. Not including the AI.
+     **/
+    List<User> getAllRegisteredUsers()throws SQLException;
 
 }

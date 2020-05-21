@@ -477,21 +477,21 @@ public class SQLDatabase implements DBManager {
         //Add Games to the player including who won and who loss
 
 
-        if(game.getWinner() != null || game.getEndTime() != null)
-        {
-            instance.addTotalGame(Integer.parseInt(game.getStartPlayer().getId()));
-            instance.addTotalGame(Integer.parseInt(game.getOtherPlayer().getId()));
-            instance.addWin(Integer.parseInt(game.getWinner().getId()));
-
-            if(game.getWinner().getId() == game.getStartPlayer().getId())
-            {
-                instance.addLoss(Integer.parseInt(game.getOtherPlayer().getId()));
-            }
-            else
-            {
-                instance.addLoss(Integer.parseInt(game.getStartPlayer().getId()));
-            }
-        }
+//        if(game.getWinner() == null || game.getEndTime() != null)
+//        {
+//            instance.addTotalGame(Integer.parseInt(game.getStartPlayer().getId()));
+//            instance.addTotalGame(Integer.parseInt(game.getOtherPlayer().getId()));
+//            instance.addWin(Integer.parseInt(game.getWinner().getId()));
+//
+//            if(game.getWinner().getId() == game.getStartPlayer().getId())
+//            {
+//                instance.addLoss(Integer.parseInt(game.getOtherPlayer().getId()));
+//            }
+//            else
+//            {
+//                instance.addLoss(Integer.parseInt(game.getStartPlayer().getId()));
+//            }
+//        }
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -501,50 +501,18 @@ public class SQLDatabase implements DBManager {
 
         try
         {
+            ps = connection.prepareStatement("INSERT INTO GAMES(UniqueID, Creator, Winner, Player1, Player2, Viewers, StartTime, EndTime) VALUES(?,?,?,?,?,?,?,?)");
 
-            if(game.getWinner() != null || game.getEndTime() != null) {
-                ps = connection.prepareStatement("INSERT INTO GAMES(UniqueID, Creator, Winner, Player1, Player2, Viewers, StartTime, EndTime) VALUES(?,?,?,?,?,?,?,?)");
+            ps.setString(1, game.getGameID());
+            ps.setInt(2, Integer.parseInt(game.getCreator().getId()));
+            ps.setInt(3, -1);
+            ps.setInt(4, Integer.parseInt(game.getStartPlayer().getId()));
+            ps.setInt(5, Integer.parseInt(game.getOtherPlayer().getId()));
+            ps.setString(6, ",");
+            ps.setString(7, game.getStartTime());
+            ps.setString(8, "");
 
-                ps.setString(1, game.getGameID());
-                ps.setInt(2, Integer.parseInt(game.getCreator().getId()));
-                ps.setInt(3, Integer.parseInt(game.getWinner().getId()));
-                ps.setInt(4, Integer.parseInt(game.getStartPlayer().getId()));
-                ps.setInt(5, Integer.parseInt(game.getOtherPlayer().getId()));
-                ps.setString(6, ",");
-                ps.setString(7, game.getStartTime());
-                ps.setString(8, game.getEndTime());
-
-                counter = ps.executeUpdate();
-            }
-            else if (game.getWinner() != null)
-            {
-                ps = connection.prepareStatement("INSERT INTO GAMES(UniqueID, Creator, Winner, Player1, Player2, Viewers, StartTime, EndTime) VALUES(?,?,?,?,?,?,?,?)");
-
-                ps.setString(1, game.getGameID());
-                ps.setInt(2, Integer.parseInt(game.getCreator().getId()));
-                ps.setInt(3, -1);
-                ps.setInt(4, Integer.parseInt(game.getStartPlayer().getId()));
-                ps.setInt(5, Integer.parseInt(game.getOtherPlayer().getId()));
-                ps.setString(6, ",");
-                ps.setString(7, game.getStartTime());
-                ps.setString(8, game.getEndTime());
-
-                counter = ps.executeUpdate();
-            }
-            else{
-                ps = connection.prepareStatement("INSERT INTO GAMES(UniqueID, Creator, Winner, Player1, Player2, Viewers, StartTime, EndTime) VALUES(?,?,?,?,?,?,?,?)");
-
-                ps.setString(1, game.getGameID());
-                ps.setInt(2, Integer.parseInt(game.getCreator().getId()));
-                ps.setInt(3, -1);
-                ps.setInt(4, Integer.parseInt(game.getStartPlayer().getId()));
-                ps.setInt(5, Integer.parseInt(game.getOtherPlayer().getId()));
-                ps.setString(6, ",");
-                ps.setString(7, game.getStartTime());
-                ps.setString(8, "");
-
-                counter = ps.executeUpdate();
-            }
+            counter = ps.executeUpdate();
         }
         catch(Exception e)
         {
@@ -566,7 +534,7 @@ public class SQLDatabase implements DBManager {
         {
             instance.addWin(Integer.parseInt(game.getWinner().getId()));
 
-            if(game.getWinner().getId() == game.getStartPlayer().getId())
+            if(game.getWinner().getId().equals(game.getStartPlayer().getId()))
             {
                 instance.addLoss(Integer.parseInt(game.getOtherPlayer().getId()));
             }
@@ -590,7 +558,7 @@ public class SQLDatabase implements DBManager {
             ps = connection.prepareStatement("UPDATE GAMES SET Creator = ? , Winner = ?, Player1 = ?, Player2 = ? , StartTime = ?, EndTime = ? WHERE UniqueID = ?");
 
             ps.setInt(1, Integer.parseInt(game.getCreator().getId()));
-            ps.setInt(2, Integer.parseInt(game.getWinner().getId()));
+            ps.setInt(2, Integer.parseInt(game.getWinner() == null ? "-1" : game.getWinner().getId()));
             ps.setInt(3, Integer.parseInt(game.getStartPlayer().getId()));
             ps.setInt(4, Integer.parseInt(game.getOtherPlayer().getId()));
             ps.setString(5, game.getStartTime());
@@ -727,7 +695,7 @@ public class SQLDatabase implements DBManager {
 
             String dataEndTime;
 
-            if(rs.getString(this.endTime) == "")
+            if(rs.getString(this.endTime).equals(""))
             {
                 dataEndTime = null;
             }
@@ -1079,5 +1047,40 @@ public class SQLDatabase implements DBManager {
             System.out.println(e.toString());
             throw new Exception("No Game(s) found");
         }
+    }
+
+    @Override
+    public List<User> getAllRegisteredUsers() throws SQLException
+    {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<User> users = new ArrayList<>();
+
+        try
+        {
+            ps = connection.prepareStatement("SELECT * FROM USER WHERE Username != ? AND Username != ?");
+            ps.setString(1, "HardAI" );
+            ps.setString(2, "HardAI2" );
+
+            rs = ps.executeQuery();
+
+            while (rs.next())
+            {
+                User user = new TTTUser(rs.getString(this.username), rs.getString(this.firstName), rs.getString(this.lastName), "*");
+
+                user.setId(String.valueOf(rs.getInt(this.uniqueID)));
+
+                users.add(user);
+            }
+
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+        return users;
     }
 }

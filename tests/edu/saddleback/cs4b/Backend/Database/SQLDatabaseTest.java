@@ -1,6 +1,8 @@
 package edu.saddleback.cs4b.Backend.Database;
 
 import edu.saddleback.cs4b.Backend.Objects.*;
+import edu.saddleback.cs4b.Backend.PubSub.Observer;
+import edu.saddleback.cs4b.Backend.PubSub.SystemEvent;
 import edu.saddleback.cs4b.Backend.Utilitys.PublicUser;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTPublicUser;
 import edu.saddleback.cs4b.Backend.Utilitys.TTTUser;
@@ -227,6 +229,20 @@ class SQLDatabaseTest {
         DBManager db = SQLDatabase.getInstance();
 
         Game game = new Game() {
+            @Override
+            public void addObserver(Observer o) {
+
+            }
+
+            @Override
+            public void removeObserver(Observer o) {
+
+            }
+
+            @Override
+            public void notifyObserver(SystemEvent e) {
+
+            }
 
             String id;
 
@@ -382,6 +398,21 @@ class SQLDatabaseTest {
         DBManager db = SQLDatabase.getInstance();
 
         Game game = new Game() {
+
+            @Override
+            public void addObserver(Observer o) {
+
+            }
+
+            @Override
+            public void removeObserver(Observer o) {
+
+            }
+
+            @Override
+            public void notifyObserver(SystemEvent e) {
+
+            }
 
             String id;
             String endTime = null;
